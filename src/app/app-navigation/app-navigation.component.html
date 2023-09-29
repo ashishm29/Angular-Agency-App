@@ -9,8 +9,7 @@
       <a mat-list-item routerLink="/dashboard" (click)="drawer.toggle()">Dashboard</a>
       <a mat-list-item routerLink="/dataentry" (click)="drawer.toggle()">Data Entry</a>
       <a mat-list-item routerLink="/recovery" (click)="drawer.toggle()">Recovery</a>
-      <a mat-list-item routerLink="" (click)="drawer.toggle()">History</a>
-      <a mat-list-item routerLink="" (click)="drawer.toggle()">Search</a>
+      <a mat-list-item routerLink="/history" (click)="drawer.toggle()">History</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -32,8 +31,7 @@
         <a mat-button routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
         <a mat-button routerLink="/dataentry" routerLinkActive="active-link">Data Entry</a>
         <a mat-button routerLink="/recovery" routerLinkActive="active-link">Recovery</a>
-        <a mat-button href="#">History</a>
-        <a mat-button href="#">Search</a>
+        <a mat-button routerLink="/history" routerLinkActive="active-link">History</a>
       </div>
     </mat-toolbar>
     <router-outlet></router-outlet>

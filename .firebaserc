@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "agency-app-31a1b"
+  },
+  "targets": {
+    "agency-app-31a1b": {
+      "hosting": {
+        "agency-mapp": [
+          "agency-app-31a1b"
+        ]
+      }
+    }
   }
 }

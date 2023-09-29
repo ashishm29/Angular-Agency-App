@@ -21,6 +21,10 @@ import {MatInputModule} from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DataEntryComponent } from './data-entry/data-entry.component';
 import { RecoveryComponent } from './recovery/recovery.component';
+import { HistoryComponent } from './history/history.component';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,8 @@ import { RecoveryComponent } from './recovery/recovery.component';
     DashboardComponent,
     LoginComponent,
     DataEntryComponent,
-    RecoveryComponent
+    RecoveryComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,9 @@ import { RecoveryComponent } from './recovery/recovery.component';
     MatMenuModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore())
   ],
   providers: [],
   bootstrap: [AppComponent]
