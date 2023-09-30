@@ -16,15 +16,19 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { LoginComponent } from './login/login.component';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DataEntryComponent } from './data-entry/data-entry.component';
 import { RecoveryComponent } from './recovery/recovery.component';
 import { HistoryComponent } from './history/history.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { LoginDetailsComponent } from './login-details/login-details.component';
+import { MatTableModule } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,8 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
     LoginComponent,
     DataEntryComponent,
     RecoveryComponent,
-    HistoryComponent
+    HistoryComponent,
+    LoginDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,10 +57,13 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatTableModule,
+    ReactiveFormsModule,
+    FormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,5 +1,4 @@
-
-export class AppConstant{
-
-  SERVICE_URL = "";
+export class AppConstant {
+  AGENCY_COLLECTION_NAME = 'AgencyCollection';
+  USER_COLLECTION_NAME = 'UserCollection';
 }

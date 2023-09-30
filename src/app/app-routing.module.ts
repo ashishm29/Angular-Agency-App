@@ -5,13 +5,15 @@ import { LoginComponent } from './login/login.component';
 import { DataEntryComponent } from './data-entry/data-entry.component';
 import { RecoveryComponent } from './recovery/recovery.component';
 import { HistoryComponent } from './history/history.component';
+import { LoginDetailsComponent } from './login-details/login-details.component';
 
 const routes: Routes = [
   {path : '' , component : LoginComponent},
   {path : 'dashboard' , component : DashboardComponent},
   {path : 'dataentry' , component : DataEntryComponent},
   {path : 'recovery' , component : RecoveryComponent},
-  {path : 'history' , component : HistoryComponent}
+  {path : 'history' , component : HistoryComponent},
+  {path : 'logindetails' , component : LoginDetailsComponent}
 ];
 
 @NgModule({

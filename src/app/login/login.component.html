@@ -1,7 +1,10 @@
+<form [formGroup]="loginFormGroup">
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Enter Mobile Number</mat-label>
-    <input matInput placeholder="Enter Mobile No.">
+    <input
+    formControlName="mobileNumber"
+    matInput placeholder="Enter Mobile No.">
     <mat-icon matSuffix>phone</mat-icon>
     <mat-hint>Enter 10 digit mobile number.</mat-hint>
   </mat-form-field>
@@ -9,7 +12,9 @@
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Enter Password</mat-label>
-    <input matInput placeholder="Enter Password" [type]="hide ? 'password' : 'text'">
+    <input matInput
+      formControlName="password"
+    placeholder="Enter Password" [type]="hide ? 'password' : 'text'">
     <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
       <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
@@ -20,5 +25,9 @@
   <button mat-raised-button color="primary" (click)="onLogin()">Login</button>
 </p>
 
+<p>
+  <button mat-raised-button color="primary" (click)="onSignUp()">SignUp</button>
+</p>
 
+  </form>
 

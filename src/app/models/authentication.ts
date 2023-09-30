@@ -8,14 +8,19 @@ export class Authentication {
 }
 
 export class UserDetails {
-  email! : string;
-  localId! : string;
-  returnSecureToken! :boolean;
+  email!: string;
+  localId!: string;
+  returnSecureToken!: boolean;
 }
 
+export class User {
+  id!: string;
+  mobileNumber!: number;
+  password!: string;
+  Roles!: Role[];
+}
 
-export class User
-{
-  mobileNumber! : number;
-  password! : string;
+export class Role {
+  RoleId!: number;
+  RoleName!: string;
 }
