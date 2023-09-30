@@ -1,5 +1,5 @@
 {
-  "hosting": [
+  "hosting":
     {
       "public": "build",
       "ignore": [
@@ -14,10 +14,8 @@
         }
       ]
     },
-    {
-      "target": "agency-mapp",
-      "source": ".",
-      "frameworksBackend": {}
-    }
-  ]
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
 }
