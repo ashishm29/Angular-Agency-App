@@ -1,4 +1,4 @@
-<!-- <table mat-table [dataSource]="userCollection" class="mat-elevation-z8">
+<table mat-table [dataSource]="userCollection" class="mat-elevation-z8">
   <ng-container matColumnDef="mobileNumber">
     <th mat-header-cell *matHeaderCellDef> id. </th>
     <td mat-cell *matCellDef="let element"> {{element.mobileNumber}} </td>
@@ -10,9 +10,9 @@
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table> -->
+</table>
 
-<div class="mat-action-row">
+<!-- <div class="mat-action-row">
   <div *ngFor="let user of userCollection">
       <input type="text" name="name" [(ngModel)]="user.mobileNumber">
       <input type="text" name="name" [(ngModel)]="user.password">
@@ -23,4 +23,4 @@
 
 <p>
   <button mat-raised-button color="primary" (click)="onGetDetail()">Get Login Details</button>
-</p>
+</p> -->

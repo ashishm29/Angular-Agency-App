@@ -10,18 +10,13 @@ import { Role, User } from '../models/authentication';
 export class LoginDetailsComponent implements OnInit {
   constructor(public authService: AuthService) {}
 
-  userCollection: User[] = [
-    {
-      mobileNumber: 9665552,
-      password: 'admin',
-      Roles: [],
-      id: '',
-    },
-  ];
+  userCollection: User[] = [];
   userDetail: User[] = [];
   displayedColumns: string[] = ['mobileNumber', 'password'];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onGetDetail();
+  }
 
   onGetDetail() {
     this.authService.onFetchLoginDetails().then((result) => {

@@ -28,7 +28,6 @@ import { Console } from 'console';
 export class AuthService implements OnInit {
   constructor(
     public firestore: Firestore,
-
     public fireStoreInstance: FirestoreInstances
   ) {}
 
@@ -99,8 +98,6 @@ export class AuthService implements OnInit {
 
   async onFetchLoginDetails() {
     // Read collection
-    // try {
-
     const collectionInstance = collection(this.firestore, 'UserCollection');
     const docsSnap = await getDocs(collectionInstance);
     docsSnap.forEach((doc) => {
@@ -116,15 +113,6 @@ export class AuthService implements OnInit {
     console.log(JSON.stringify(this._users));
 
     return this._users;
-    // return collectionData(collectionInstance).pipe(
-    //   tap((val) => {
-    //     _users = JSON.parse(JSON.stringify(val)) as User;
-    //     console.log('Users : ' + JSON.stringify(_users));
-    //   })
-    // );
-    // } catch (error) {
-    //   console.log(error);
-    // }
   }
 
   onUpdateLoginDetails(user: User) {

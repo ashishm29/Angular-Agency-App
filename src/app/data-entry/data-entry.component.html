@@ -1,11 +1,40 @@
+
+<p>
+  <mat-form-field appearance="outline">
+    <mat-label>Select Option to Enter Data</mat-label>
+    <mat-select (selectionChange)="onSelectionChange($event.value)">
+        <mat-option value="store">Store</mat-option>
+        <mat-option value="route">Route</mat-option>
+        <mat-option value="bill">Bill</mat-option>
+    </mat-select>
+  </mat-form-field>
+</p>
+
+<div class="container">
+  <div class="line"><mat-divider></mat-divider></div>
+  <div class="line"><mat-divider></mat-divider></div>
+</div>
+
+<div *ngIf="showRouteControls">
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Route Name</mat-label>
-    <mat-select>
-      <mat-option value="barshi">Barshi</mat-option>
-      <mat-option value="ter">Ter</mat-option>
-      <mat-option value="kalamb">Kalamb</mat-option>
-      <mat-option value="Dhoki">Dhoki</mat-option>
+    <input matInput [(ngModel)]="routeName">
+  </mat-form-field>
+</p>
+<p align="center">
+  <button mat-raised-button color="primary" (click)="onAddRoute()" >Add Route</button>
+</p>
+</div>
+
+<form *ngIf="showShopControls"  [formGroup]="shopFormGroup">
+<p>
+  <mat-form-field appearance="outline">
+    <mat-label>Route Name</mat-label>
+    <mat-select formControlName="route">
+      <div *ngFor="let route of routeCollection">
+        <mat-option value="{{route.routeName}}">{{route.routeName}}</mat-option>
+      </div>
     </mat-select>
   </mat-form-field>
 </p>
@@ -13,29 +42,98 @@
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Store Name</mat-label>
-    <input matInput>
+    <input matInput formControlName="storeName">
   </mat-form-field>
 </p>
 
 <p>
   <mat-form-field appearance="outline" class="example-full-width">
     <mat-label>Shop Address</mat-label>
-    <textarea matInput></textarea>
+    <textarea matInput formControlName="address"></textarea>
   </mat-form-field>
 </p>
 
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Mobile Number</mat-label>
-    <input matInput>
+    <input matInput formControlName="mobileNo">
   </mat-form-field>
 </p>
 
-
-
 <p>
-  <button mat-raised-button color="primary" routerLink="/dashboard">Add Shop</button>
+  <mat-form-field appearance="outline">
+    <mat-label>Alternate Mobile Number</mat-label>
+    <input matInput formControlName="altMobileNo">
+  </mat-form-field>
 </p>
 
+<p align="center">
+  <button mat-raised-button color="primary"  type="submit" (click)="onAddStore()">Add Shop</button>
+</p>
+
+</form>
+
+<form *ngIf="showBillControls" [formGroup]="billFormGroup">
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Route Name</mat-label>
+      <mat-select formControlName="route" [formControl]="myControl" (selectionChange)="onBillForm_RouteSelectionChange($event.value)">
+        <div *ngFor="let route of routeCollection">
+          <mat-option value="{{route.routeName}}">{{route.routeName}}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <p>
+
+    <p>
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Store Name</mat-label>
+      <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onStoreSelected($event.option.value)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option.storeName}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline" class="example-full-width">
+      <mat-label>Shop Address</mat-label>
+      <textarea readonly="true" matInput formControlName="address"></textarea>
+    </mat-form-field>
+  </p>
+
+
+  <p>
+  <mat-form-field appearance="outline">
+    <mat-label>Bill Number</mat-label>
+    <input matInput formControlName="billNumber">
+  </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <input matInput [matDatepicker]="picker" formControlName="billDate" placeholder="Choose a date">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker ></mat-datepicker>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Bill Amount</mat-label>
+      <input matInput formControlName="billAmount">
+    </mat-form-field>
+  </p>
+
+  <p align="center">
+    <button mat-raised-button color="primary" type="submit" (click)="onAddBill()">Add Bill</button>
+  </p>
+
+</form>
 
 
