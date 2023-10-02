@@ -79,19 +79,19 @@ export class DataEntryComponent implements OnInit {
       ),
     } as StoreDetails;
 
-    // this.entryService
-    //   .addStoreDetails(shopDetails)
-    //   .then(() => {
-    //     console.log(AppConstant.STORE_ADDED_SUCCESS_MSG);
-    //     this.openSnackBar(
-    //       AppConstant.STORE_ADDED_SUCCESS_MSG,
-    //       AppConstant.SAVE_ACTION
-    //     );
-    //     this.resetStoreUiFields();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    this.entryService
+      .addStoreDetails(shopDetails)
+      .then(() => {
+        console.log(AppConstant.STORE_ADDED_SUCCESS_MSG);
+        this.openSnackBar(
+          AppConstant.STORE_ADDED_SUCCESS_MSG,
+          AppConstant.SAVE_ACTION
+        );
+        this.resetStoreUiFields();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   onAddBill() {
