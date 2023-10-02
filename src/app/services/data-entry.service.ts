@@ -80,16 +80,6 @@ export class DataEntryService implements OnInit {
         id: doc.id,
       } as StoreDetails);
     });
-
-    // const docsSnap = await getDocs(collectionInstance);
-    // docsSnap.forEach((doc) => {
-    //   console.log(doc.data());
-    //   storeCollection.push({
-    //     ...doc.data(),
-    //     id: doc.id,
-    //   } as StoreDetails);
-    // });
-
     console.log(JSON.stringify(storeCollection));
     return storeCollection;
   }

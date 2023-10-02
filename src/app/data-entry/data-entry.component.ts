@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DataEntryService } from '../services/data-entry.service';
 import { BillDetails, Route, StoreDetails } from '../models/route';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
-import { Observable, map, of, startWith } from 'rxjs';
+import { Observable, map, of, startWith, tap } from 'rxjs';
+import { AppConstant } from '../appConstant';
 
 @Component({
   selector: 'app-data-entry',
@@ -20,7 +21,7 @@ export class DataEntryComponent implements OnInit {
 
   routeName!: string;
   routeCollection: Route[] = [];
-  storeArray: StoreDetails[] = [];
+  storeCollection: StoreDetails[] = [];
   filteredOptions: Observable<StoreDetails[]> | undefined;
   myControl = new FormControl();
 
@@ -33,73 +34,27 @@ export class DataEntryComponent implements OnInit {
   ngOnInit(): void {
     this.resetStoreUiFields();
     this.resetBillUiFields();
-
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filter(name as string) : this.storeArray.slice();
-      })
-    );
   }
-
-  onSelectionChange(selecetdValue: string) {
-    console.log(selecetdValue);
-    this.showRouteControls = false;
-    this.showShopControls = false;
-    this.showBillControls = false;
-    this.resetBillUiFields();
-    this.resetStoreUiFields();
-
-    if (selecetdValue) {
-      if (selecetdValue === 'store') {
-        this.onFetchRoute();
-        this.showShopControls = true;
-      } else if (selecetdValue === 'route') {
-        this.showRouteControls = true;
-      } else if (selecetdValue === 'bill') {
-        this.onFetchRoute();
-        this.showBillControls = true;
-      }
-    }
-  }
-
-  onBillForm_RouteSelectionChange(selecetdValue: string) {
-    console.log(selecetdValue);
-    if (selecetdValue) {
-      this.billFormGroup.get('storeName')?.reset();
-      this.billFormGroup.get('billNumber')?.reset();
-      this.billFormGroup.get('billDate')?.reset();
-      this.billFormGroup.get('billAmount')?.reset();
-      this.onFetchStoreDetails(selecetdValue);
-    }
-  }
-
-  // onBillForm_StoreSelectionChange(selecetdValue: string) {
-  //   console.log(selecetdValue);
-  //   // if (selecetdValue) {
-  //   //   this.storeCollection.forEach((element) => {
-  //   //     if (element.storeName == selecetdValue) {
-  //   //       this.billFormGroup.patchValue({
-  //   //         address: element.address,
-  //   //       });
-  //   //     }
-  //   //   });
-  //   // }
-  // }
 
   onAddRoute() {
     let route = {
       routeName: this.routeName,
-      createdDate: this.datePipe.transform(Date.now().toString(), 'yyyy-MM-dd'),
-    } as unknown as Route;
+      createdDate: this.datePipe.transform(
+        Date.now().toString(),
+        AppConstant.DATE_TIME_FORMAT
+      ),
+    } as Route;
 
     const newLocal = this;
     newLocal.entryService
       .addRoute(route)
       .then(() => {
-        console.log('Route added Successfully');
-        this.openSnackBar('Route added Successfully', 'Saved');
+        console.log(AppConstant.ROUTE_ADDED_SUCCESS_MSG);
+        this.openSnackBar(
+          AppConstant.ROUTE_ADDED_SUCCESS_MSG,
+          AppConstant.SAVE_ACTION
+        );
+        this.routeName = '';
       })
       .catch((err) => {
         console.log(err);
@@ -107,25 +62,36 @@ export class DataEntryComponent implements OnInit {
   }
 
   onAddStore() {
+    if (this.shopFormGroup.invalid) {
+      console.log('store form is invalid');
+      return;
+    }
+
     let shopDetails = {
       route: this.shopFormGroup.value.route,
       storeName: this.shopFormGroup.value.storeName,
       address: this.shopFormGroup.value.address,
       mobileNo: this.shopFormGroup.value.mobileNo,
       altMobileNo: this.shopFormGroup.value.altMobileNo,
-      createdDate: this.datePipe.transform(Date.now().toString(), 'yyyy-MM-dd'),
-    } as unknown as StoreDetails;
+      createdDate: this.datePipe.transform(
+        Date.now().toString(),
+        AppConstant.DATE_TIME_FORMAT
+      ),
+    } as StoreDetails;
 
-    this.entryService
-      .addStoreDetails(shopDetails)
-      .then(() => {
-        console.log('Store added Successfully');
-        this.openSnackBar('Store added Successfully', 'Saved');
-        this.resetStoreUiFields();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // this.entryService
+    //   .addStoreDetails(shopDetails)
+    //   .then(() => {
+    //     console.log(AppConstant.STORE_ADDED_SUCCESS_MSG);
+    //     this.openSnackBar(
+    //       AppConstant.STORE_ADDED_SUCCESS_MSG,
+    //       AppConstant.SAVE_ACTION
+    //     );
+    //     this.resetStoreUiFields();
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   onAddBill() {
@@ -135,15 +101,21 @@ export class DataEntryComponent implements OnInit {
       billNumber: this.billFormGroup.value.billNumber,
       billDate: this.billFormGroup.value.billDate,
       billAmount: this.billFormGroup.value.billAmount,
-      createdDate: this.datePipe.transform(Date.now().toString(), 'yyyy-MM-dd'),
-    } as unknown as BillDetails;
+      createdDate: this.datePipe.transform(
+        Date.now().toString(),
+        AppConstant.DATE_TIME_FORMAT
+      ),
+    } as BillDetails;
 
     this.entryService
       .addBillDetails(billDetails)
       .then(() => {
-        console.log('Bill added Successfully');
-        this.openSnackBar('Bill added Successfully', 'Saved');
-        this.resetStoreUiFields();
+        console.log(AppConstant.BILL_ADDED_SUCCESS_MSG);
+        this.openSnackBar(
+          AppConstant.BILL_ADDED_SUCCESS_MSG,
+          AppConstant.SAVE_ACTION
+        );
+        this.resetBillUiFields();
       })
       .catch((err) => {
         console.log(err);
@@ -155,7 +127,11 @@ export class DataEntryComponent implements OnInit {
       route: new FormControl(),
       storeName: new FormControl(),
       address: new FormControl(),
-      mobileNo: new FormControl(),
+      mobileNo: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+      ]),
       altMobileNo: new FormControl(),
     });
   }
@@ -177,18 +153,18 @@ export class DataEntryComponent implements OnInit {
       if (result && result.length > 0) {
         this.routeCollection = result;
       } else {
-        console.log('No routes found');
+        console.log(AppConstant.ROUTE_NOT_FOUND_MSG);
       }
     });
   }
 
   onFetchStoreDetails(selecetdValue: string) {
-    this.storeArray = [];
+    this.storeCollection = [];
     this.entryService.getStores(selecetdValue).then((result) => {
       if (result && result.length > 0) {
-        this.storeArray = result;
+        this.storeCollection = result;
       } else {
-        console.log('No stores found');
+        console.log(AppConstant.STORE_NOT_FOUND_MSG);
       }
     });
   }
@@ -199,6 +175,58 @@ export class DataEntryComponent implements OnInit {
     });
   }
 
+  onSelectionChange(selecetdValue: string) {
+    console.log(selecetdValue);
+    this.showRouteControls = false;
+    this.showShopControls = false;
+    this.showBillControls = false;
+    this.resetBillUiFields();
+    this.resetStoreUiFields();
+
+    if (selecetdValue) {
+      if (selecetdValue === 'store') {
+        this.onFetchRoute();
+        this.showShopControls = true;
+      } else if (selecetdValue === 'route') {
+        this.showRouteControls = true;
+      } else if (selecetdValue === 'bill') {
+        this.onFetchRoute();
+        this.showBillControls = true;
+        this.subscribeBill_StoreNameValueChange();
+      }
+    }
+  }
+
+  subscribeBill_StoreNameValueChange() {
+    let routeControl = this.billFormGroup.controls['storeName'];
+    this.filteredOptions = routeControl?.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const name = typeof value === 'string' ? value : value?.name;
+        return name
+          ? this._filter(name as string)
+          : this.storeCollection.slice();
+      })
+    );
+  }
+
+  onBillForm_RouteSelectionChange(selecetdValue: string) {
+    console.log(selecetdValue);
+    if (selecetdValue) {
+      this.billFormGroup.get('storeName')?.reset();
+      this.billFormGroup.get('billNumber')?.reset();
+      this.billFormGroup.get('billDate')?.reset();
+      this.billFormGroup.get('billAmount')?.reset();
+      this.onFetchStoreDetails(selecetdValue);
+    }
+  }
+
+  onStoreSelected(selectedStore: StoreDetails) {
+    this.billFormGroup.patchValue({
+      address: selectedStore.address,
+    });
+  }
+
   displayFn(user: StoreDetails): string {
     return user && user.storeName ? user.storeName : '';
   }
@@ -206,14 +234,8 @@ export class DataEntryComponent implements OnInit {
   private _filter(name: string): StoreDetails[] {
     const filterValue = name.toLowerCase();
 
-    return this.storeArray.filter((option) =>
+    return this.storeCollection.filter((option) =>
       option.storeName.toLowerCase().includes(filterValue)
     );
-  }
-
-  onStoreSelected(selectedStore: StoreDetails) {
-    this.billFormGroup.patchValue({
-      address: selectedStore.address,
-    });
   }
 }

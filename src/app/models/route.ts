@@ -1,7 +1,7 @@
 export class Route {
   routeName!: string;
   id!: string;
-  createdDate!: Date;
+  createdDate!: string;
 }
 
 export class StoreDetails {
@@ -11,7 +11,7 @@ export class StoreDetails {
   address!: string;
   mobileNo!: string;
   altMobileNo!: string;
-  createdDate!: Date;
+  createdDate!: string;
 }
 
 export class BillDetails {
@@ -20,14 +20,14 @@ export class BillDetails {
   billNumber!: string;
   billDate!: Date;
   billAmount!: string;
-  createdDate!: Date;
+  createdDate!: string;
 }
 
 export class Recovery {
   route!: Route;
   shopDetails!: StoreDetails;
   billDetails!: BillDetails;
-  createdDate!: Date;
+  createdDate!: string;
 }
 
 export class StoreDataEntry {
