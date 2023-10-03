@@ -1,5 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { DataEntryService } from '../services/data-entry.service';
+import { AppConstant } from '../appConstant';
+import {
+  BillDetails,
+  PaymentMode,
+  RecoveryDetails,
+  Route,
+  StoreDetails,
+} from '../models/route';
+import { RecoveryService } from '../services/recovery.service';
+import { Observable, map, startWith } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-recovery',
@@ -8,8 +22,258 @@ import { FormGroup } from '@angular/forms';
 })
 export class RecoveryComponent implements OnInit {
   recoveryFormGroup!: FormGroup;
+  routeCollection: Route[] = [];
+  modeOfPaymentCollection: PaymentMode[] = [];
+  storeCollection: StoreDetails[] = [];
+  filteredOptions: Observable<StoreDetails[]> | undefined;
+  billCollection: BillDetails[] = [];
+  filteredBillNumbers: Observable<BillDetails[]> | undefined;
+  selecetdBill!: BillDetails;
 
-  constructor() {}
+  constructor(
+    public entryService: DataEntryService,
+    public recoveryService: RecoveryService,
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initializeFormGroup();
+    this.getPaymentModes();
+    this.onFetchRoute();
+  }
+
+  initializeFormGroup() {
+    this.recoveryFormGroup = new FormGroup({
+      route: new FormControl(),
+      storeName: new FormControl(),
+      address: new FormControl(),
+      billNumber: new FormControl(),
+      billAmount: new FormControl(),
+      amountReceived: new FormControl(),
+      pendingAmount: new FormControl(),
+      receiptNumber: new FormControl(),
+      modeOfPayment: new FormControl(),
+    });
+  }
+
+  getPaymentModes() {
+    this.recoveryService.getPaymentModes().then((result) => {
+      if (result && result.length > 0) {
+        this.modeOfPaymentCollection = result;
+      } else {
+        console.log(AppConstant.PAYMENT_MODES_NOT_FOUND_MSG);
+      }
+    });
+  }
+
+  onFetchRoute() {
+    this.routeCollection = [];
+    this.entryService.getRoutes().then((result) => {
+      if (result && result.length > 0) {
+        this.routeCollection = result;
+      } else {
+        console.log(AppConstant.ROUTE_NOT_FOUND_MSG);
+      }
+    });
+  }
+
+  onRouteSelectionChange(selecetdValue: string) {
+    console.log(selecetdValue);
+    if (selecetdValue) {
+      this.recoveryFormGroup.get('storeName')?.reset();
+      this.recoveryFormGroup.get('address')?.reset();
+      this.recoveryFormGroup.get('billNumber')?.reset();
+      this.recoveryFormGroup.get('billAmount')?.reset();
+      this.recoveryFormGroup.get('amountReceived')?.reset();
+      this.recoveryFormGroup.get('pendingAmount')?.reset();
+      this.recoveryFormGroup.get('modeOfPayment')?.reset();
+      this.onFetchStoreDetails(selecetdValue);
+    }
+  }
+
+  onFetchStoreDetails(selecetdValue: string) {
+    this.storeCollection = [];
+    this.entryService.getStores(selecetdValue).then((result) => {
+      if (result && result.length > 0) {
+        this.storeCollection = result;
+        this.subscribeBill_StoreNameValueChange();
+      } else {
+        console.log(AppConstant.STORE_NOT_FOUND_MSG);
+      }
+    });
+  }
+
+  subscribeBill_StoreNameValueChange() {
+    let routeControl = this.recoveryFormGroup.controls['storeName'];
+    this.filteredOptions = routeControl?.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const name = typeof value === 'string' ? value : value?.name;
+        return name
+          ? this._filter(name as string)
+          : this.storeCollection.slice();
+      })
+    );
+  }
+
+  displayBillNumberFn(user: BillDetails): string {
+    return user && user.billNumber ? user.billNumber : '';
+  }
+
+  private _filterBillNumber(name: string): BillDetails[] {
+    const filterValue = name.toLowerCase();
+
+    return this.billCollection.filter((option) =>
+      option.billNumber.toLowerCase().includes(filterValue)
+    );
+  }
+
+  subscribeBillNumberValueChange() {
+    let control = this.recoveryFormGroup.controls['billNumber'];
+    this.filteredBillNumbers = control?.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const name = typeof value === 'string' ? value : value?.name;
+        return name
+          ? this._filterBillNumber(name as string)
+          : this.billCollection.slice();
+      })
+    );
+  }
+
+  displayFn(user: StoreDetails): string {
+    return user && user.storeName ? user.storeName : '';
+  }
+
+  private _filter(name: string): StoreDetails[] {
+    const filterValue = name.toLowerCase();
+
+    return this.storeCollection.filter((option) =>
+      option.storeName.toLowerCase().includes(filterValue)
+    );
+  }
+
+  onStoreSelected(selectedStore: StoreDetails) {
+    this.recoveryFormGroup.patchValue({
+      address: selectedStore.address,
+      mobileNo: selectedStore.mobileNo,
+    });
+
+    this.getBillsForSelectedStore(selectedStore.storeName);
+  }
+
+  onBillSelected(selectedBill: string) {
+    const billobject = this.billCollection.find(
+      (c) => c.billNumber == selectedBill
+    ) as BillDetails;
+
+    if (billobject) {
+      this.selecetdBill = billobject;
+      this.recoveryFormGroup.patchValue({
+        billAmount: billobject.pendingAmount ?? 0,
+        pendingAmount: billobject.pendingAmount ?? 0,
+      });
+    }
+  }
+
+  getBillsForSelectedStore(selecetdValue: string) {
+    this.billCollection = [];
+    this.recoveryService.getFilteredBills(selecetdValue).then((result) => {
+      if (result && result.length > 0) {
+        this.billCollection = this.sortData(result);
+      } else {
+        console.log(AppConstant.STORE_NOT_FOUND_MSG);
+      }
+
+      this.subscribeBillNumberValueChange();
+    });
+  }
+
+  sortData(result: BillDetails[]) {
+    return result.sort((a, b) => {
+      return <any>new Date(a.billDate) - <any>new Date(b.billDate);
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
+  }
+
+  onAddRecoveryData() {
+    let recoveryDetail = {
+      route: this.recoveryFormGroup.value.route,
+      storeName: this.recoveryFormGroup.value.storeName,
+      address: this.recoveryFormGroup.value.address,
+      billNumber: this.recoveryFormGroup.value.billNumber,
+      billAmount: this.recoveryFormGroup.value.billAmount,
+      amountReceived: this.recoveryFormGroup.value.amountReceived,
+      pendingAmount: this.recoveryFormGroup.value.pendingAmount,
+      receiptNumber: this.recoveryFormGroup.value.receiptNumber,
+      modeOfPayment: this.recoveryFormGroup.value.modeOfPayment,
+      createdDate: this.datePipe.transform(
+        Date.now().toString(),
+        AppConstant.DATE_TIME_FORMAT
+      ),
+    } as RecoveryDetails;
+
+    this.recoveryService
+      .addRecoveryDetails(recoveryDetail)
+      .then(() => {
+        console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
+        this.openSnackBar(
+          AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
+          AppConstant.SAVE_ACTION
+        );
+        this.updateBillPendingAmount();
+        this.initializeFormGroup();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  updateBillPendingAmount() {
+    let bill = {
+      ...this.selecetdBill,
+      pendingAmount: this.recoveryFormGroup.value.pendingAmount,
+      updatedDate: this.datePipe.transform(
+        Date.now().toString(),
+        AppConstant.DATE_TIME_FORMAT
+      ),
+    } as BillDetails;
+
+    this.recoveryService
+      .updateBillPendingAmount(bill)
+      .then(() => {
+        console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);
+        this.openSnackBar(
+          AppConstant.BILL_UPDATED_SUCCESS_MSG,
+          AppConstant.UPDAE_ACTION
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  OnAmountReceivedChanged() {
+    const billAmt = +this.recoveryFormGroup.value.billAmount;
+    const receivedAmt = +this.recoveryFormGroup.value.amountReceived;
+    const pendingAmt = billAmt - receivedAmt;
+    console.log(pendingAmt);
+    this.recoveryFormGroup.patchValue({
+      pendingAmount: pendingAmt,
+    });
+  }
+
+  OnBillNumberChanged() {
+    this.recoveryFormGroup.patchValue({
+      billAmount: '',
+      pendingAmount: '',
+      amountReceived: '',
+    });
+  }
 }

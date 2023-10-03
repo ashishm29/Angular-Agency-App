@@ -99,8 +99,9 @@ export class DataEntryComponent implements OnInit {
       route: this.billFormGroup.value.route,
       storeName: this.billFormGroup.value.storeName,
       billNumber: this.billFormGroup.value.billNumber,
-      billDate: this.billFormGroup.value.billDate,
+      billDate: this.billFormGroup.value.billDate.toLocaleDateString(),
       billAmount: this.billFormGroup.value.billAmount,
+      pendingAmount: this.billFormGroup.value.billAmount,
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -163,6 +164,7 @@ export class DataEntryComponent implements OnInit {
     this.entryService.getStores(selecetdValue).then((result) => {
       if (result && result.length > 0) {
         this.storeCollection = result;
+        this.subscribeBill_StoreNameValueChange();
       } else {
         console.log(AppConstant.STORE_NOT_FOUND_MSG);
       }
@@ -192,7 +194,6 @@ export class DataEntryComponent implements OnInit {
       } else if (selecetdValue === 'bill') {
         this.onFetchRoute();
         this.showBillControls = true;
-        this.subscribeBill_StoreNameValueChange();
       }
     }
   }

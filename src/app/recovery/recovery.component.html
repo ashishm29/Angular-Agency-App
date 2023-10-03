@@ -1,75 +1,96 @@
+<form [formGroup]="recoveryFormGroup">
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Route Name</mat-label>
-    <mat-select>
-      <mat-option value="barshi">Barshi</mat-option>
-      <mat-option value="ter">Ter</mat-option>
-      <mat-option value="kalamb">Kalamb</mat-option>
-      <mat-option value="Dhoki">Dhoki</mat-option>
+    <mat-select formControlName="route" (selectionChange)="onRouteSelectionChange($event.value)">
+      <div *ngFor="let route of routeCollection">
+        <mat-option value="{{ route.routeName }}">{{
+          route.routeName
+          }}</mat-option>
+      </div>
     </mat-select>
   </mat-form-field>
 </p>
 
 <p>
-  <mat-form-field appearance="outline">
+  <mat-form-field class="example-full-width" appearance="outline">
     <mat-label>Store Name</mat-label>
-    <input matInput>
+    <input type="text" formControlName="storeName" matInput [matAutocomplete]="auto" />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+      (optionSelected)="onStoreSelected($event.option.value)">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{ option.storeName }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 </p>
 
 <p>
   <mat-form-field appearance="outline" class="example-full-width">
     <mat-label>Shop Address</mat-label>
-    <textarea matInput></textarea>
+    <textarea readonly="true" matInput formControlName="address"></textarea>
   </mat-form-field>
 </p>
 
 <p>
-  <mat-form-field appearance="outline">
-    <mat-label>Mobile Number</mat-label>
-    <input matInput>
+  <mat-form-field class="example-full-width" appearance="outline">
+    <mat-label>Bill Number </mat-label>
+    <input matInput aria-label="State" formControlName="billNumber" [matAutocomplete]="bill" (keyup)="OnBillNumberChanged()">
+    <mat-autocomplete #bill="matAutocomplete" (optionSelected)="onBillSelected($event.option.value)">
+      <mat-option *ngFor="let state of filteredBillNumbers | async" [value]="state.billNumber">
+        <small>No : {{state.billNumber}}</small> |
+        <small>Amount: {{state.billAmount}}</small> |
+        <small>Date : {{state.billDate | date : 'dd/MM/yyyy'}}</small>
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 </p>
 
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Bill Amount</mat-label>
-    <input matInput>
+    <input matInput formControlName="billAmount">
   </mat-form-field>
 </p>
 <p>
 
   <mat-form-field appearance="outline">
     <mat-label>Amount Received</mat-label>
-    <input matInput>
+    <input matInput formControlName="amountReceived" (keyup)="OnAmountReceivedChanged()">
   </mat-form-field>
 </p>
 <p>
-
   <mat-form-field appearance="outline">
     <mat-label>Pending Amount</mat-label>
-    <input matInput>
+    <input matInput formControlName="pendingAmount">
+  </mat-form-field>
+</p>
+
+<p>
+  <mat-form-field appearance="outline">
+    <mat-label>Receipt Number</mat-label>
+    <input matInput formControlName="receiptNumber">
   </mat-form-field>
 </p>
 
 <p>
   <mat-form-field appearance="outline">
     <mat-label>Payment option</mat-label>
-    <mat-select>
-      <mat-option value="cash">Cash</mat-option>
-      <mat-option value="phonepay">Phone Pay</mat-option>
-      <mat-option value="googlepay">Google Pay</mat-option>
-      <mat-option value="netbanking">Net Banking</mat-option>
-      <mat-option value="cheque">Cheque</mat-option>
-      <mat-option value="other">Other</mat-option>
+    <mat-select formControlName="modeOfPayment">
+      <div *ngFor="let paymentMode of modeOfPaymentCollection">
+        <mat-option value="{{ paymentMode.mode }}">
+          {{paymentMode.mode}}
+        </mat-option>
+      </div>
+
     </mat-select>
   </mat-form-field>
 </p>
 
 
-<p>
-  <button mat-raised-button color="primary" routerLink="/dashboard">Submit</button>
+<p align="center">
+  <button mat-raised-button color="primary" (click)="onAddRecoveryData()">Submit</button>
 </p>
-
+</form>
 
 

@@ -15,22 +15,36 @@ export class StoreDetails {
 }
 
 export class BillDetails {
+  id!: string;
   route!: string;
   storeName!: string;
   billNumber!: string;
-  billDate!: Date;
+  billDate!: string;
   billAmount!: string;
+  pendingAmount!: string;
   createdDate!: string;
+  updatedDate!: string;
 }
 
-export class Recovery {
-  route!: Route;
-  shopDetails!: StoreDetails;
-  billDetails!: BillDetails;
+export class RecoveryDetails {
+  route!: string;
+  storeName!: string;
+  address!: string;
+  billNumber!: string;
+  billAmount!: string;
+  amountReceived!: string;
+  pendingAmount!: string;
+  receiptNumber!: string;
+  modeOfPayment!: string;
   createdDate!: string;
 }
 
 export class StoreDataEntry {
   route!: Route;
   shopDetails!: StoreDetails;
+}
+
+export class PaymentMode {
+  mode!: string;
+  id!: string;
 }
