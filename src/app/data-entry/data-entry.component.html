@@ -14,19 +14,21 @@
   <div class="line"><mat-divider></mat-divider></div>
 </div>
 
-<div *ngIf="showRouteControls">
+<form *ngIf="showRouteControls" [formGroup]="routeFormGroup">
+<div>
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
-      <input matInput [(ngModel)]="routeName" />
+      <input matInput formControlName="route" required #route />
     </mat-form-field>
   </p>
   <p align="center">
-    <button mat-raised-button color="primary" (click)="onAddRoute()">
+    <button mat-raised-button color="primary" [disabled]="routeFormGroup.invalid" (click)="onAddRoute()">
       Add Route
     </button>
   </p>
 </div>
+</form>
 
 <form *ngIf="showShopControls" [formGroup]="shopFormGroup">
   <p>
@@ -75,6 +77,7 @@
       mat-raised-button
       color="primary"
       type="submit"
+      [disabled]="shopFormGroup.invalid"
       (click)="onAddStore()"
     >
       Add Shop
@@ -163,6 +166,7 @@
       mat-raised-button
       color="primary"
       type="submit"
+      [disabled]="billFormGroup.invalid"
       (click)="onAddBill()"
     >
       Add Bill

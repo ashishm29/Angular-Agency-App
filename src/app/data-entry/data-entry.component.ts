@@ -25,6 +25,7 @@ export class DataEntryComponent implements OnInit {
   filteredOptions: Observable<StoreDetails[]> | undefined;
   myControl = new FormControl();
 
+  routeFormGroup!: FormGroup;
   shopFormGroup!: FormGroup;
   billFormGroup!: FormGroup;
   showRouteControls!: boolean;
@@ -32,13 +33,19 @@ export class DataEntryComponent implements OnInit {
   showBillControls!: boolean;
 
   ngOnInit(): void {
-    this.resetStoreUiFields();
-    this.resetBillUiFields();
+    this.initializeRouteUiFields();
+    this.initializeStoreUiFields();
+    this.initializeBillUiFields();
   }
 
   onAddRoute() {
+    if (this.routeFormGroup.invalid) {
+      console.log('route form is invalid');
+      return;
+    }
+
     let route = {
-      routeName: this.routeName,
+      routeName: this.routeFormGroup.value.route,
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -54,7 +61,7 @@ export class DataEntryComponent implements OnInit {
           AppConstant.ROUTE_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
-        this.routeName = '';
+        this.initializeRouteUiFields();
       })
       .catch((err) => {
         console.log(err);
@@ -87,7 +94,7 @@ export class DataEntryComponent implements OnInit {
           AppConstant.STORE_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
-        this.resetStoreUiFields();
+        this.initializeStoreUiFields();
       })
       .catch((err) => {
         console.log(err);
@@ -95,6 +102,11 @@ export class DataEntryComponent implements OnInit {
   }
 
   onAddBill() {
+    if (this.billFormGroup.invalid) {
+      console.log('bill form is invalid');
+      return;
+    }
+
     let billDetails = {
       route: this.billFormGroup.value.route,
       storeName: this.billFormGroup.value.storeName,
@@ -116,35 +128,41 @@ export class DataEntryComponent implements OnInit {
           AppConstant.BILL_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
-        this.resetBillUiFields();
+        this.initializeBillUiFields();
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  resetStoreUiFields() {
+  initializeStoreUiFields() {
     this.shopFormGroup = new FormGroup({
-      route: new FormControl(),
-      storeName: new FormControl(),
-      address: new FormControl(),
+      route: new FormControl('', [Validators.required]),
+      storeName: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
       mobileNo: new FormControl('', [
         Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(10),
+        Validators.min(1000000000),
+        Validators.max(99999999999),
       ]),
       altMobileNo: new FormControl(),
     });
   }
 
-  resetBillUiFields() {
+  initializeBillUiFields() {
     this.billFormGroup = new FormGroup({
-      route: new FormControl(),
-      storeName: new FormControl(),
-      billNumber: new FormControl(),
-      billDate: new FormControl(),
-      billAmount: new FormControl(),
+      route: new FormControl('', [Validators.required]),
+      storeName: new FormControl('', [Validators.required]),
+      billNumber: new FormControl('', [Validators.required]),
+      billDate: new FormControl('', [Validators.required]),
+      billAmount: new FormControl('', [Validators.required]),
       address: new FormControl(),
+    });
+  }
+
+  initializeRouteUiFields() {
+    this.routeFormGroup = new FormGroup({
+      route: new FormControl('', [Validators.required]),
     });
   }
 
@@ -182,8 +200,8 @@ export class DataEntryComponent implements OnInit {
     this.showRouteControls = false;
     this.showShopControls = false;
     this.showBillControls = false;
-    this.resetBillUiFields();
-    this.resetStoreUiFields();
+    this.initializeBillUiFields();
+    this.initializeStoreUiFields();
 
     if (selecetdValue) {
       if (selecetdValue === 'store') {

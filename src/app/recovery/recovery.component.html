@@ -38,8 +38,8 @@
     <input matInput aria-label="State" formControlName="billNumber" [matAutocomplete]="bill" (keyup)="OnBillNumberChanged()">
     <mat-autocomplete #bill="matAutocomplete" (optionSelected)="onBillSelected($event.option.value)">
       <mat-option *ngFor="let state of filteredBillNumbers | async" [value]="state.billNumber">
-        <small>No : {{state.billNumber}}</small> |
-        <small>Amount: {{state.billAmount}}</small> |
+        <small style="color: red;">No : {{state.billNumber}}</small> ,
+        <small style="color: green;">Amount: {{state.billAmount}}</small> ,
         <small>Date : {{state.billDate | date : 'dd/MM/yyyy'}}</small>
       </mat-option>
     </mat-autocomplete>
@@ -82,14 +82,13 @@
           {{paymentMode.mode}}
         </mat-option>
       </div>
-
     </mat-select>
   </mat-form-field>
 </p>
 
 
 <p align="center">
-  <button mat-raised-button color="primary" (click)="onAddRecoveryData()">Submit</button>
+  <button mat-raised-button color="primary" [disabled]="recoveryFormGroup.invalid" (click)="onAddRecoveryData()">Submit</button>
 </p>
 </form>
 

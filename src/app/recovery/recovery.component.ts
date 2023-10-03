@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataEntryService } from '../services/data-entry.service';
 import { AppConstant } from '../appConstant';
 import {
@@ -45,15 +45,15 @@ export class RecoveryComponent implements OnInit {
 
   initializeFormGroup() {
     this.recoveryFormGroup = new FormGroup({
-      route: new FormControl(),
-      storeName: new FormControl(),
+      route: new FormControl('', [Validators.required]),
+      storeName: new FormControl('', [Validators.required]),
       address: new FormControl(),
-      billNumber: new FormControl(),
-      billAmount: new FormControl(),
-      amountReceived: new FormControl(),
+      billNumber: new FormControl('', [Validators.required]),
+      billAmount: new FormControl('', [Validators.required]),
+      amountReceived: new FormControl('', [Validators.required]),
       pendingAmount: new FormControl(),
-      receiptNumber: new FormControl(),
-      modeOfPayment: new FormControl(),
+      receiptNumber: new FormControl('', [Validators.required]),
+      modeOfPayment: new FormControl('', [Validators.required]),
     });
   }
 
@@ -203,6 +203,11 @@ export class RecoveryComponent implements OnInit {
   }
 
   onAddRecoveryData() {
+    if (this.recoveryFormGroup.invalid) {
+      console.log('recovery form is invalid');
+      return;
+    }
+
     let recoveryDetail = {
       route: this.recoveryFormGroup.value.route,
       storeName: this.recoveryFormGroup.value.storeName,
@@ -219,20 +224,20 @@ export class RecoveryComponent implements OnInit {
       ),
     } as RecoveryDetails;
 
-    this.recoveryService
-      .addRecoveryDetails(recoveryDetail)
-      .then(() => {
-        console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
-        this.openSnackBar(
-          AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
-          AppConstant.SAVE_ACTION
-        );
-        this.updateBillPendingAmount();
-        this.initializeFormGroup();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // this.recoveryService
+    //   .addRecoveryDetails(recoveryDetail)
+    //   .then(() => {
+    //     console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
+    //     this.openSnackBar(
+    //       AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
+    //       AppConstant.SAVE_ACTION
+    //     );
+    //     this.updateBillPendingAmount();
+    //     this.initializeFormGroup();
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   updateBillPendingAmount() {
