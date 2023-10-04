@@ -19,7 +19,12 @@ import { AppConstant } from '../appConstant';
 export class BillService {
   constructor(public firestoreService: FirestoreService) {}
 
-  async getFilteredBills(route: string, storeName: string, billDate: string) {
+  async getFilteredBills(
+    route: string,
+    storeName: string,
+    fromBillDate: string,
+    toBillDate: string
+  ) {
     let collectionData: BillDetails[] = [];
 
     const queryConditions: QueryConstraint[] = [];
@@ -32,8 +37,12 @@ export class BillService {
       queryConditions.push(where('storeName.storeName', '==', storeName));
     }
 
-    if (billDate) {
-      queryConditions.push(where('billDate', '==', billDate));
+    if (fromBillDate) {
+      queryConditions.push(where('billDate', '>=', fromBillDate));
+
+      if (toBillDate) {
+        queryConditions.push(where('billDate', '<=', toBillDate));
+      }
     }
 
     // Create a query against the collection.

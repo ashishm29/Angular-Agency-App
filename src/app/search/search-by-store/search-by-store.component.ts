@@ -27,7 +27,8 @@ export class SearchByStoreComponent implements OnInit {
 
   route!: FormControl;
   storeName!: FormControl;
-  billDate!: FormControl;
+  fromBillDate!: FormControl;
+  toBillDate!: FormControl;
   storeMessage!: string;
   billMessage!: string;
 
@@ -39,14 +40,14 @@ export class SearchByStoreComponent implements OnInit {
   ngOnInit(): void {
     this.route = new FormControl();
     this.storeName = new FormControl();
-    this.billDate = new FormControl();
+    this.fromBillDate = new FormControl();
+    this.toBillDate = new FormControl();
     this.onFetchRoute();
   }
 
   onRouteSelectionChange(selectedRoute: string) {
     console.log(selectedRoute);
     this.storeName.setValue('');
-    this.billDate.setValue(null);
     this.billCollection = [];
     this.storeMessage;
     this.billMessage = '';
@@ -111,7 +112,8 @@ export class SearchByStoreComponent implements OnInit {
       .getFilteredBills(
         this.route?.value,
         this.storeName?.value?.storeName,
-        this.billDate?.value?.toLocaleDateString()
+        this.fromBillDate?.value?.toLocaleDateString(),
+        this.toBillDate?.value?.toLocaleDateString()
       )
       .then((result) => {
         if (result && result.length > 0) {
