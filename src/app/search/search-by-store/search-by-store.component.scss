@@ -9,7 +9,10 @@ mat-form-field
   margin-left: 2em;
 }
 
-tr.mat-footer-row td {
+tr.mat-footer-row td ,
+tr.mat-header-row th{
   font-weight: bold;
-  background-color: lightgreen;
+    color: black;
+    font-size: small;
+    background-color: lightgreen;
 }
