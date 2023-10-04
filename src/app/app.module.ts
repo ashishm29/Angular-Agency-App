@@ -35,6 +35,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SearchComponent } from './search/search.component';
+import { SearchByStoreComponent } from './search/search-by-store/search-by-store.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     RecoveryComponent,
     HistoryComponent,
     LoginDetailsComponent,
+    SearchComponent,
+    SearchByStoreComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +74,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
+    MatSortModule,
     ReactiveFormsModule,
     FormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),

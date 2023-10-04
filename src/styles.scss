@@ -18,3 +18,11 @@ mat-form-field
 table {
   width: 100%;
 }
+
+
+.centerFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}

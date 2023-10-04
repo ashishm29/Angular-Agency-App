@@ -6,18 +6,20 @@ import { DataEntryComponent } from './data-entry/data-entry.component';
 import { RecoveryComponent } from './recovery/recovery.component';
 import { HistoryComponent } from './history/history.component';
 import { LoginDetailsComponent } from './login-details/login-details.component';
+import { SearchByStoreComponent } from './search/search-by-store/search-by-store.component';
 
 const routes: Routes = [
-  {path : '' , component : LoginComponent},
-  {path : 'dashboard' , component : DashboardComponent},
-  {path : 'dataentry' , component : DataEntryComponent},
-  {path : 'recovery' , component : RecoveryComponent},
-  {path : 'history' , component : HistoryComponent},
-  {path : 'logindetails' , component : LoginDetailsComponent}
+  { path: '', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dataentry', component: DataEntryComponent },
+  { path: 'recovery', component: RecoveryComponent },
+  { path: 'history', component: HistoryComponent },
+  { path: 'logindetails', component: LoginDetailsComponent },
+  { path: 'search', component: SearchByStoreComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
