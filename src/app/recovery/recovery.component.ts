@@ -224,20 +224,20 @@ export class RecoveryComponent implements OnInit {
       ),
     } as RecoveryDetails;
 
-    // this.recoveryService
-    //   .addRecoveryDetails(recoveryDetail)
-    //   .then(() => {
-    //     console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
-    //     this.openSnackBar(
-    //       AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
-    //       AppConstant.SAVE_ACTION
-    //     );
-    //     this.updateBillPendingAmount();
-    //     this.initializeFormGroup();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    this.recoveryService
+      .addRecoveryDetails(recoveryDetail)
+      .then(() => {
+        console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
+        this.openSnackBar(
+          AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
+          AppConstant.SAVE_ACTION
+        );
+        this.updateBillPendingAmount();
+        this.initializeFormGroup();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   updateBillPendingAmount() {
