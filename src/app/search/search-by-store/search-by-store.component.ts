@@ -19,6 +19,7 @@ export class SearchByStoreComponent implements OnInit {
   displayedColumns: string[] = [
     'route',
     'storeName',
+    'address',
     'billDate',
     'billNumber',
     'billAmount',
@@ -27,6 +28,7 @@ export class SearchByStoreComponent implements OnInit {
 
   route!: FormControl;
   storeName!: FormControl;
+  billNumber!: FormControl;
   fromBillDate!: FormControl;
   toBillDate!: FormControl;
   storeMessage!: string;
@@ -40,6 +42,7 @@ export class SearchByStoreComponent implements OnInit {
   ngOnInit(): void {
     this.route = new FormControl();
     this.storeName = new FormControl();
+    this.billNumber = new FormControl();
     this.fromBillDate = new FormControl();
     this.toBillDate = new FormControl();
     this.onFetchRoute();
@@ -48,6 +51,7 @@ export class SearchByStoreComponent implements OnInit {
   onRouteSelectionChange(selectedRoute: string) {
     console.log(selectedRoute);
     this.storeName.setValue('');
+    this.billNumber.setValue('');
     this.billCollection = [];
     this.storeMessage;
     this.billMessage = '';
@@ -113,7 +117,8 @@ export class SearchByStoreComponent implements OnInit {
         this.route?.value,
         this.storeName?.value?.storeName,
         this.fromBillDate?.value?.toLocaleDateString(),
-        this.toBillDate?.value?.toLocaleDateString()
+        this.toBillDate?.value?.toLocaleDateString(),
+        this.billNumber.value
       )
       .then((result) => {
         if (result && result.length > 0) {

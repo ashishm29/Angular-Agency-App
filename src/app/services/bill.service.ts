@@ -23,7 +23,8 @@ export class BillService {
     route: string,
     storeName: string,
     fromBillDate: string,
-    toBillDate: string
+    toBillDate: string,
+    billNumber: string
   ) {
     let collectionData: BillDetails[] = [];
 
@@ -43,6 +44,10 @@ export class BillService {
       if (toBillDate) {
         queryConditions.push(where('billDate', '<=', toBillDate));
       }
+    }
+
+    if (billNumber) {
+      queryConditions.push(where('billNumber', '==', billNumber));
     }
 
     // Create a query against the collection.

@@ -24,6 +24,11 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
+    <mat-label>Bill Number</mat-label>
+    <input matInput [formControl]="billNumber">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
     <mat-label>From date</mat-label>
     <input matInput [matDatepicker]="picker" [formControl]="fromBillDate" placeholder="From date" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -56,6 +61,13 @@
     <th mat-header-cell *matHeaderCellDef> Store Name </th>
     <td mat-cell *matCellDef="let element"> {{element.storeName.storeName}}
     </td><td mat-footer-cell *matFooterCellDef> </td>
+  </ng-container>
+
+  <ng-container matColumnDef="address">
+    <th mat-header-cell *matHeaderCellDef> Store Address </th>
+    <td mat-cell *matCellDef="let element"> {{element.storeName.address}}
+    </td>
+    <td mat-footer-cell *matFooterCellDef> </td>
   </ng-container>
 
   <ng-container matColumnDef="billDate">
