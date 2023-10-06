@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
@@ -24,6 +25,7 @@ export class SearchByStoreComponent implements OnInit {
     'billNumber',
     'billAmount',
     'pendingAmount',
+    'Action',
   ];
 
   route!: FormControl;
@@ -36,7 +38,8 @@ export class SearchByStoreComponent implements OnInit {
 
   constructor(
     public entryService: DataEntryService,
-    public billService: BillService
+    public billService: BillService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -127,6 +130,9 @@ export class SearchByStoreComponent implements OnInit {
           console.log(AppConstant.STORE_NOT_FOUND_MSG);
         }
         this.billMessage = 'BILLS  : ' + this.billCollection?.length;
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -154,5 +160,28 @@ export class SearchByStoreComponent implements OnInit {
     return this.billCollection
       .map((t) => +t.pendingAmount)
       .reduce((acc, value) => acc + value, 0);
+  }
+
+  onDeleteBill(element: BillDetails) {
+    console.log(element.id);
+    this.billService
+      .deleteBill(element.id)
+      .then(() => {
+        this.openSnackBar(
+          AppConstant.BILL_DELETED_SUCCESS_MSG,
+          AppConstant.DELETE_ACTION
+        );
+        console.log(AppConstant.BILL_DELETED_SUCCESS_MSG);
+        this.onSearch();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 }

@@ -4,11 +4,9 @@ import { getDoc, getDocs } from '@firebase/firestore';
 import { BillDetails, PaymentMode, RecoveryDetails } from '../models/route';
 import {
   QueryConstraint,
-  addDoc,
+  deleteDoc,
   doc,
-  orderBy,
   query,
-  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { AppConstant } from '../appConstant';
@@ -65,5 +63,14 @@ export class BillService {
     });
     console.log(JSON.stringify(collectionData));
     return collectionData;
+  }
+
+  deleteBill(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.BILL_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
   }
 }
