@@ -27,6 +27,7 @@ export class BillDetails {
 }
 
 export class RecoveryDetails {
+  id!: string;
   route!: string;
   storeName!: string;
   address!: string;

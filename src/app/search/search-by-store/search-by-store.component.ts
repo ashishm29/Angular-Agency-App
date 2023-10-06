@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
 import { DataEntryService } from 'src/app/services/data-entry.service';
+import { RecoveryInfoComponent } from '../recovery-info/recovery-info.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-search-by-store',
@@ -39,7 +42,9 @@ export class SearchByStoreComponent implements OnInit {
   constructor(
     public entryService: DataEntryService,
     public billService: BillService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -182,6 +187,20 @@ export class SearchByStoreComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 5000,
+    });
+  }
+
+  navigateToBillDetailPage(billNumber: string) {
+    this.router.navigate(['billinfo/' + billNumber]);
+  }
+
+  openDialog(selectedBillNo: string): void {
+    const dialogRef = this.dialog.open(RecoveryInfoComponent, {
+      data: { billNumber: selectedBillNo },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
     });
   }
 }

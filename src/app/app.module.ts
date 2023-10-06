@@ -38,6 +38,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SearchComponent } from './search/search.component';
 import { SearchByStoreComponent } from './search/search-by-store/search-by-store.component';
 import { MatSortModule } from '@angular/material/sort';
+import { RecoveryInfoComponent } from './search/recovery-info/recovery-info.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { MatSortModule } from '@angular/material/sort';
     LoginDetailsComponent,
     SearchComponent,
     SearchByStoreComponent,
+    RecoveryInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +78,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatNativeDateModule,
     MatAutocompleteModule,
     MatSortModule,
+    MatDialogModule,
     ReactiveFormsModule,
     FormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),

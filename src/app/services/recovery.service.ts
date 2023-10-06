@@ -76,4 +76,28 @@ export class RecoveryService {
       }
     );
   }
+
+  async getBillRecoveryDetails(billNumber: string) {
+    let collectionData: RecoveryDetails[] = [];
+
+    const queryConditions: QueryConstraint[] = [
+      where('billNumber', '==', billNumber),
+    ];
+
+    const q = query(
+      this.firestoreService.recoveryCollectionInstance,
+      ...queryConditions
+    );
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      collectionData.push({
+        ...doc.data(),
+        id: doc.id,
+      } as RecoveryDetails);
+    });
+    console.log(JSON.stringify(collectionData));
+    return collectionData;
+  }
 }
