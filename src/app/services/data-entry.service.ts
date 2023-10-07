@@ -2,10 +2,13 @@ import { Injectable, OnInit } from '@angular/core';
 import {
   Firestore,
   FirestoreInstances,
+  QueryConstraint,
   addDoc,
   collection,
+  doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import {
@@ -32,16 +35,43 @@ export class DataEntryService implements OnInit {
     return addDoc(coll, route);
   }
 
+  updateRoute(details: Route) {
+    return updateDoc(
+      doc(this.firestore, AppConstant.ROUTE_COLLECTION_NAME, details.id),
+      {
+        ...details,
+      }
+    );
+  }
+
   addStoreDetails(store: StoreDetails) {
     // Add STORE
     const coll = collection(this.firestore, AppConstant.STORE_COLLECTION_NAME);
     return addDoc(coll, store);
   }
 
+  updateStoreDetails(details: StoreDetails) {
+    return updateDoc(
+      doc(this.firestore, AppConstant.STORE_COLLECTION_NAME, details.id),
+      {
+        ...details,
+      }
+    );
+  }
+
   addBillDetails(bill: BillDetails) {
     // Add BILL
     const coll = collection(this.firestore, AppConstant.BILL_COLLECTION_NAME);
     return addDoc(coll, bill);
+  }
+
+  updateBillDetails(details: BillDetails) {
+    return updateDoc(
+      doc(this.firestore, AppConstant.BILL_COLLECTION_NAME, details.id),
+      {
+        ...details,
+      }
+    );
   }
 
   async getRoutes() {
@@ -68,10 +98,16 @@ export class DataEntryService implements OnInit {
       AppConstant.STORE_COLLECTION_NAME
     );
 
+    const queryConditions: QueryConstraint[] = [];
+
+    if (route) {
+      queryConditions.push(where('route', '==', route));
+    }
+
     let storeCollection: StoreDetails[] = [];
 
     // Create a query against the collection.
-    const q = query(collectionInstance, where('route', '==', route));
+    const q = query(collectionInstance, ...queryConditions);
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       console.log(doc.data());

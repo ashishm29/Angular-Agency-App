@@ -2,6 +2,7 @@ export class Route {
   routeName!: string;
   id!: string;
   createdDate!: string;
+  updatedDate!: string;
 }
 
 export class StoreDetails {
@@ -12,6 +13,7 @@ export class StoreDetails {
   mobileNo!: string;
   altMobileNo!: string;
   createdDate!: string;
+  updatedDate!: string;
 }
 
 export class BillDetails {

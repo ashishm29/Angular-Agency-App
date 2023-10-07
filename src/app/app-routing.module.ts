@@ -7,6 +7,10 @@ import { RecoveryComponent } from './recovery/recovery.component';
 import { HistoryComponent } from './history/history.component';
 import { LoginDetailsComponent } from './login-details/login-details.component';
 import { SearchByStoreComponent } from './search/search-by-store/search-by-store.component';
+import { EditInfoComponent } from './edit-info/edit-info.component';
+import { EditRouteDetailsComponent } from './edit-info/edit-route-details/edit-route-details.component';
+import { EditStoreDetailsComponent } from './edit-info/edit-store-details/edit-store-details.component';
+import { EditBillDetailsComponent } from './edit-info/edit-bill-details/edit-bill-details.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,6 +20,15 @@ const routes: Routes = [
   { path: 'history', component: HistoryComponent },
   { path: 'logindetails', component: LoginDetailsComponent },
   { path: 'search', component: SearchByStoreComponent },
+  {
+    path: 'editinfo',
+    component: EditInfoComponent,
+    children: [
+      { path: 'editroute', component: EditRouteDetailsComponent },
+      { path: 'editstore', component: EditStoreDetailsComponent },
+      { path: 'editbill', component: EditBillDetailsComponent },
+    ],
+  },
 ];
 
 @NgModule({

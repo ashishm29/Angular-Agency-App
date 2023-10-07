@@ -1,0 +1,62 @@
+<form [formGroup]="billFormGroup">
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter Bill Number to update</mat-label>
+      <input matInput [formControl]="billFormBillNoControl" />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="searchBill()"
+    >
+      Search Bill
+    </button>
+  </p>
+
+  <br />
+  <br />
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Bill Number</mat-label>
+      <input matInput formControlName="billNumber" />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="billDate"
+        placeholder="Choose a date"
+      />
+      <mat-hint>DD/MM/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Bill Amount</mat-label>
+      <input matInput type="number" formControlName="billAmount" />
+    </mat-form-field>
+  </p>
+
+  <p align="center">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="billFormGroup.invalid"
+      (click)="onUpdateBill()"
+    >
+      Update Bill
+    </button>
+  </p>
+</form>

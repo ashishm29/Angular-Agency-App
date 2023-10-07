@@ -1,0 +1,31 @@
+<form [formGroup]="routeFormGroup">
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Select Route to update</mat-label>
+      <mat-select (selectionChange)="routeSelectionChange($event.value)">
+        <div *ngFor="let route of routeCollection">
+          <mat-option value="{{ route.routeName }}">{{
+            route.routeName
+          }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter New Route Name</mat-label>
+      <input matInput formControlName="route" required #route />
+    </mat-form-field>
+  </p>
+  <p align="center">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="routeFormGroup.invalid"
+      (click)="onUpdateRoute()"
+    >
+      Update Route
+    </button>
+  </p>
+</form>

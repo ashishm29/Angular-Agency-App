@@ -32,7 +32,11 @@ import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+} from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SearchComponent } from './search/search.component';
@@ -40,6 +44,22 @@ import { SearchByStoreComponent } from './search/search-by-store/search-by-store
 import { MatSortModule } from '@angular/material/sort';
 import { RecoveryInfoComponent } from './search/recovery-info/recovery-info.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { EditInfoComponent } from './edit-info/edit-info.component';
+import { EditRouteDetailsComponent } from './edit-info/edit-route-details/edit-route-details.component';
+import { EditStoreDetailsComponent } from './edit-info/edit-store-details/edit-store-details.component';
+import { EditBillDetailsComponent } from './edit-info/edit-bill-details/edit-bill-details.component';
+
+const MY_DATE_FORMAT = {
+  parse: {
+    dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY', // this is how your date will get displayed on the Input
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -54,6 +74,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     SearchComponent,
     SearchByStoreComponent,
     RecoveryInfoComponent,
+    EditInfoComponent,
+    EditRouteDetailsComponent,
+    EditStoreDetailsComponent,
+    EditBillDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,7 +108,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

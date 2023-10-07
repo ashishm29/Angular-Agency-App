@@ -14,18 +14,31 @@ export class AppConstant {
   static readonly SAVE_ACTION: string = 'Saved';
   static readonly UPDAE_ACTION: string = 'Updated';
   static readonly DELETE_ACTION: string = 'Deleted';
+  static readonly SEARCH_ACTION: string = 'Search';
+
   static readonly BILL_ADDED_SUCCESS_MSG: string = 'Bill added Successfully';
   static readonly STORE_ADDED_SUCCESS_MSG: string = 'Store added Successfully';
   static readonly ROUTE_ADDED_SUCCESS_MSG: string = 'Route added Successfully';
   static readonly RECOVERY_ADDED_SUCCESS_MSG: string =
     'Recovery details added Successfully';
-  static readonly BILL_UPDATED_SUCCESS_MSG: string =
-    'Bill details updated Successfully';
+
   static readonly BILL_DELETED_SUCCESS_MSG: string =
     'Bill deleted successfully...';
 
   static readonly ROUTE_NOT_FOUND_MSG: string = 'No Route details found...';
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
+  static readonly BILL_NOT_FOUND_MSG: string = 'Bill details not found...';
+
+  static readonly ROUTE_UPDATED_SUCCESS_MSG: string =
+    'Route updated Successfully';
+  static readonly STORE_UPDATED_SUCCESS_MSG: string =
+    'Store updated Successfully';
+  static readonly BILL_UPDATED_SUCCESS_MSG: string =
+    'Bill details updated Successfully';
+
+  static readonly STORE_UPDATED_FAILED_MSG: string = 'Store updated failed...';
+
+  static readonly STORE_FORM_INVALID_MSG: string = 'Store form is invalid...';
 
   static readonly PAYMENT_MODES_NOT_FOUND_MSG: string =
     'No payment modes found...';
