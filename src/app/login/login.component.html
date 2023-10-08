@@ -1,33 +1,56 @@
 <form [formGroup]="loginFormGroup">
-<p>
-  <mat-form-field appearance="outline">
-    <mat-label>Enter Mobile Number</mat-label>
-    <input
-    formControlName="mobileNumber"
-    matInput placeholder="Enter Mobile No.">
-    <mat-icon matSuffix>phone</mat-icon>
-    <mat-hint>Enter 10 digit mobile number.</mat-hint>
-  </mat-form-field>
-</p>
-<p>
-  <mat-form-field appearance="outline">
-    <mat-label>Enter Password</mat-label>
-    <input matInput
-      formControlName="password"
-    placeholder="Enter Password" [type]="hide ? 'password' : 'text'">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter Mobile Number</mat-label>
+      <input
+        formControlName="mobileNumber"
+        matInput
+        type="number"
+        placeholder="Enter Mobile No."
+      />
+      <mat-icon matSuffix>phone</mat-icon>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter Password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        placeholder="Enter Password"
+        [type]="hide ? 'password' : 'text'"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+    </mat-form-field>
+  </p>
+  <p>
+    <span *ngIf="loginFailed" style="color: red; font-size: medium"
+      >Login failed please enter valid details...</span
+    >
+  </p>
+
+  <p align="center">
+    <button
+      mat-raised-button
+      color="primary"
+      class="button"
+      (click)="onLogin()"
+    >
+      Login
     </button>
-  </mat-form-field>
-</p>
+  </p>
 
-<p align="center">
-  <button mat-raised-button color="primary" class="button" (click)="onLogin()">Login</button>
-</p>
-
-<div align="center">
-  <button mat-raised-button color="primary" (click)="onSignUp()">SignUp</button>
-</div>
-
-  </form>
-
+  <!-- <div align="center">
+    <button mat-raised-button color="primary" (click)="onSignUp()">
+      SignUp
+    </button>
+  </div> -->
+</form>

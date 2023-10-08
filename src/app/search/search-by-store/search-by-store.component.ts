@@ -9,6 +9,7 @@ import { BillService } from 'src/app/services/bill.service';
 import { DataEntryService } from 'src/app/services/data-entry.service';
 import { RecoveryInfoComponent } from '../recovery-info/recovery-info.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-search-by-store',
@@ -38,13 +39,15 @@ export class SearchByStoreComponent implements OnInit {
   toBillDate!: FormControl;
   storeMessage!: string;
   billMessage!: string;
+  isAdmin!: boolean;
 
   constructor(
     public entryService: DataEntryService,
     public billService: BillService,
     private snackBar: MatSnackBar,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +56,7 @@ export class SearchByStoreComponent implements OnInit {
     this.billNumber = new FormControl();
     this.fromBillDate = new FormControl();
     this.toBillDate = new FormControl();
+    this.isAdmin = this.authService.isAdmin();
     this.onFetchRoute();
   }
 

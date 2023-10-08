@@ -25,6 +25,11 @@ export class FirestoreService {
     AppConstant.BILL_COLLECTION_NAME
   );
 
+  userCollectionInstance = collection(
+    this.firestore,
+    AppConstant.USER_COLLECTION_NAME
+  );
+
   constructor(
     public firestore: Firestore,
     public fireStoreInstance: FirestoreInstances

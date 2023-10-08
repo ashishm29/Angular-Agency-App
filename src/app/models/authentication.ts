@@ -15,9 +15,10 @@ export class UserDetails {
 
 export class User {
   id!: string;
-  mobileNumber!: number;
+  username!: string;
+  role!: string;
+  mobileNumber!: string;
   password!: string;
-  Roles!: Role[];
 }
 
 export class Role {

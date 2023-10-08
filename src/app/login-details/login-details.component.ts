@@ -15,21 +15,21 @@ export class LoginDetailsComponent implements OnInit {
   displayedColumns: string[] = ['mobileNumber', 'password'];
 
   ngOnInit(): void {
-    this.onGetDetail();
+    //this.onGetDetail();
   }
 
-  onGetDetail() {
-    this.authService.onFetchLoginDetails().then((result) => {
-      this.userDetail = result as User[];
-      this.userCollection = this.userDetail;
-    });
-  }
+  // onGetDetail() {
+  //   this.authService.onFetchLoginDetails().then((result) => {
+  //     this.userDetail = result as User[];
+  //     this.userCollection = this.userDetail;
+  //   });
+  // }
 
-  onUpdate(user: User) {
-    this.authService.onUpdateLoginDetails(user);
-  }
+  // onUpdate(user: User) {
+  //   this.authService.onUpdateLoginDetails(user);
+  // }
 
-  onDelete(user: User) {
-    this.authService.onDelete(user);
-  }
+  // onDelete(user: User) {
+  //   this.authService.onDelete(user);
+  // }
 }

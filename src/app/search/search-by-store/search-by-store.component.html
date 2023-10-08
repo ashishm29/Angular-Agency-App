@@ -1,111 +1,162 @@
 <div class="centerFlex">
-
-<div>
-  <mat-form-field appearance="outline">
-    <mat-label>Route Name</mat-label>
-    <mat-select  [formControl]="route" (selectionChange)="onRouteSelectionChange($event.value)">
-      <div *ngFor="let route of routeCollection">
-        <mat-option value="{{ route.routeName }}">{{
-          route.routeName
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Route Name</mat-label>
+      <mat-select
+        [formControl]="route"
+        (selectionChange)="onRouteSelectionChange($event.value)"
+      >
+        <div *ngFor="let route of routeCollection">
+          <mat-option value="{{ route.routeName }}">{{
+            route.routeName
           }}</mat-option>
-      </div>
-    </mat-select>
-  </mat-form-field>
+        </div>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field class="example-full-width" appearance="outline">
-    <mat-label>Store Name</mat-label>
-    <input type="text" [formControl]="storeName" matInput [matAutocomplete]="auto" />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
-      (optionSelected)="onStoreSelected($event.option.value)">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-        {{ option.storeName }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Store Name</mat-label>
+      <input
+        type="text"
+        [formControl]="storeName"
+        matInput
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayFn"
+        (optionSelected)="onStoreSelected($event.option.value)"
+      >
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option.storeName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Bill Number</mat-label>
-    <input matInput [formControl]="billNumber">
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Bill Number</mat-label>
+      <input matInput [formControl]="billNumber" />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>From date</mat-label>
-    <input matInput [matDatepicker]="picker" [formControl]="fromBillDate" placeholder="From date" />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>From date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [formControl]="fromBillDate"
+        placeholder="From date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>To date</mat-label>
-    <input matInput [matDatepicker]="toPicker" [formControl]="toBillDate" placeholder="To date" />
-    <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-    <mat-datepicker #toPicker></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>To date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="toPicker"
+        [formControl]="toBillDate"
+        placeholder="To date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
 
-  <button mat-raised-button color="primary" style="margin-left: 1em;" (click)="onSearch()">Search</button>
-</div>
-<div *ngIf="storeMessage || billMessage" style="color: red;">
-{{storeMessage}}  {{billMessage}}
-</div>
-
+    <button
+      mat-raised-button
+      color="primary"
+      style="margin-left: 1em"
+      (click)="onSearch()"
+    >
+      Search
+    </button>
+  </div>
+  <div *ngIf="storeMessage || billMessage" style="color: red">
+    {{ storeMessage }} {{ billMessage }}
+  </div>
 </div>
 
 <table mat-table [dataSource]="billCollection" class="mat-elevation-z8">
-    <ng-container matColumnDef="route">
-      <th mat-header-cell *matHeaderCellDef> Route </th>
-      <td mat-cell *matCellDef="let element"> {{element.route}} </td>
-      <td mat-footer-cell *matFooterCellDef> TOTAL : {{billCollection.length}}</td>
-    </ng-container>
+  <ng-container matColumnDef="route">
+    <th mat-header-cell *matHeaderCellDef>Route</th>
+    <td mat-cell *matCellDef="let element">{{ element.route }}</td>
+    <td mat-footer-cell *matFooterCellDef>
+      TOTAL : {{ billCollection.length }}
+    </td>
+  </ng-container>
 
   <ng-container matColumnDef="storeName">
-    <th mat-header-cell *matHeaderCellDef> Store Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.storeName.storeName}}
-    </td><td mat-footer-cell *matFooterCellDef> </td>
+    <th mat-header-cell *matHeaderCellDef>Store Name</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.storeName.storeName }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
 
   <ng-container matColumnDef="address">
-    <th mat-header-cell *matHeaderCellDef> Store Address </th>
-    <td mat-cell *matCellDef="let element"> {{element.storeName.address}}
-    </td>
-    <td mat-footer-cell *matFooterCellDef> </td>
+    <th mat-header-cell *matHeaderCellDef>Store Address</th>
+    <td mat-cell *matCellDef="let element">{{ element.storeName.address }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
 
   <ng-container matColumnDef="billDate">
-    <th mat-header-cell *matHeaderCellDef> Bill Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.billDate}} </td>
-    <td mat-footer-cell *matFooterCellDef> </td>
+    <th mat-header-cell *matHeaderCellDef>Bill Date</th>
+    <td mat-cell *matCellDef="let element">{{ element.billDate }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
 
   <ng-container matColumnDef="billNumber">
-    <th mat-header-cell *matHeaderCellDef> Bill Number </th>
+    <th mat-header-cell *matHeaderCellDef>Bill Number</th>
     <td mat-cell *matCellDef="let element">
-      <button mat-stroked-button color="primary" (click)="openDialog(element.billNumber)">{{element.billNumber}} </button>
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="openDialog(element.billNumber)"
+      >
+        {{ element.billNumber }}
+      </button>
     </td>
-    <td mat-footer-cell *matFooterCellDef> </td>
+    <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
 
   <ng-container matColumnDef="billAmount">
-    <th mat-header-cell *matHeaderCellDef> Bill Amount </th>
-    <td mat-cell *matCellDef="let element"> {{element.billAmount | currency:"₹"}} </td>
-    <td mat-footer-cell *matFooterCellDef> {{getTotalBillAmount() | currency:"₹"}} </td>
+    <th mat-header-cell *matHeaderCellDef>Bill Amount</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.billAmount | currency : "₹" }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef>
+      {{ getTotalBillAmount() | currency : "₹" }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="pendingAmount">
-    <th mat-header-cell *matHeaderCellDef> Pending Amount </th>
-    <td mat-cell *matCellDef="let element"> {{element.pendingAmount | currency:"₹"}} </td>
-    <td mat-footer-cell *matFooterCellDef> {{getTotalPendingAmount() | currency:"₹"}} </td>
+    <th mat-header-cell *matHeaderCellDef>Pending Amount</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.pendingAmount | currency : "₹" }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef>
+      {{ getTotalPendingAmount() | currency : "₹" }}
+    </td>
   </ng-container>
 
-  <ng-container matColumnDef="Action" style="width: 10px;">
-    <th mat-header-cell *matHeaderCellDef> Action </th>
-    <td mat-cell *matCellDef="let element" style="width: 10px;">
-      <button mat-mini-fab (click)="onDeleteBill(element)" >
-          <mat-icon>delete</mat-icon>
-      </button> </td>
-    <td mat-footer-cell *matFooterCellDef> </td>
+  <ng-container matColumnDef="Action" style="width: 10px">
+    <th mat-header-cell *matHeaderCellDef>Action</th>
+    <td mat-cell *matCellDef="let element" style="width: 10px">
+      <button
+        [disabled]="!isAdmin"
+        mat-mini-fab
+        (click)="onDeleteBill(element)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>

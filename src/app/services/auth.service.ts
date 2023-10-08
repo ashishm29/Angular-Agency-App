@@ -1,142 +1,153 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, OnInit } from '@angular/core';
 import {
-  DocumentReference,
-  Firestore,
-  FirestoreInstances,
+  QueryConstraint,
   addDoc,
   collection,
-  collectionData,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   getFirestore,
-  setDoc,
+  query,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
-import { firebaseAppFactory } from '@angular/fire/app/app.module';
-import { FirebaseApp, initializeApp } from '@angular/fire/app';
 import { User } from '../models/authentication';
-import { map, tap } from 'rxjs/operators';
-import { Console } from 'console';
+import { FirestoreService } from './firestore.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService implements OnInit {
-  constructor(
-    public firestore: Firestore,
-    public fireStoreInstance: FirestoreInstances
-  ) {}
+  constructor(public firestoreService: FirestoreService) {}
 
+  userSubject = new BehaviorSubject<User>(null!);
   _users: User[] = [];
-  //firestoreInstance : Firestore = inject(Firestore);
+  userDetails!: User;
   ngOnInit(): void {}
 
-  onSignUp(user: User) {
-    // Add document
-    const coll = collection(this.firestore, 'UserCollection');
-    const document = addDoc(coll, user)
-      .then(() => {
-        console.log('Success');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  // onSignUp(user: User) {
+  //   // Add document
+  //   const coll = collection(this.firestoreService.firestore, 'UserCollection');
+  //   const document = addDoc(coll, user)
+  //     .then(() => {
+  //       console.log('Success');
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
-  async onLogin() {
-    const db = getFirestore();
+  async onLogin(details: User) {
+    let responseCollection: User[] = [];
+    const queryConditions: QueryConstraint[] = [];
 
-    const userCollection = collection(this.firestore, 'UserCollection');
-    const userCollection1 = collection(
-      this.firestore,
-      'UserCollection/User/UserCollection'
+    queryConditions.push(where('mobileNumber', '==', details.mobileNumber));
+    queryConditions.push(where('password', '==', details.password));
+
+    // Create a query against the collection.
+    const q = query(
+      this.firestoreService.userCollectionInstance,
+      ...queryConditions
     );
-    let userDocReference = doc(db, 'UserCollection', 'Users');
-
-    collectionData(userCollection).forEach((row) => {
-      console.log(row);
-    });
-
-    //// Update Document
-    // const setdocument = updateDoc(doc(db, 'UserCollection', 'Users'), {
-    //   UserCollection: [
-    //     {
-    //       mobileNumber: 9404036779,
-    //       password: 'admin',
-    //       Roles: [
-    //         {
-    //           RoleId: 100,
-    //           RoleName: 'admin',
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       mobileNumber: 9665154120,
-    //       password: 'admin',
-    //       Roles: [
-    //         {
-    //           RoleId: 101,
-    //           RoleName: 'sales',
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // })
-    //   .then(() => {
-    //     console.log('Success');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    // let _user;
-  }
-
-  async onFetchLoginDetails() {
-    // Read collection
-    const collectionInstance = collection(this.firestore, 'UserCollection');
-    const docsSnap = await getDocs(collectionInstance);
-    docsSnap.forEach((doc) => {
-      console.log(doc);
-      console.log(doc.id);
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
       console.log(doc.data());
-      this._users.push({
+      responseCollection.push({
         ...doc.data(),
         id: doc.id,
       } as User);
+      this.userDetails = responseCollection[0];
+      this.userSubject.next(responseCollection[0]);
+      localStorage.setItem('userData', JSON.stringify(responseCollection[0]));
     });
-
-    console.log(JSON.stringify(this._users));
-
-    return this._users;
+    console.log(JSON.stringify(responseCollection));
+    return responseCollection;
   }
 
-  onUpdateLoginDetails(user: User) {
-    const db = getFirestore();
+  autoLogin() {
+    const userData: {
+      mobileNumber: string;
+      password: string;
+      id: string;
+      role: string;
+      username: string;
+    } = JSON.parse(localStorage.getItem('userData')!);
 
-    updateDoc(doc(db, 'UserCollection', user.id), {
-      ...user,
-    })
-      .then(() => {
-        console.log('Updated Successfully');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (!userData) {
+      return;
+    }
+
+    if (userData) {
+      this.userSubject.next(userData);
+    }
   }
 
-  onDelete(user: User) {
-    const db = getFirestore();
-    deleteDoc(doc(db, 'UserCollection', user.id))
-      .then(() => {
-        console.log('Deleted Successfully');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  isAdmin() {
+    if (this.userDetails) {
+      if (this.userDetails.role == 'admin') {
+        return true;
+      }
+    }
+
+    return false;
   }
+
+  onLogout() {
+    this.userDetails = null!;
+    localStorage.removeItem('userData');
+    this.userSubject.next(null!);
+
+    // if (this.tokenExpirationTimeout) {
+    //   clearTimeout(this.tokenExpirationTimeout);
+    // }
+    // this.tokenExpirationTimeout = null;
+  }
+
+  // async onFetchLoginDetails() {
+  //   // Read collection
+  //   const collectionInstance = collection(
+  //     this.firestoreService.firestore,
+  //     'UserCollection'
+  //   );
+  //   const docsSnap = await getDocs(collectionInstance);
+  //   docsSnap.forEach((doc) => {
+  //     console.log(doc);
+  //     console.log(doc.id);
+  //     console.log(doc.data());
+  //     this._users.push({
+  //       ...doc.data(),
+  //       id: doc.id,
+  //     } as User);
+  //   });
+
+  //   console.log(JSON.stringify(this._users));
+
+  //   return this._users;
+  // }
+
+  // onUpdateLoginDetails(user: User) {
+  //   const db = getFirestore();
+
+  //   updateDoc(doc(db, 'UserCollection', user.id), {
+  //     ...user,
+  //   })
+  //     .then(() => {
+  //       console.log('Updated Successfully');
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
+
+  // onDelete(user: User) {
+  //   const db = getFirestore();
+  //   deleteDoc(doc(db, 'UserCollection', user.id))
+  //     .then(() => {
+  //       console.log('Deleted Successfully');
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
 }

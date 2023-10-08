@@ -11,22 +11,52 @@ import { EditInfoComponent } from './edit-info/edit-info.component';
 import { EditRouteDetailsComponent } from './edit-info/edit-route-details/edit-route-details.component';
 import { EditStoreDetailsComponent } from './edit-info/edit-store-details/edit-store-details.component';
 import { EditBillDetailsComponent } from './edit-info/edit-bill-details/edit-bill-details.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'dataentry', component: DataEntryComponent },
-  { path: 'recovery', component: RecoveryComponent },
-  { path: 'history', component: HistoryComponent },
-  { path: 'logindetails', component: LoginDetailsComponent },
-  { path: 'search', component: SearchByStoreComponent },
+  { path: '', component: LoginComponent, pathMatch: 'full' },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dataentry',
+    component: DataEntryComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'recovery', component: RecoveryComponent, canActivate: [AuthGuard] },
+  { path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
+  {
+    path: 'logindetails',
+    component: LoginDetailsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'search',
+    component: SearchByStoreComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'editinfo',
     component: EditInfoComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: 'editroute', component: EditRouteDetailsComponent },
-      { path: 'editstore', component: EditStoreDetailsComponent },
-      { path: 'editbill', component: EditBillDetailsComponent },
+      {
+        path: 'editroute',
+        component: EditRouteDetailsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'editstore',
+        component: EditStoreDetailsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'editbill',
+        component: EditBillDetailsComponent,
+        canActivate: [AuthGuard],
+      },
     ],
   },
 ];
