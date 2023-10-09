@@ -79,6 +79,7 @@ export class AuthService implements OnInit {
     }
 
     if (userData) {
+      this.userDetails = userData;
       this.userSubject.next(userData);
     }
   }
