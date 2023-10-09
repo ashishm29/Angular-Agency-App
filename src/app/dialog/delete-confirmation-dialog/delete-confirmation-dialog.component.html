@@ -1,0 +1,31 @@
+<div style="font-size: medium; font-weight: bold">Delete Bill</div>
+
+<br />
+<div style="font-size: medium">
+  Do you want to delete this Bill Number : {{ data.billNumber }}?
+</div>
+<br />
+
+<div class="container">
+  <div class="line"><mat-divider></mat-divider></div>
+  <div class="line"><mat-divider></mat-divider></div>
+</div>
+
+<div align="right" style="margin-top: 1em">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onYesClick()"
+    style="margin-left: 1em"
+  >
+    Yes
+  </button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onNoClick()"
+    style="margin-left: 1em"
+  >
+    No
+  </button>
+</div>

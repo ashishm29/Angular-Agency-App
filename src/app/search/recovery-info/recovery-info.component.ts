@@ -19,10 +19,12 @@ export class RecoveryInfoComponent implements OnInit {
 
   displayedColumns: string[] = [
     'billNumber',
-    'billDate',
     'billAmount',
+    'recoveryDate',
+    'receiptNumber',
     'amountReceived',
     'pendingAmount',
+    'modeOfPayment',
   ];
 
   constructor(
@@ -32,7 +34,7 @@ export class RecoveryInfoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dialogRef.updateSize('60%');
+    this.dialogRef.updateSize('70%');
     this.getBillDetails();
   }
 

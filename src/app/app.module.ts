@@ -48,6 +48,7 @@ import { EditInfoComponent } from './edit-info/edit-info.component';
 import { EditRouteDetailsComponent } from './edit-info/edit-route-details/edit-route-details.component';
 import { EditStoreDetailsComponent } from './edit-info/edit-store-details/edit-store-details.component';
 import { EditBillDetailsComponent } from './edit-info/edit-bill-details/edit-bill-details.component';
+import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -78,6 +79,7 @@ const MY_DATE_FORMAT = {
     EditRouteDetailsComponent,
     EditStoreDetailsComponent,
     EditBillDetailsComponent,
+    DeleteConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

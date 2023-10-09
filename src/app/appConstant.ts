@@ -9,12 +9,14 @@ export class AppConstant {
     'PaymentModeCollection';
 
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
-  static readonly DATE_TIME_FORMAT: string = 'yyyy-MM-dd HH:mm:ss';
+  static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';
 
   static readonly SAVE_ACTION: string = 'Saved';
   static readonly UPDAE_ACTION: string = 'Updated';
   static readonly DELETE_ACTION: string = 'Deleted';
   static readonly SEARCH_ACTION: string = 'Search';
+  static readonly YES_ACTION: string = 'Yes';
+  static readonly NO_ACTION: string = 'No';
 
   static readonly BILL_ADDED_SUCCESS_MSG: string = 'Bill added Successfully';
   static readonly STORE_ADDED_SUCCESS_MSG: string = 'Store added Successfully';

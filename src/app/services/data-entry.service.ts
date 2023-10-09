@@ -8,6 +8,7 @@ import {
   doc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from '@angular/fire/firestore';
@@ -31,8 +32,19 @@ export class DataEntryService implements OnInit {
 
   addRoute(route: Route) {
     // Add Route
-    const coll = collection(this.firestore, AppConstant.ROUTE_COLLECTION_NAME);
-    return addDoc(coll, route);
+    //const coll = collection(this.firestore, AppConstant.ROUTE_COLLECTION_NAME);
+
+    // let dt = new Date();
+    // dt.toISOString();
+    return setDoc(
+      doc(
+        this.firestore,
+        AppConstant.ROUTE_COLLECTION_NAME,
+        route.routeName.toLowerCase()
+      ),
+      route
+    );
+    //return addDoc(coll, route);
   }
 
   updateRoute(details: Route) {

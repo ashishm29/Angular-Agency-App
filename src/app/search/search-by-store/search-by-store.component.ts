@@ -10,6 +10,7 @@ import { DataEntryService } from 'src/app/services/data-entry.service';
 import { RecoveryInfoComponent } from '../recovery-info/recovery-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
+import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-search-by-store',
@@ -29,6 +30,7 @@ export class SearchByStoreComponent implements OnInit {
     'billNumber',
     'billAmount',
     'pendingAmount',
+    'amountReceived',
     'Action',
   ];
 
@@ -171,6 +173,12 @@ export class SearchByStoreComponent implements OnInit {
       .reduce((acc, value) => acc + value, 0);
   }
 
+  getTotalAmountReceived() {
+    return this.billCollection
+      .map((t) => +t.billAmount - +t.pendingAmount)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
   onDeleteBill(element: BillDetails) {
     console.log(element.id);
     this.billService
@@ -205,6 +213,21 @@ export class SearchByStoreComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
+    });
+  }
+
+  openDeleteConfimationDialog(element: BillDetails): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: { billNumber: element.billNumber },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.delete == AppConstant.YES_ACTION) {
+        console.log(AppConstant.YES_ACTION);
+        this.onDeleteBill(element);
+      } else {
+        console.log(AppConstant.NO_ACTION);
+      }
     });
   }
 }
