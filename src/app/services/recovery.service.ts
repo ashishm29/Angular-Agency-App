@@ -5,6 +5,7 @@ import { BillDetails, PaymentMode, RecoveryDetails } from '../models/route';
 import {
   QueryConstraint,
   addDoc,
+  deleteDoc,
   doc,
   orderBy,
   query,
@@ -37,6 +38,27 @@ export class RecoveryService {
 
   addRecoveryDetails(details: RecoveryDetails) {
     return addDoc(this.firestoreService.recoveryCollectionInstance, details);
+  }
+
+  async getRecoveryDetails() {
+    let collectionData: RecoveryDetails[] = [];
+
+    const queryConditions: QueryConstraint[] = [];
+    // Create a query against the collection.
+    const q = query(
+      this.firestoreService.recoveryCollectionInstance,
+      ...queryConditions
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      collectionData.push({
+        ...doc.data(),
+        id: doc.id,
+      } as RecoveryDetails);
+    });
+    console.log(JSON.stringify(collectionData));
+    return collectionData;
   }
 
   async getFilteredBills(storeName: string) {
@@ -99,5 +121,14 @@ export class RecoveryService {
     });
     console.log(JSON.stringify(collectionData));
     return collectionData;
+  }
+
+  deleteRecovery(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.RECOVERY_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
   }
 }

@@ -8,13 +8,36 @@ import { AppConstant } from 'src/app/appConstant';
   styleUrls: ['./delete-confirmation-dialog.component.scss'],
 })
 export class DeleteConfirmationDialogComponent implements OnInit {
+  message!: string;
   constructor(
     public dialogRef: MatDialogRef<DeleteConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { billNumber: string; delete: string }
+    public data: {
+      billNumber: string;
+      key: string;
+      value: string;
+      delete: string;
+    }
   ) {}
 
   ngOnInit(): void {
+    if (this.data.billNumber) {
+      this.message =
+        'Do you want to delete this Bill Number : ' +
+        this.data.billNumber +
+        ' ?';
+    } else if (this.data.key === AppConstant.STORE) {
+      this.message =
+        'Do you want to delete this Store : ' + this.data.value + ' ?';
+    } else if (this.data.key === AppConstant.ROUTE) {
+      this.message =
+        'Do you want to delete this Route : ' + this.data.value + ' ?';
+    } else if (this.data.key === AppConstant.RECOVERY) {
+      this.message =
+        'Do you want to delete this recovery Receipt Number : ' +
+        this.data.value +
+        ' ?';
+    }
   }
 
   onYesClick(): void {

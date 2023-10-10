@@ -12,6 +12,10 @@ import { EditRouteDetailsComponent } from './edit-info/edit-route-details/edit-r
 import { EditStoreDetailsComponent } from './edit-info/edit-store-details/edit-store-details.component';
 import { EditBillDetailsComponent } from './edit-info/edit-bill-details/edit-bill-details.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { DeleteInfoComponent } from './delete-info/delete-info.component';
+import { DeleteRouteComponent } from './delete-info/delete-route/delete-route.component';
+import { DeleteStoreComponent } from './delete-info/delete-store/delete-store.component';
+import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-recovery.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -55,6 +59,28 @@ const routes: Routes = [
       {
         path: 'editbill',
         component: EditBillDetailsComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+  },
+  {
+    path: 'delete',
+    component: DeleteInfoComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'route',
+        component: DeleteRouteComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'store',
+        component: DeleteStoreComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'recovery',
+        component: DeleteRecoveryComponent,
         canActivate: [AuthGuard],
       },
     ],

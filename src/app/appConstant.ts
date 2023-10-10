@@ -44,4 +44,9 @@ export class AppConstant {
 
   static readonly PAYMENT_MODES_NOT_FOUND_MSG: string =
     'No payment modes found...';
+
+  static readonly ROUTE: string = 'Route';
+  static readonly STORE: string = 'Store';
+  static readonly BILL: string = 'Bill';
+  static readonly RECOVERY: string = 'Recovery';
 }

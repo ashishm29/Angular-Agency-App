@@ -1,0 +1,19 @@
+<div class="host">
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Select Option to Delete Data</mat-label>
+      <mat-select (selectionChange)="onSelectionChange($event.value)">
+        <mat-option value="route">Route</mat-option>
+        <mat-option value="store">Store</mat-option>
+        <mat-option value="recovery">Recovery</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <div class="container">
+    <div class="line"><mat-divider></mat-divider></div>
+    <div class="line"><mat-divider></mat-divider></div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

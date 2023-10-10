@@ -26,3 +26,23 @@ table {
   align-items: center;
   margin-top: 10px;
 }
+
+
+tr.mat-footer-row td,
+tr.mat-header-row th {
+  font-weight: bold;
+  color: black;
+  font-size: small;
+  background-color: lightgreen;
+}
+
+
+tr.mat-row td,
+tr.mat-header-row th,
+tr.mat-footer-row td {
+  font-size: 14px;
+  min-height: 48px;
+  text-align: left;
+  padding-left: 10px;
+  border-right: 1px solid black;
+}

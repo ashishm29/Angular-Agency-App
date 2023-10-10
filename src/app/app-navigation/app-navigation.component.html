@@ -25,16 +25,23 @@
       <a
         mat-list-item
         routerLink="/dataentry"
-        *ngIf="isAuthenticate  && isAdmin"
+        *ngIf="isAuthenticate && isAdmin"
         (click)="drawer.toggle()"
         >Data Entry</a
       >
       <a
         mat-list-item
         routerLink="/editinfo"
-        *ngIf="isAuthenticate  && isAdmin"
+        *ngIf="isAuthenticate && isAdmin"
         (click)="drawer.toggle()"
         >Edit Data</a
+      >
+      <a
+        mat-list-item
+        routerLink="/delete"
+        *ngIf="isAuthenticate && isAdmin"
+        (click)="drawer.toggle()"
+        >Delete Data</a
       >
       <a
         mat-list-item
@@ -101,6 +108,13 @@
           routerLinkActive="active-link"
           *ngIf="isAuthenticate && isAdmin"
           >Edit Data</a
+        >
+        <a
+          mat-button
+          routerLink="/delete"
+          routerLinkActive="active-link"
+          *ngIf="isAuthenticate && isAdmin"
+          >Delete Data</a
         >
         <a
           mat-button

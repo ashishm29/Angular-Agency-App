@@ -49,6 +49,10 @@ import { EditRouteDetailsComponent } from './edit-info/edit-route-details/edit-r
 import { EditStoreDetailsComponent } from './edit-info/edit-store-details/edit-store-details.component';
 import { EditBillDetailsComponent } from './edit-info/edit-bill-details/edit-bill-details.component';
 import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteInfoComponent } from './delete-info/delete-info.component';
+import { DeleteStoreComponent } from './delete-info/delete-store/delete-store.component';
+import { DeleteRouteComponent } from './delete-info/delete-route/delete-route.component';
+import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-recovery.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -80,6 +84,10 @@ const MY_DATE_FORMAT = {
     EditStoreDetailsComponent,
     EditBillDetailsComponent,
     DeleteConfirmationDialogComponent,
+    DeleteInfoComponent,
+    DeleteStoreComponent,
+    DeleteRouteComponent,
+    DeleteRecoveryComponent,
   ],
   imports: [
     BrowserModule,
