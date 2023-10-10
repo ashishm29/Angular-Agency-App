@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 import { BillService } from '../services/bill.service';
 import { StoreService } from '../services/store.service';
 import { RouteService } from '../services/route.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-recovery',
@@ -36,6 +37,7 @@ export class RecoveryComponent implements OnInit {
     public storeService: StoreService,
     public routeService: RouteService,
     private billService: BillService,
+    private authservice: AuthService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {}
@@ -227,6 +229,7 @@ export class RecoveryComponent implements OnInit {
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
       ),
+      recoveryAgent: this.authservice.getuserDetails().username,
     } as RecoveryDetails;
 
     this.recoveryService

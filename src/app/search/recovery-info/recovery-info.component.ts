@@ -19,6 +19,7 @@ export class RecoveryInfoComponent implements OnInit {
 
   displayedColumns: string[] = [
     'billNumber',
+    'recoveryAgent',
     'billAmount',
     'recoveryDate',
     'receiptNumber',

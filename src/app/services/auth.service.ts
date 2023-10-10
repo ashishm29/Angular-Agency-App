@@ -1,14 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import {
   QueryConstraint,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
   getDocs,
-  getFirestore,
   query,
-  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { User } from '../models/authentication';
@@ -93,6 +87,12 @@ export class AuthService implements OnInit {
 
     return false;
   }
+
+  getuserDetails()
+  {
+    return this.userDetails;
+  }
+
 
   onLogout() {
     this.userDetails = null!;

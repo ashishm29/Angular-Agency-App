@@ -40,6 +40,7 @@ export class RecoveryDetails {
   receiptNumber!: string;
   modeOfPayment!: string;
   createdDate!: string;
+  recoveryAgent!: string;
 }
 
 export class StoreDataEntry {
@@ -51,5 +52,3 @@ export class PaymentMode {
   mode!: string;
   id!: string;
 }
-
-

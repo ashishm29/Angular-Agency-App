@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
@@ -30,8 +30,8 @@ export class SearchByStoreComponent implements OnInit {
     'billDate',
     'billNumber',
     'billAmount',
-    'pendingAmount',
     'amountReceived',
+    'pendingAmount',
     'Action',
   ];
 

@@ -10,6 +10,14 @@
     </td>
   </ng-container>
 
+   <ng-container matColumnDef="recoveryAgent">
+    <th mat-header-cell *matHeaderCellDef>Recovery Agent</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.recoveryAgent }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
   <ng-container matColumnDef="billAmount">
     <th mat-header-cell *matHeaderCellDef>Bill Amount</th>
     <td mat-cell *matCellDef="let element">

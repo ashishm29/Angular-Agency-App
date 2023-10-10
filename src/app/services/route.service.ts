@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { AppConstant } from '../appConstant';
-import { deleteDoc, doc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
+import {
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Route } from '../models/route';
 
 @Injectable({
@@ -11,9 +17,10 @@ export class RouteService {
   constructor(private firestoreService: FirestoreService) {}
 
   async getRoutes() {
-
     let routes: Route[] = [];
-    const docsSnap = await getDocs(this.firestoreService.routeCollectionInstance);
+    const docsSnap = await getDocs(
+      this.firestoreService.routeCollectionInstance
+    );
     docsSnap.forEach((doc) => {
       console.log(doc.data());
       routes.push({
