@@ -3,9 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { RecoveryDetails } from 'src/app/models/route';
-import { DataEntryService } from 'src/app/services/data-entry.service';
 import { RecoveryService } from 'src/app/services/recovery.service';
-import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-delete-recovery',
@@ -25,7 +23,6 @@ export class DeleteRecoveryComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private entryService: DataEntryService,
     private recoveryService: RecoveryService
   ) {}
 

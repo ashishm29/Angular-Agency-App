@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
-import { getDoc, getDocs } from '@firebase/firestore';
-import { BillDetails, PaymentMode, RecoveryDetails } from '../models/route';
+import { getDocs } from '@firebase/firestore';
+import { BillDetails } from '../models/route';
 import {
   QueryConstraint,
+  addDoc,
   deleteDoc,
   doc,
+  orderBy,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { AppConstant } from '../appConstant';
@@ -24,8 +27,6 @@ export class BillService {
     toBillDate: string,
     billNumber: string
   ) {
-    let collectionData: BillDetails[] = [];
-
     const queryConditions: QueryConstraint[] = [];
 
     if (route) {
@@ -48,6 +49,30 @@ export class BillService {
       queryConditions.push(where('billNumber', '==', billNumber));
     }
 
+    return this.getBills(queryConditions);
+  }
+
+  deleteBill(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.BILL_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
+  }
+
+  async getFilteredBillsByStoreName(storeName: string) {
+    const queryConditions: QueryConstraint[] = [
+      where('storeName.storeName', '==', storeName),
+      where('pendingAmount', '>', 0),
+      orderBy('pendingAmount', 'asc'),
+    ];
+
+    return this.getBills(queryConditions);
+  }
+
+  private async getBills(queryConditions: QueryConstraint[]) {
+    let collectionData: BillDetails[] = [];
     // Create a query against the collection.
     const q = query(
       this.firestoreService.billCollectionInstance,
@@ -65,12 +90,33 @@ export class BillService {
     return collectionData;
   }
 
-  deleteBill(docId: string) {
-    const docRef = doc(
-      this.firestoreService.firestore,
-      AppConstant.BILL_COLLECTION_NAME,
-      docId
+  updateBillPendingAmount(details: BillDetails) {
+    return updateDoc(
+      doc(
+        this.firestoreService.firestore,
+        AppConstant.BILL_COLLECTION_NAME,
+        details.id
+      ),
+      {
+        ...details,
+      }
     );
-    return deleteDoc(docRef);
+  }
+
+  addBillDetails(bill: BillDetails) {
+    return addDoc(this.firestoreService.billCollectionInstance, bill);
+  }
+
+  updateBillDetails(details: BillDetails) {
+    return updateDoc(
+      doc(
+        this.firestoreService.firestore,
+        AppConstant.BILL_COLLECTION_NAME,
+        details.id
+      ),
+      {
+        ...details,
+      }
+    );
   }
 }

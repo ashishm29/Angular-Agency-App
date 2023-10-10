@@ -4,7 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { Route } from 'src/app/models/route';
-import { DataEntryService } from 'src/app/services/data-entry.service';
+import { RouteService } from 'src/app/services/route.service';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-edit-route-details',
@@ -18,7 +19,8 @@ export class EditRouteDetailsComponent implements OnInit {
   selectedRouteToUpdate!: Route;
 
   constructor(
-    public entryService: DataEntryService,
+    public routeService: RouteService,
+    public storeService: StoreService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {}
@@ -36,7 +38,7 @@ export class EditRouteDetailsComponent implements OnInit {
 
   onFetchRoute() {
     this.routeCollection = [];
-    this.entryService.getRoutes().then((result) => {
+    this.routeService.getRoutes().then((result) => {
       if (result && result.length > 0) {
         this.routeCollection = result;
       } else {
@@ -80,7 +82,7 @@ export class EditRouteDetailsComponent implements OnInit {
     } as Route;
 
     const newLocal = this;
-    newLocal.entryService
+    newLocal.routeService
       .updateRoute(route)
       .then(() => {
         console.log(AppConstant.ROUTE_UPDATED_SUCCESS_MSG);

@@ -6,11 +6,12 @@ import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
-import { DataEntryService } from 'src/app/services/data-entry.service';
 import { RecoveryInfoComponent } from '../recovery-info/recovery-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { RouteService } from 'src/app/services/route.service';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-search-by-store',
@@ -44,8 +45,9 @@ export class SearchByStoreComponent implements OnInit {
   isAdmin!: boolean;
 
   constructor(
-    public entryService: DataEntryService,
+    public routeService: RouteService,
     public billService: BillService,
+    public storeService: StoreService,
     private snackBar: MatSnackBar,
     private router: Router,
     public dialog: MatDialog,
@@ -75,7 +77,7 @@ export class SearchByStoreComponent implements OnInit {
   onFetchRoute() {
     this.routeCollection = [];
 
-    this.entryService.getRoutes().then((result) => {
+    this.routeService.getRoutes().then((result) => {
       if (result && result.length > 0) {
         this.routeCollection = result;
       } else {
@@ -87,7 +89,7 @@ export class SearchByStoreComponent implements OnInit {
   onFetchStoreDetails(selecetdValue: string) {
     this.storeCollection = [];
     this.storeMessage;
-    this.entryService.getStores(selecetdValue).then((result) => {
+    this.storeService.getStores(selecetdValue).then((result) => {
       if (result && result.length > 0) {
         this.storeCollection = result;
       } else {

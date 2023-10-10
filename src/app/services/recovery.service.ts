@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
-import { getDoc, getDocs } from '@firebase/firestore';
-import { BillDetails, PaymentMode, RecoveryDetails } from '../models/route';
+import { getDocs } from '@firebase/firestore';
+import { PaymentMode, RecoveryDetails } from '../models/route';
 import {
   QueryConstraint,
   addDoc,
   deleteDoc,
   doc,
-  orderBy,
   query,
-  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { AppConstant } from '../appConstant';
@@ -40,77 +38,19 @@ export class RecoveryService {
     return addDoc(this.firestoreService.recoveryCollectionInstance, details);
   }
 
-  async getRecoveryDetails() {
+  async getRecoveryDetails(billNumber: string = '') {
     let collectionData: RecoveryDetails[] = [];
-
     const queryConditions: QueryConstraint[] = [];
+
+    if (billNumber) {
+      queryConditions.push(where('billNumber', '==', billNumber));
+    }
+
     // Create a query against the collection.
     const q = query(
       this.firestoreService.recoveryCollectionInstance,
       ...queryConditions
     );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-      collectionData.push({
-        ...doc.data(),
-        id: doc.id,
-      } as RecoveryDetails);
-    });
-    console.log(JSON.stringify(collectionData));
-    return collectionData;
-  }
-
-  async getFilteredBills(storeName: string) {
-    let collectionData: BillDetails[] = [];
-
-    const queryConditions: QueryConstraint[] = [
-      where('storeName.storeName', '==', storeName),
-      where('pendingAmount', '>', 0),
-      orderBy('pendingAmount', 'asc'),
-    ];
-    // Create a query against the collection.
-    const q = query(
-      this.firestoreService.billCollectionInstance,
-      ...queryConditions
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-      collectionData.push({
-        ...doc.data(),
-        id: doc.id,
-      } as BillDetails);
-    });
-    console.log(JSON.stringify(collectionData));
-    return collectionData;
-  }
-
-  updateBillPendingAmount(details: BillDetails) {
-    return updateDoc(
-      doc(
-        this.firestoreService.firestore,
-        AppConstant.BILL_COLLECTION_NAME,
-        details.id
-      ),
-      {
-        ...details,
-      }
-    );
-  }
-
-  async getBillRecoveryDetails(billNumber: string) {
-    let collectionData: RecoveryDetails[] = [];
-
-    const queryConditions: QueryConstraint[] = [
-      where('billNumber', '==', billNumber),
-    ];
-
-    const q = query(
-      this.firestoreService.recoveryCollectionInstance,
-      ...queryConditions
-    );
-
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       console.log(doc.data());

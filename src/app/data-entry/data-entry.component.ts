@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { DataEntryService } from '../services/data-entry.service';
 import { BillDetails, Route, StoreDetails } from '../models/route';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
-import { Observable, map, of, startWith, tap } from 'rxjs';
+import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from '../appConstant';
+import { RouteService } from '../services/route.service';
+import { StoreService } from '../services/store.service';
+import { BillService } from '../services/bill.service';
 
 @Component({
   selector: 'app-data-entry',
@@ -14,7 +16,9 @@ import { AppConstant } from '../appConstant';
 })
 export class DataEntryComponent implements OnInit {
   constructor(
-    public entryService: DataEntryService,
+    public storeService: StoreService,
+    public billService: BillService,
+    private routeService: RouteService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {}
@@ -53,7 +57,7 @@ export class DataEntryComponent implements OnInit {
     } as Route;
 
     const newLocal = this;
-    newLocal.entryService
+    newLocal.routeService
       .addRoute(route)
       .then(() => {
         console.log(AppConstant.ROUTE_ADDED_SUCCESS_MSG);
@@ -86,7 +90,7 @@ export class DataEntryComponent implements OnInit {
       ),
     } as StoreDetails;
 
-    this.entryService
+    this.storeService
       .addStoreDetails(shopDetails)
       .then(() => {
         console.log(AppConstant.STORE_ADDED_SUCCESS_MSG);
@@ -120,7 +124,7 @@ export class DataEntryComponent implements OnInit {
       ),
     } as BillDetails;
 
-    this.entryService
+    this.billService
       .addBillDetails(billDetails)
       .then(() => {
         console.log(AppConstant.BILL_ADDED_SUCCESS_MSG);
@@ -168,7 +172,7 @@ export class DataEntryComponent implements OnInit {
 
   onFetchRoute() {
     this.routeCollection = [];
-    this.entryService.getRoutes().then((result) => {
+    this.routeService.getRoutes().then((result) => {
       if (result && result.length > 0) {
         this.routeCollection = result;
       } else {
@@ -179,7 +183,7 @@ export class DataEntryComponent implements OnInit {
 
   onFetchStoreDetails(selecetdValue: string) {
     this.storeCollection = [];
-    this.entryService.getStores(selecetdValue).then((result) => {
+    this.storeService.getStores(selecetdValue).then((result) => {
       if (result && result.length > 0) {
         this.storeCollection = result;
         this.subscribeBill_StoreNameValueChange();

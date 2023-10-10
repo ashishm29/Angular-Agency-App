@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DataEntryService } from '../services/data-entry.service';
 import { AppConstant } from '../appConstant';
 import {
   BillDetails,
@@ -13,7 +12,9 @@ import { RecoveryService } from '../services/recovery.service';
 import { Observable, map, startWith } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { BillService } from '../services/bill.service';
+import { StoreService } from '../services/store.service';
+import { RouteService } from '../services/route.service';
 
 @Component({
   selector: 'app-recovery',
@@ -31,8 +32,10 @@ export class RecoveryComponent implements OnInit {
   selecetdBill!: BillDetails;
 
   constructor(
-    public entryService: DataEntryService,
     public recoveryService: RecoveryService,
+    public storeService: StoreService,
+    public routeService: RouteService,
+    private billService: BillService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {}
@@ -69,7 +72,7 @@ export class RecoveryComponent implements OnInit {
 
   onFetchRoute() {
     this.routeCollection = [];
-    this.entryService.getRoutes().then((result) => {
+    this.routeService.getRoutes().then((result) => {
       if (result && result.length > 0) {
         this.routeCollection = result;
       } else {
@@ -94,7 +97,7 @@ export class RecoveryComponent implements OnInit {
 
   onFetchStoreDetails(selecetdValue: string) {
     this.storeCollection = [];
-    this.entryService.getStores(selecetdValue).then((result) => {
+    this.storeService.getStores(selecetdValue).then((result) => {
       if (result && result.length > 0) {
         this.storeCollection = result;
         this.subscribeBill_StoreNameValueChange();
@@ -179,15 +182,17 @@ export class RecoveryComponent implements OnInit {
 
   getBillsForSelectedStore(selecetdValue: string) {
     this.billCollection = [];
-    this.recoveryService.getFilteredBills(selecetdValue).then((result) => {
-      if (result && result.length > 0) {
-        this.billCollection = this.sortData(result);
-      } else {
-        console.log(AppConstant.STORE_NOT_FOUND_MSG);
-      }
+    this.billService
+      .getFilteredBillsByStoreName(selecetdValue)
+      .then((result) => {
+        if (result && result.length > 0) {
+          this.billCollection = this.sortData(result);
+        } else {
+          console.log(AppConstant.STORE_NOT_FOUND_MSG);
+        }
 
-      this.subscribeBillNumberValueChange();
-    });
+        this.subscribeBillNumberValueChange();
+      });
   }
 
   sortData(result: BillDetails[]) {
@@ -250,7 +255,7 @@ export class RecoveryComponent implements OnInit {
       ),
     } as BillDetails;
 
-    this.recoveryService
+    this.billService
       .updateBillPendingAmount(bill)
       .then(() => {
         console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);

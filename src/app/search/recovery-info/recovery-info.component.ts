@@ -40,7 +40,7 @@ export class RecoveryInfoComponent implements OnInit {
 
   getBillDetails() {
     this.recoveryService
-      .getBillRecoveryDetails(this.data.billNumber)
+      .getRecoveryDetails(this.data.billNumber)
       .then((result) => {
         this.recoveryCollection = this.sortData(result);
       });

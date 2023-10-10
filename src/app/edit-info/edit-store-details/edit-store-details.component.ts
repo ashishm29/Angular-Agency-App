@@ -5,7 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { StoreDetails } from 'src/app/models/route';
-import { DataEntryService } from 'src/app/services/data-entry.service';
+import { BillService } from 'src/app/services/bill.service';
+import { RouteService } from 'src/app/services/route.service';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-edit-store-details',
@@ -20,7 +22,9 @@ export class EditStoreDetailsComponent implements OnInit {
   billStoreControl = new FormControl();
 
   constructor(
-    public entryService: DataEntryService,
+    public routeService: RouteService,
+    public billService: BillService,
+    public storeService: StoreService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {}
@@ -47,7 +51,7 @@ export class EditStoreDetailsComponent implements OnInit {
 
   onFetchStoreDetails() {
     this.storeCollection = [];
-    this.entryService.getStores('').then((result) => {
+    this.storeService.getStores('').then((result) => {
       if (result && result.length > 0) {
         this.storeCollection = result;
         this.subscribeBill_StoreNameValueChange();
@@ -120,7 +124,7 @@ export class EditStoreDetailsComponent implements OnInit {
       ),
     } as StoreDetails;
 
-    this.entryService
+    this.storeService
       .updateStoreDetails(shopDetails)
       .then(() => {
         console.log(AppConstant.STORE_UPDATED_SUCCESS_MSG);

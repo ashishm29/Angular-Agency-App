@@ -30,6 +30,16 @@ export class FirestoreService {
     AppConstant.USER_COLLECTION_NAME
   );
 
+  storeCollectionInstance = collection(
+    this.firestore,
+    AppConstant.STORE_COLLECTION_NAME
+  );
+
+  routeCollectionInstance = collection(
+    this.firestore,
+    AppConstant.ROUTE_COLLECTION_NAME
+  );
+
   constructor(
     public firestore: Firestore,
     public fireStoreInstance: FirestoreInstances

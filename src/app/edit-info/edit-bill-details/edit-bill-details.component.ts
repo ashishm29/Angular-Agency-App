@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
-import { DataEntryService } from 'src/app/services/data-entry.service';
 
 @Component({
   selector: 'app-edit-bill-details',
@@ -19,7 +18,6 @@ export class EditBillDetailsComponent implements OnInit {
   billCollection: BillDetails[] = [];
 
   constructor(
-    public entryService: DataEntryService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
     private billService: BillService
@@ -75,13 +73,14 @@ export class EditBillDetailsComponent implements OnInit {
       billNumber: this.billFormGroup.value.billNumber,
       billDate: this.billFormGroup.value.billDate.toLocaleDateString(),
       billAmount: this.billFormGroup.value.billAmount,
+      pendingAmount: this.billFormGroup.value.billAmount,
       updatedDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
       ),
     } as BillDetails;
 
-    this.entryService
+    this.billService
       .updateBillDetails(billDetails)
       .then(() => {
         console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);

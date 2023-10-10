@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { StoreDetails } from 'src/app/models/route';
-import { DataEntryService } from 'src/app/services/data-entry.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -21,11 +20,7 @@ export class DeleteStoreComponent implements OnInit {
     'Action',
   ];
 
-  constructor(
-    public dialog: MatDialog,
-    private entryService: DataEntryService,
-    private storeService: StoreService
-  ) {}
+  constructor(public dialog: MatDialog, private storeService: StoreService) {}
 
   ngOnInit(): void {
     this.onFetchStoreDetails();
@@ -33,7 +28,7 @@ export class DeleteStoreComponent implements OnInit {
 
   onFetchStoreDetails() {
     this.collection = [];
-    this.entryService
+    this.storeService
       .getStores('')
       .then((result) => {
         if (result && result.length > 0) {

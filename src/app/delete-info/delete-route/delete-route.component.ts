@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { Route } from 'src/app/models/route';
-import { DataEntryService } from 'src/app/services/data-entry.service';
 import { RouteService } from 'src/app/services/route.service';
 
 @Component({
@@ -15,11 +14,7 @@ export class DeleteRouteComponent implements OnInit {
   collection: Route[] = [];
   displayedColumns: string[] = ['routeName', 'Action'];
 
-  constructor(
-    public dialog: MatDialog,
-    private entryService: DataEntryService,
-    private routeService: RouteService
-  ) {}
+  constructor(public dialog: MatDialog, private routeService: RouteService) {}
 
   ngOnInit(): void {
     this.onFetchRoutesDetails();
@@ -27,7 +22,7 @@ export class DeleteRouteComponent implements OnInit {
 
   onFetchRoutesDetails() {
     this.collection = [];
-    this.entryService
+    this.routeService
       .getRoutes()
       .then((result) => {
         if (result && result.length > 0) {
