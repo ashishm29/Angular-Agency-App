@@ -4,6 +4,7 @@ import { AppConstant } from 'src/app/appConstant';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { Route } from 'src/app/models/route';
 import { RouteService } from 'src/app/services/route.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-delete-route',
@@ -14,7 +15,11 @@ export class DeleteRouteComponent implements OnInit {
   collection: Route[] = [];
   displayedColumns: string[] = ['routeName', 'Action'];
 
-  constructor(public dialog: MatDialog, private routeService: RouteService) {}
+  constructor(
+    public dialog: MatDialog,
+    private routeService: RouteService,
+    private snackbarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
     this.onFetchRoutesDetails();
@@ -52,9 +57,15 @@ export class DeleteRouteComponent implements OnInit {
           let array = this.collection.slice();
           this.collection = array;
         }
+
+        this.snackbarService.openSnackBar(
+          AppConstant.ROUTE_DELETED_SUCCESS_MSG,
+          AppConstant.DELETE_ACTION
+        );
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
       });
   }
 

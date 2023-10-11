@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { RecoveryDetails } from 'src/app/models/route';
+import { BillDetails, RecoveryDetails } from 'src/app/models/route';
+import { BillService } from 'src/app/services/bill.service';
 import { RecoveryService } from 'src/app/services/recovery.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-delete-recovery',
@@ -16,6 +18,7 @@ export class DeleteRecoveryComponent implements OnInit {
     'route',
     'storeName',
     'address',
+    'billNumber',
     'amountReceived',
     'receiptNumber',
     'Action',
@@ -23,7 +26,9 @@ export class DeleteRecoveryComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private recoveryService: RecoveryService
+    private recoveryService: RecoveryService,
+    private billService: BillService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +61,7 @@ export class DeleteRecoveryComponent implements OnInit {
       });
   }
 
-  onDeleteStore(element: RecoveryDetails) {
+  onDelete(element: RecoveryDetails) {
     this.recoveryService
       .deleteRecovery(element.id)
       .then(() => {
@@ -65,10 +70,45 @@ export class DeleteRecoveryComponent implements OnInit {
           this.collection.splice(index, 1);
           let array = this.collection.slice();
           this.collection = array;
+          this.updateBillPendingAmount(element);
         }
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+      });
+  }
+
+  updateBillPendingAmount(element: RecoveryDetails) {
+    this.billService
+      .getFilteredBills('', '', '', '', element.billNumber)
+      .then((result) => {
+        if (result && result.length > 0) {
+          let billobj = {
+            ...result[0],
+            pendingAmount: result[0].pendingAmount + +element.amountReceived,
+          } as BillDetails;
+
+          this.billService
+            .updateBillPendingAmount(billobj)
+            .then(() => {
+              this.snackbarService.openSnackBar(
+                AppConstant.BILL_UPDATED_SUCCESS_MSG,
+                AppConstant.UPDAE_ACTION
+              );
+              console.log('Bill updated successfully...');
+            })
+            .catch((err) => {
+              console.log(err);
+              this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+            });
+        } else {
+          console.log('No bill found...');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
       });
   }
 
@@ -80,7 +120,7 @@ export class DeleteRecoveryComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result && result.delete == AppConstant.YES_ACTION) {
         console.log(AppConstant.YES_ACTION);
-        this.onDeleteStore(element);
+        this.onDelete(element);
       } else {
         console.log(AppConstant.NO_ACTION);
       }

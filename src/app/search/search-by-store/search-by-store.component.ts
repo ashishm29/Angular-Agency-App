@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { RouteService } from 'src/app/services/route.service';
 import { StoreService } from 'src/app/services/store.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-search-by-store',
@@ -51,7 +52,8 @@ export class SearchByStoreComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     public dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -186,7 +188,7 @@ export class SearchByStoreComponent implements OnInit {
     this.billService
       .deleteBill(element.id)
       .then(() => {
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.BILL_DELETED_SUCCESS_MSG,
           AppConstant.DELETE_ACTION
         );
@@ -196,12 +198,6 @@ export class SearchByStoreComponent implements OnInit {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 5000,
-    });
   }
 
   navigateToBillDetailPage(billNumber: string) {

@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-edit-bill-details',
@@ -20,7 +21,8 @@ export class EditBillDetailsComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
-    private billService: BillService
+    private billService: BillService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +56,7 @@ export class EditBillDetailsComponent implements OnInit {
           });
         } else {
           console.log(AppConstant.BILL_NOT_FOUND_MSG);
-          this.openSnackBar(
+          this.snackbarService.openSnackBar(
             AppConstant.BILL_NOT_FOUND_MSG,
             AppConstant.UPDAE_ACTION
           );
@@ -84,7 +86,7 @@ export class EditBillDetailsComponent implements OnInit {
       .updateBillDetails(billDetails)
       .then(() => {
         console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.BILL_UPDATED_SUCCESS_MSG,
           AppConstant.UPDAE_ACTION
         );
@@ -95,9 +97,4 @@ export class EditBillDetailsComponent implements OnInit {
       });
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
 }

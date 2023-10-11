@@ -8,6 +8,7 @@ import { AppConstant } from '../appConstant';
 import { RouteService } from '../services/route.service';
 import { StoreService } from '../services/store.service';
 import { BillService } from '../services/bill.service';
+import { SnackBarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-data-entry',
@@ -20,7 +21,8 @@ export class DataEntryComponent implements OnInit {
     public billService: BillService,
     private routeService: RouteService,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private snackbarService: SnackBarService
   ) {}
 
   routeName!: string;
@@ -61,7 +63,7 @@ export class DataEntryComponent implements OnInit {
       .addRoute(route)
       .then(() => {
         console.log(AppConstant.ROUTE_ADDED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.ROUTE_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
@@ -94,7 +96,7 @@ export class DataEntryComponent implements OnInit {
       .addStoreDetails(shopDetails)
       .then(() => {
         console.log(AppConstant.STORE_ADDED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.STORE_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
@@ -128,7 +130,7 @@ export class DataEntryComponent implements OnInit {
       .addBillDetails(billDetails)
       .then(() => {
         console.log(AppConstant.BILL_ADDED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.BILL_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
@@ -190,12 +192,6 @@ export class DataEntryComponent implements OnInit {
       } else {
         console.log(AppConstant.STORE_NOT_FOUND_MSG);
       }
-    });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 5000,
     });
   }
 

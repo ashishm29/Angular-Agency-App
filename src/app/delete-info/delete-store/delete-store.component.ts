@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { StoreDetails } from 'src/app/models/route';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -20,7 +21,11 @@ export class DeleteStoreComponent implements OnInit {
     'Action',
   ];
 
-  constructor(public dialog: MatDialog, private storeService: StoreService) {}
+  constructor(
+    public dialog: MatDialog,
+    private storeService: StoreService,
+    private snackbarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
     this.onFetchStoreDetails();
@@ -62,9 +67,15 @@ export class DeleteStoreComponent implements OnInit {
           let array = this.collection.slice();
           this.collection = array;
         }
+
+        this.snackbarService.openSnackBar(
+          AppConstant.STORE_DELETED_SUCCESS_MSG,
+          AppConstant.DELETE_ACTION
+        );
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
       });
   }
 

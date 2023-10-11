@@ -16,6 +16,7 @@ import { BillService } from '../services/bill.service';
 import { StoreService } from '../services/store.service';
 import { RouteService } from '../services/route.service';
 import { AuthService } from '../services/auth.service';
+import { SnackBarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-recovery',
@@ -39,7 +40,8 @@ export class RecoveryComponent implements OnInit {
     private billService: BillService,
     private authservice: AuthService,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -203,12 +205,6 @@ export class RecoveryComponent implements OnInit {
     });
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
-
   onAddRecoveryData() {
     if (this.recoveryFormGroup.invalid) {
       console.log('recovery form is invalid');
@@ -236,7 +232,7 @@ export class RecoveryComponent implements OnInit {
       .addRecoveryDetails(recoveryDetail)
       .then(() => {
         console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
@@ -262,7 +258,7 @@ export class RecoveryComponent implements OnInit {
       .updateBillPendingAmount(bill)
       .then(() => {
         console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.BILL_UPDATED_SUCCESS_MSG,
           AppConstant.UPDAE_ACTION
         );

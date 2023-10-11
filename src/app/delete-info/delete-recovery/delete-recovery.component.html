@@ -19,6 +19,12 @@
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
 
+  <ng-container matColumnDef="billNumber">
+    <th mat-header-cell *matHeaderCellDef>Bill Number</th>
+    <td mat-cell *matCellDef="let element">{{ element.billNumber }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
   <ng-container matColumnDef="amountReceived">
     <th mat-header-cell *matHeaderCellDef>Amount Received</th>
     <td mat-cell *matCellDef="let element">{{ element.amountReceived }}</td>

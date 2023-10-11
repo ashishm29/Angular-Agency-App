@@ -7,6 +7,7 @@ import { AppConstant } from 'src/app/appConstant';
 import { StoreDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
 import { RouteService } from 'src/app/services/route.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class EditStoreDetailsComponent implements OnInit {
     public billService: BillService,
     public storeService: StoreService,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -85,12 +87,6 @@ export class EditStoreDetailsComponent implements OnInit {
     );
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
-
   onStoreSelected(selectedStore: StoreDetails) {
     if (selectedStore) {
       this.selectedStoreToUpdate = selectedStore;
@@ -105,7 +101,7 @@ export class EditStoreDetailsComponent implements OnInit {
   onUpdateStore() {
     if (this.shopFormGroup.invalid || !this.selectedStoreToUpdate) {
       console.log('store form is invalid');
-      this.openSnackBar(
+      this.snackbarService.openSnackBar(
         AppConstant.STORE_FORM_INVALID_MSG,
         AppConstant.UPDAE_ACTION
       );
@@ -128,7 +124,7 @@ export class EditStoreDetailsComponent implements OnInit {
       .updateStoreDetails(shopDetails)
       .then(() => {
         console.log(AppConstant.STORE_UPDATED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.STORE_UPDATED_SUCCESS_MSG,
           AppConstant.UPDAE_ACTION
         );
@@ -137,7 +133,7 @@ export class EditStoreDetailsComponent implements OnInit {
       })
       .catch((err) => {
         console.log(err);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.STORE_UPDATED_FAILED_MSG,
           AppConstant.UPDAE_ACTION
         );

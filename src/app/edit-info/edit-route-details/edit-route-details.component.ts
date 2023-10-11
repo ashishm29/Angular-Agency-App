@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { Route } from 'src/app/models/route';
 import { RouteService } from 'src/app/services/route.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class EditRouteDetailsComponent implements OnInit {
     public routeService: RouteService,
     public storeService: StoreService,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +88,7 @@ export class EditRouteDetailsComponent implements OnInit {
       .updateRoute(route)
       .then(() => {
         console.log(AppConstant.ROUTE_UPDATED_SUCCESS_MSG);
-        this.openSnackBar(
+        this.snackbarService.openSnackBar(
           AppConstant.ROUTE_UPDATED_SUCCESS_MSG,
           AppConstant.UPDAE_ACTION
         );
@@ -96,11 +98,5 @@ export class EditRouteDetailsComponent implements OnInit {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 5000,
-    });
   }
 }

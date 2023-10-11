@@ -17,6 +17,7 @@ export class AppConstant {
   static readonly SEARCH_ACTION: string = 'Search';
   static readonly YES_ACTION: string = 'Yes';
   static readonly NO_ACTION: string = 'No';
+  static readonly ERROR_ACTION: string = 'Error';
 
   static readonly BILL_ADDED_SUCCESS_MSG: string = 'Bill added Successfully';
   static readonly STORE_ADDED_SUCCESS_MSG: string = 'Store added Successfully';
@@ -26,6 +27,12 @@ export class AppConstant {
 
   static readonly BILL_DELETED_SUCCESS_MSG: string =
     'Bill deleted successfully...';
+  static readonly ROUTE_DELETED_SUCCESS_MSG: string =
+    'Route deleted Successfully';
+  static readonly STORE_DELETED_SUCCESS_MSG: string =
+    'Store deleted Successfully';
+  static readonly RECOVERY_DELETED_SUCCESS_MSG: string =
+    'Recovery deleted Successfully';
 
   static readonly ROUTE_NOT_FOUND_MSG: string = 'No Route details found...';
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
