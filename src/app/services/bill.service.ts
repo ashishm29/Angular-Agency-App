@@ -71,6 +71,14 @@ export class BillService {
     return this.getBills(queryConditions);
   }
 
+  async getFilteredBillsByBillNumber(billnumber: string) {
+    const queryConditions: QueryConstraint[] = [
+      where('billNumber', '==', billnumber)
+    ];
+
+    return this.getBills(queryConditions);
+  }
+
   private async getBills(queryConditions: QueryConstraint[]) {
     let collectionData: BillDetails[] = [];
     // Create a query against the collection.

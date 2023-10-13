@@ -56,4 +56,10 @@ export class AppConstant {
   static readonly STORE: string = 'Store';
   static readonly BILL: string = 'Bill';
   static readonly RECOVERY: string = 'Recovery';
+
+  static readonly ADD_STORE_VALIDATION: string =
+    'Store with entered mobile number already exist.';
+
+  static readonly ADD_BILL_VALIDATION: string =
+    'Bill number already exist.';
 }

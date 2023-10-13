@@ -53,6 +53,7 @@ import { DeleteInfoComponent } from './delete-info/delete-info.component';
 import { DeleteStoreComponent } from './delete-info/delete-store/delete-store.component';
 import { DeleteRouteComponent } from './delete-info/delete-route/delete-route.component';
 import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-recovery.component';
+import { ValidationDialogComponent } from './dialog/validation-dialog/validation-dialog.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -88,6 +89,7 @@ const MY_DATE_FORMAT = {
     DeleteStoreComponent,
     DeleteRouteComponent,
     DeleteRecoveryComponent,
+    ValidationDialogComponent,
   ],
   imports: [
     BrowserModule,

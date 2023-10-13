@@ -9,6 +9,7 @@ import { RouteService } from '../services/route.service';
 import { StoreService } from '../services/store.service';
 import { BillService } from '../services/bill.service';
 import { SnackBarService } from '../services/snackbar.service';
+import { ValidationDialogService } from '../services/validation-dialog.service';
 
 @Component({
   selector: 'app-data-entry',
@@ -22,7 +23,8 @@ export class DataEntryComponent implements OnInit {
     private routeService: RouteService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private validationDialogService: ValidationDialogService
   ) {}
 
   routeName!: string;
@@ -93,6 +95,23 @@ export class DataEntryComponent implements OnInit {
     } as StoreDetails;
 
     this.storeService
+      .getSpecificStoreDetails(shopDetails)
+      .then((result) => {
+        if (result != null && result.length > 0) {
+          this.validationDialogService.openValidationDialog(
+            AppConstant.ADD_STORE_VALIDATION
+          );
+        } else {
+          this.addStore(shopDetails);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  addStore(shopDetails: StoreDetails) {
+    this.storeService
       .addStoreDetails(shopDetails)
       .then(() => {
         console.log(AppConstant.STORE_ADDED_SUCCESS_MSG);
@@ -126,6 +145,23 @@ export class DataEntryComponent implements OnInit {
       ),
     } as BillDetails;
 
+    this.billService
+      .getFilteredBillsByBillNumber(billDetails.billNumber)
+      .then((result) => {
+        if (result != null && result.length > 0) {
+          this.validationDialogService.openValidationDialog(
+            AppConstant.ADD_BILL_VALIDATION
+          );
+        } else {
+          this.addBill(billDetails);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  addBill(billDetails: BillDetails) {
     this.billService
       .addBillDetails(billDetails)
       .then(() => {

@@ -26,27 +26,18 @@ export class StoreService {
       queryConditions.push(where('route', '==', route));
     }
 
-    let storeCollection: StoreDetails[] = [];
-
-    // Create a query against the collection.
-    const q = query(
-      this.firestoreService.storeCollectionInstance,
-      ...queryConditions
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-      storeCollection.push({
-        ...doc.data(),
-        id: doc.id,
-      } as StoreDetails);
-    });
-    console.log(JSON.stringify(storeCollection));
-    return storeCollection;
+    return this.getStoreFilterdData(queryConditions);
   }
 
   addStoreDetails(store: StoreDetails) {
     return addDoc(this.firestoreService.storeCollectionInstance, store);
+  }
+
+  async getSpecificStoreDetails(store: StoreDetails) {
+    const queryConditions: QueryConstraint[] = [];
+
+    queryConditions.push(where('mobileNo', '==', store.mobileNo));
+    return this.getStoreFilterdData(queryConditions);
   }
 
   updateStoreDetails(details: StoreDetails) {
@@ -69,5 +60,24 @@ export class StoreService {
       docId
     );
     return deleteDoc(docRef);
+  }
+
+  async getStoreFilterdData(queryConditions: QueryConstraint[]) {
+    let storeCollection: StoreDetails[] = [];
+
+    // Create a query against the collection.
+    const q = query(
+      this.firestoreService.storeCollectionInstance,
+      ...queryConditions
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      storeCollection.push({
+        ...doc.data(),
+        id: doc.id,
+      } as StoreDetails);
+    });
+    return storeCollection;
   }
 }
