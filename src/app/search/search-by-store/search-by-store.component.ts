@@ -13,6 +13,7 @@ import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirm
 import { RouteService } from 'src/app/services/route.service';
 import { StoreService } from 'src/app/services/store.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
+import { dateConverter } from 'src/app/shared/dateConverter';
 
 @Component({
   selector: 'app-search-by-store',
@@ -152,17 +153,16 @@ export class SearchByStoreComponent implements OnInit {
   }
 
   sortData(result: BillDetails[]) {
-    return result
-      .sort((a, b) => {
-        return <any>a.billNumber - <any>b.billNumber;
-      })
-      .sort((a, b) => {
-        return <any>new Date(a.billDate) - <any>new Date(b.billDate);
-      });
-
-    // .sort((a, b) => {
-    //   return a.route < b.route ? -1 : 1;
-    // });
+    return result.sort((a, b) => {
+      if (a.storeName.storeName === b.storeName.storeName) {
+        return (
+          <any>dateConverter.StringToDateConverter(a.billDate) -
+          <any>dateConverter.StringToDateConverter(b.billDate)
+        );
+      } else {
+        return a.storeName.storeName < b.storeName.storeName ? -1 : 1;
+      }
+    });
   }
 
   getTotalBillAmount() {

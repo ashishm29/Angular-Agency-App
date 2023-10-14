@@ -17,6 +17,8 @@ import { StoreService } from '../services/store.service';
 import { RouteService } from '../services/route.service';
 import { AuthService } from '../services/auth.service';
 import { SnackBarService } from '../services/snackbar.service';
+import { dateConverter } from '../shared/dateConverter';
+import { ValidationDialogService } from '../services/validation-dialog.service';
 
 @Component({
   selector: 'app-recovery',
@@ -32,6 +34,7 @@ export class RecoveryComponent implements OnInit {
   billCollection: BillDetails[] = [];
   filteredBillNumbers: Observable<BillDetails[]> | undefined;
   selecetdBill!: BillDetails;
+  pendingValidation!: boolean;
 
   constructor(
     public recoveryService: RecoveryService,
@@ -41,7 +44,8 @@ export class RecoveryComponent implements OnInit {
     private authservice: AuthService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private validationService: ValidationDialogService
   ) {}
 
   ngOnInit(): void {
@@ -201,13 +205,27 @@ export class RecoveryComponent implements OnInit {
 
   sortData(result: BillDetails[]) {
     return result.sort((a, b) => {
-      return <any>new Date(a.billDate) - <any>new Date(b.billDate);
+      return (
+        <any>dateConverter.StringToDateTimeConverter(a.billDate) -
+        <any>dateConverter.StringToDateTimeConverter(b.billDate)
+      );
     });
   }
 
   onAddRecoveryData() {
     if (this.recoveryFormGroup.invalid) {
       console.log('recovery form is invalid');
+      return;
+    }
+
+    if (
+      +this.recoveryFormGroup.value.billAmount -
+        +this.recoveryFormGroup.value.amountReceived <
+      0
+    ) {
+      this.validationService.openValidationDialog(
+        AppConstant.ADD_BILL_PENDING_AMT_VALIDATION
+      );
       return;
     }
 
@@ -272,6 +290,13 @@ export class RecoveryComponent implements OnInit {
     const billAmt = +this.recoveryFormGroup.value.billAmount;
     const receivedAmt = +this.recoveryFormGroup.value.amountReceived;
     const pendingAmt = billAmt - receivedAmt;
+
+    if (billAmt - receivedAmt < 0) {
+      this.pendingValidation = true;
+    } else {
+      this.pendingValidation = false;
+    }
+
     console.log(pendingAmt);
     this.recoveryFormGroup.patchValue({
       pendingAmount: pendingAmt,

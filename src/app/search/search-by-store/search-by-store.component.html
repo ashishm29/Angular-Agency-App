@@ -135,7 +135,13 @@
   <ng-container matColumnDef="pendingAmount">
     <th mat-header-cell *matHeaderCellDef>Pending Amount</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.pendingAmount | currency : "₹" }}
+      <div
+        [ngClass]="
+          element.pendingAmount < 0 ? 'negativeValue' : 'positiveValue'
+        "
+      >
+        {{ element.pendingAmount | currency : "₹" }}
+      </div>
     </td>
     <td mat-footer-cell *matFooterCellDef>
       {{ getTotalPendingAmount() | currency : "₹" }}

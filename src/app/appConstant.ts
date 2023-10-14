@@ -60,6 +60,7 @@ export class AppConstant {
   static readonly ADD_STORE_VALIDATION: string =
     'Store with entered mobile number already exist.';
 
-  static readonly ADD_BILL_VALIDATION: string =
-    'Bill number already exist.';
+  static readonly ADD_BILL_VALIDATION: string = 'Bill number already exist.';
+
+  static readonly ADD_BILL_PENDING_AMT_VALIDATION: string = 'Pending amount can not be less than 0.';
 }

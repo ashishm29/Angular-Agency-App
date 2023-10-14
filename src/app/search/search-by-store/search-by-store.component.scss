@@ -1,19 +1,14 @@
-
-// button {
-//   width: 15em;
-//   margin-left: 1em;
-// }
-
 mat-form-field
 {
   width: 20em;
   margin-left: 1em;
 }
 
-// tr.mat-footer-row td ,
-// tr.mat-header-row th{
-//   font-weight: bold;
-//     color: black;
-//     font-size: small;
-//     background-color: lightgreen;
-// }
+.negativeValue{
+  color: red;
+  font-size: large;
+}
+
+.positiveValue {
+  color: black;
+}

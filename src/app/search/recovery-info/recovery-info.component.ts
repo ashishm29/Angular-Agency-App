@@ -7,6 +7,7 @@ import {
   MatDialogRef,
   MatDialogModule,
 } from '@angular/material/dialog';
+import { dateConverter } from 'src/app/shared/dateConverter';
 
 @Component({
   selector: 'app-recovery-info',
@@ -35,7 +36,7 @@ export class RecoveryInfoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dialogRef.updateSize('70%');
+    this.dialogRef.updateSize('100%');
     this.getBillDetails();
   }
 
@@ -49,7 +50,10 @@ export class RecoveryInfoComponent implements OnInit {
 
   sortData(result: RecoveryDetails[]) {
     return result.sort((a, b) => {
-      return <any>new Date(a.createdDate) - <any>new Date(b.createdDate);
+      return (
+        <any>dateConverter.StringToDateTimeConverter(a.createdDate) -
+        <any>dateConverter.StringToDateTimeConverter(b.createdDate)
+      );
     });
   }
 }

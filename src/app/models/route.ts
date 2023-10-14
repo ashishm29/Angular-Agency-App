@@ -19,7 +19,7 @@ export class StoreDetails {
 export class BillDetails {
   id!: string;
   route!: string;
-  storeName!: string;
+  storeName!: StoreDetails;
   billNumber!: string;
   billDate!: string;
   billAmount!: string;
