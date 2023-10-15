@@ -73,6 +73,15 @@
     >
       Search
     </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      style="margin: 1em"
+      (click)="exportToExcel()"
+    >
+      Export to Excel
+    </button>
   </div>
   <div *ngIf="storeMessage || billMessage" style="color: red">
     {{ storeMessage }} {{ billMessage }}

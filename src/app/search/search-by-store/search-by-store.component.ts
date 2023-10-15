@@ -14,6 +14,7 @@ import { RouteService } from 'src/app/services/route.service';
 import { StoreService } from 'src/app/services/store.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { dateConverter } from 'src/app/shared/dateConverter';
+import { ExcelService } from 'src/app/services/excel.service';
 
 @Component({
   selector: 'app-search-by-store',
@@ -54,7 +55,8 @@ export class SearchByStoreComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private authService: AuthService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private excelService: ExcelService
   ) {}
 
   ngOnInit(): void {
@@ -227,5 +229,11 @@ export class SearchByStoreComponent implements OnInit {
         console.log(AppConstant.NO_ACTION);
       }
     });
+  }
+
+  exportToExcel() {
+    if (this.billCollection) {
+      this.excelService.ExportExcel(this.billCollection);
+    }
   }
 }

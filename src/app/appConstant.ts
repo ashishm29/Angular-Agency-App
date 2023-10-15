@@ -10,6 +10,7 @@ export class AppConstant {
 
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
   static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';
+  static readonly DATE_TIME_FORMAT_PLAIN: string = 'yyyyMMddHHmmss';
 
   static readonly SAVE_ACTION: string = 'Saved';
   static readonly UPDAE_ACTION: string = 'Updated';
@@ -62,5 +63,6 @@ export class AppConstant {
 
   static readonly ADD_BILL_VALIDATION: string = 'Bill number already exist.';
 
-  static readonly ADD_BILL_PENDING_AMT_VALIDATION: string = 'Pending amount can not be less than 0.';
+  static readonly ADD_BILL_PENDING_AMT_VALIDATION: string =
+    'Pending amount can not be less than 0.';
 }
