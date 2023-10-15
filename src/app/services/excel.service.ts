@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Borders, Workbook } from 'ExcelJs';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { BillDetails } from '../models/route';
 import * as FileSaver from 'file-saver';
-import { reduce } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { AppConstant } from '../appConstant';
 
@@ -11,9 +11,6 @@ import { AppConstant } from '../appConstant';
 })
 export class ExcelService {
   list!: BillDetails;
-
-  workbook = new Workbook();
-  worksheet = this.workbook.addWorksheet('Report');
 
   border: Partial<Borders> = {
     top: { style: 'thin' },
@@ -39,7 +36,9 @@ export class ExcelService {
       'Pending Amount',
     ];
 
-    const headerRow = this.worksheet.addRow(header);
+    let workbook = new Workbook();
+    let worksheet = workbook.addWorksheet('Report');
+    const headerRow = worksheet.addRow(header);
     headerRow.border = this.border;
 
     headerRow.eachCell((cell) => {
@@ -57,12 +56,12 @@ export class ExcelService {
         pendingAmount: d.pendingAmount,
       };
 
-      let row = this.worksheet.addRow(Object.values(values));
+      let row = worksheet.addRow(Object.values(values));
       row.font = this.detailsFontStyle;
       row.border = this.border;
     });
 
-    this.worksheet.columns.forEach(function (column, i) {
+    worksheet.columns.forEach(function (column, i) {
       if (column['eachCell']) {
         let maxLength = 20;
         column['eachCell']({ includeEmpty: true }, function (cell) {
@@ -95,11 +94,11 @@ export class ExcelService {
       pendingAmount: totalPendingAmt,
     };
 
-    let footerRow = this.worksheet.addRow(Object.values(values));
+    let footerRow = worksheet.addRow(Object.values(values));
     footerRow.font = this.footerFontStyle;
     footerRow.border = this.border;
 
-    this.workbook.xlsx.writeBuffer().then((excelData) => {
+    workbook.xlsx.writeBuffer().then((excelData) => {
       const blob = new Blob([excelData], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
