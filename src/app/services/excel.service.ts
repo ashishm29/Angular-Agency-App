@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Borders, Workbook } from 'ExcelJs';
+import { Borders, Workbook } from 'exceljs';
 import { BillDetails } from '../models/route';
 import * as FileSaver from 'file-saver';
 import { DatePipe } from '@angular/common';
