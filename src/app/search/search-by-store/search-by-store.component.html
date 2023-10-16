@@ -78,6 +78,7 @@
       mat-raised-button
       color="primary"
       style="margin: 1em"
+      [disabled]="this.billCollection.length == 0"
       (click)="exportToExcel()"
     >
       Export to Excel

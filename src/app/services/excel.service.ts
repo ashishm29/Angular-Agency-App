@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Borders, Workbook } from 'exceljs';
+import { Borders, Workbook, Worksheet } from 'exceljs';
 import { BillDetails } from '../models/route';
 import * as FileSaver from 'file-saver';
 import { DatePipe } from '@angular/common';
@@ -10,6 +10,8 @@ import { AppConstant } from '../appConstant';
 })
 export class ExcelService {
   list!: BillDetails;
+  workbook!: Workbook;
+  worksheet!: Worksheet;
 
   border: Partial<Borders> = {
     top: { style: 'thin' },
@@ -18,31 +20,38 @@ export class ExcelService {
     right: { style: 'thin' },
   };
 
-  headerFontStyle = { name: 'Times New Roman', size: 15, bold: true };
-  footerFontStyle = { name: 'Times New Roman', size: 15, bold: true };
-  detailsFontStyle = { name: 'Times New Roman', size: 14 };
+  headerFontStyle = {
+    name: AppConstant.REPORT_FONT_NAME,
+    size: 15,
+    bold: true,
+  };
+  footerFontStyle = {
+    name: AppConstant.REPORT_FONT_NAME,
+    size: 15,
+    bold: true,
+  };
+  detailsFontStyle = { name: AppConstant.REPORT_FONT_NAME, size: 14 };
+
+  fontWithBoldCell = {
+    name: AppConstant.REPORT_FONT_NAME,
+    size: 14,
+    bold: true,
+  };
+  fontWithoutBoldCell = { name: AppConstant.REPORT_FONT_NAME, size: 14 };
 
   constructor(private datePipe: DatePipe) {}
 
-  ExportExcel(bills: BillDetails[]) {
-    let header = [
-      'Route',
-      'Store Name',
-      'Bill Number',
-      'Bill Date',
-      'Bill Amount',
-      'Received Amount',
-      'Pending Amount',
-    ];
+  ExportBillReportExcel(
+    bills: BillDetails[],
+    fromDate: string,
+    toDate: string
+  ) {
+    this.workbook = new Workbook();
+    this.worksheet = this.workbook.addWorksheet('Bill Report');
+    this.addFilterRows(fromDate, toDate);
 
-    let workbook = new Workbook();
-    let worksheet = workbook.addWorksheet('Report');
-    const headerRow = worksheet.addRow(header);
-    headerRow.border = this.border;
-
-    headerRow.eachCell((cell) => {
-      cell.font = this.headerFontStyle;
-    });
+    let header = this.prepareBillReportHeader();
+    this.addHeader(header);
 
     bills.forEach((d) => {
       let values = {
@@ -54,24 +63,10 @@ export class ExcelService {
         receivedAmount: +d.billAmount - +d.pendingAmount,
         pendingAmount: d.pendingAmount,
       };
-
-      let row = worksheet.addRow(Object.values(values));
-      row.font = this.detailsFontStyle;
-      row.border = this.border;
+      this.addDetails(values);
     });
 
-    worksheet.columns.forEach(function (column, i) {
-      if (column['eachCell']) {
-        let maxLength = 20;
-        column['eachCell']({ includeEmpty: true }, function (cell) {
-          var columnLength = cell.value ? cell.value.toString().length : 20;
-          if (columnLength > maxLength) {
-            maxLength = columnLength;
-          }
-        });
-        column.width = maxLength;
-      }
-    });
+    this.adjustColumnWidth();
 
     let totalBillAmt = bills.reduce(
       (prevTotal, newVal) => prevTotal + +newVal.billAmount,
@@ -93,11 +88,12 @@ export class ExcelService {
       pendingAmount: totalPendingAmt,
     };
 
-    let footerRow = worksheet.addRow(Object.values(values));
-    footerRow.font = this.footerFontStyle;
-    footerRow.border = this.border;
+    this.addFooter(values);
+    this.exportToExcel('_BillReport');
+  }
 
-    workbook.xlsx.writeBuffer().then((excelData) => {
+  exportToExcel(fileName: string) {
+    this.workbook.xlsx.writeBuffer().then((excelData) => {
       const blob = new Blob([excelData], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
@@ -107,7 +103,76 @@ export class ExcelService {
         AppConstant.DATE_TIME_FORMAT_PLAIN
       );
 
-      FileSaver.saveAs(blob, currrent_Date + '_BillReport.xlsx');
+      FileSaver.saveAs(blob, currrent_Date + fileName + '.xlsx');
+    });
+  }
+
+  prepareBillReportHeader() {
+    return [
+      'Route',
+      'Store Name',
+      'Bill Number',
+      'Bill Date',
+      'Bill Amount',
+      'Received Amount',
+      'Pending Amount',
+    ];
+  }
+
+  addFilterRows(fromDate: string, toDate: string) {
+    let row = this.worksheet.addRow([]);
+    row = this.worksheet.addRow(['FROM DATE : ', fromDate]);
+    row.getCell(1).font = this.fontWithBoldCell;
+    row.getCell(2).font = this.fontWithoutBoldCell;
+    row = this.worksheet.addRow(['TO DATE : ', toDate]);
+    row.getCell(1).font = this.fontWithBoldCell;
+    row.getCell(2).font = this.fontWithoutBoldCell;
+    row = this.worksheet.addRow([]);
+  }
+
+  addHeader(header: string[]) {
+    const headerRow = this.worksheet.addRow(header);
+    headerRow.border = this.border;
+
+    headerRow.eachCell((cell) => {
+      cell.font = this.headerFontStyle;
+    });
+
+    headerRow.fill = {
+      type: 'gradient',
+      gradient: 'angle',
+      degree: 0,
+      stops: [
+        { position: 0, color: { argb: 'FFD3D3D3' } },
+        { position: 1, color: { argb: 'FFD3D3D3' } },
+      ],
+    };
+  }
+
+  addDetails(values: any) {
+    let row = this.worksheet.addRow(Object.values(values));
+    row.font = this.detailsFontStyle;
+    row.border = this.border;
+  }
+
+  addFooter(values: any) {
+    let footerRow = this.worksheet.addRow(Object.values(values));
+    footerRow.font = this.footerFontStyle;
+    footerRow.border = this.border;
+  }
+
+  adjustColumnWidth() {
+    this.worksheet.columns.forEach(function (column, i) {
+      if (column['eachCell']) {
+        let maxLength = 20;
+        column['eachCell']({ includeEmpty: true }, function (cell) {
+          var columnLength = cell.value ? cell.value.toString().length : 20;
+          if (columnLength > maxLength) {
+            maxLength = columnLength;
+          }
+        });
+        column.width = maxLength;
+      }
     });
   }
 }

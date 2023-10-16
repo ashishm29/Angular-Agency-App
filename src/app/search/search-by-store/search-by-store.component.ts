@@ -232,8 +232,10 @@ export class SearchByStoreComponent implements OnInit {
   }
 
   exportToExcel() {
-    if (this.billCollection) {
-      this.excelService.ExportExcel(this.billCollection);
-    }
+    this.excelService.ExportBillReportExcel(
+      this.billCollection,
+      this.fromBillDate?.value?.toLocaleDateString(),
+      this.toBillDate?.value?.toLocaleDateString()
+    );
   }
 }

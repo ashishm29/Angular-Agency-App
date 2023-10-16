@@ -65,4 +65,6 @@ export class AppConstant {
 
   static readonly ADD_BILL_PENDING_AMT_VALIDATION: string =
     'Pending amount can not be less than 0.';
+
+  static readonly REPORT_FONT_NAME: string = 'Times New Roman';
 }
