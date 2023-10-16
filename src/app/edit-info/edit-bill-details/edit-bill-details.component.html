@@ -2,7 +2,7 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Enter Bill Number to update</mat-label>
-      <input matInput [formControl]="billFormBillNoControl" />
+      <input matInput [formControl]="billFormBillNoControl" toUppercase />
     </mat-form-field>
   </p>
 
@@ -23,7 +23,7 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Bill Number</mat-label>
-      <input matInput formControlName="billNumber" />
+      <input matInput formControlName="billNumber" toUppercase />
     </mat-form-field>
   </p>
 

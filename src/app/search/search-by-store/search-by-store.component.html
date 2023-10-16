@@ -21,6 +21,7 @@
         [formControl]="storeName"
         matInput
         [matAutocomplete]="auto"
+        oninput="this.value = this.value.toUpperCase()"
       />
       <mat-autocomplete
         #auto="matAutocomplete"
@@ -38,7 +39,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Bill Number</mat-label>
-      <input matInput [formControl]="billNumber" />
+      <input matInput [formControl]="billNumber" toUppercase />
     </mat-form-field>
 
     <mat-form-field appearance="outline">

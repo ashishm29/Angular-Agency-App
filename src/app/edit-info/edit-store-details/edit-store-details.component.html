@@ -7,6 +7,7 @@
         [formControl]="billStoreControl"
         matInput
         [matAutocomplete]="auto"
+        oninput="this.value = this.value.toUpperCase()"
       />
       <mat-autocomplete
         #auto="matAutocomplete"
@@ -26,14 +27,18 @@
   <p>
     <mat-form-field class="example-full-width" appearance="outline">
       <mat-label>Store Name</mat-label>
-      <input type="text" formControlName="storeName" matInput />
+      <input type="text" formControlName="storeName" matInput toUppercase />
     </mat-form-field>
   </p>
 
   <p>
     <mat-form-field appearance="outline" class="example-full-width">
       <mat-label>Shop Address</mat-label>
-      <textarea matInput formControlName="address"></textarea>
+      <textarea
+        matInput
+        formControlName="address"
+        oninput="this.value = this.value.toUpperCase()"
+      ></textarea>
     </mat-form-field>
   </p>
 

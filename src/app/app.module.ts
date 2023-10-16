@@ -55,6 +55,7 @@ import { DeleteStoreComponent } from './delete-info/delete-store/delete-store.co
 import { DeleteRouteComponent } from './delete-info/delete-route/delete-route.component';
 import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-recovery.component';
 import { ValidationDialogComponent } from './dialog/validation-dialog/validation-dialog.component';
+import { UpperCaseInputDirective } from './shared/UpperCaseInputDirective';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -91,6 +92,7 @@ const MY_DATE_FORMAT = {
     DeleteRouteComponent,
     DeleteRecoveryComponent,
     ValidationDialogComponent,
+    UpperCaseInputDirective,
   ],
   imports: [
     BrowserModule,
@@ -126,6 +128,7 @@ const MY_DATE_FORMAT = {
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
   ],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}

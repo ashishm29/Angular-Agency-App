@@ -15,19 +15,24 @@
 </div>
 
 <form *ngIf="showRouteControls" [formGroup]="routeFormGroup">
-<div>
-  <p>
-    <mat-form-field appearance="outline">
-      <mat-label>Route Name</mat-label>
-      <input matInput formControlName="route" required #route />
-    </mat-form-field>
-  </p>
-  <p align="center">
-    <button mat-raised-button color="primary" [disabled]="routeFormGroup.invalid" (click)="onAddRoute()">
-      Add Route
-    </button>
-  </p>
-</div>
+  <div>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Route Name</mat-label>
+        <input matInput formControlName="route" toUppercase required #route />
+      </mat-form-field>
+    </p>
+    <p align="center">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="routeFormGroup.invalid"
+        (click)="onAddRoute()"
+      >
+        Add Route
+      </button>
+    </p>
+  </div>
 </form>
 
 <form *ngIf="showShopControls" [formGroup]="shopFormGroup">
@@ -47,28 +52,32 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Store Name</mat-label>
-      <input matInput formControlName="storeName" />
+      <input matInput formControlName="storeName" toUppercase />
     </mat-form-field>
   </p>
 
   <p>
     <mat-form-field appearance="outline" class="example-full-width">
       <mat-label>Shop Address</mat-label>
-      <textarea matInput formControlName="address"></textarea>
+      <textarea
+        matInput
+        oninput="this.value = this.value.toUpperCase()"
+        formControlName="address"
+      ></textarea>
     </mat-form-field>
   </p>
 
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Mobile Number</mat-label>
-      <input matInput type="number" formControlName="mobileNo" />
+      <input matInput type="number" formControlName="mobileNo" toUppercase />
     </mat-form-field>
   </p>
 
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Alternate Mobile Number</mat-label>
-      <input matInput type="number" formControlName="altMobileNo" />
+      <input matInput type="number" formControlName="altMobileNo" toUppercase />
     </mat-form-field>
   </p>
 
@@ -109,6 +118,7 @@
         type="text"
         formControlName="storeName"
         matInput
+        oninput="this.value = this.value.toUpperCase()"
         [matAutocomplete]="auto"
       />
       <mat-autocomplete
@@ -136,7 +146,7 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Bill Number</mat-label>
-      <input matInput formControlName="billNumber" />
+      <input matInput formControlName="billNumber" toUppercase />
     </mat-form-field>
   </p>
 
