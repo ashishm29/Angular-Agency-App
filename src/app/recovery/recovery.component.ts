@@ -206,8 +206,8 @@ export class RecoveryComponent implements OnInit {
   sortData(result: BillDetails[]) {
     return result.sort((a, b) => {
       return (
-        <any>dateConverter.StringToDateTimeConverter(a.billDate) -
-        <any>dateConverter.StringToDateTimeConverter(b.billDate)
+        <any>dateConverter.StringToDateConverter(a.billDate) -
+        <any>dateConverter.StringToDateConverter(b.billDate)
       );
     });
   }
