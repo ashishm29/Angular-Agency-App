@@ -139,7 +139,8 @@ export class SearchByStoreComponent implements OnInit {
         this.storeName?.value?.storeName,
         this.fromBillDate?.value?.toLocaleDateString(),
         this.toBillDate?.value?.toLocaleDateString(),
-        this.billNumber.value
+        this.billNumber.value,
+        true
       )
       .then((result) => {
         if (result && result.length > 0) {

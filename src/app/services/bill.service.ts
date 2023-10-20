@@ -25,7 +25,8 @@ export class BillService {
     storeName: string,
     fromBillDate: string,
     toBillDate: string,
-    billNumber: string
+    billNumber: string,
+    excludeFullPaymentBills: boolean = false
   ) {
     const queryConditions: QueryConstraint[] = [];
 
@@ -47,6 +48,10 @@ export class BillService {
 
     if (billNumber) {
       queryConditions.push(where('billNumber', '==', billNumber));
+    }
+
+    if (excludeFullPaymentBills) {
+      queryConditions.push(where('pendingAmount', '>', 0));
     }
 
     return this.getBills(queryConditions);
@@ -73,7 +78,7 @@ export class BillService {
 
   async getFilteredBillsByBillNumber(billnumber: string) {
     const queryConditions: QueryConstraint[] = [
-      where('billNumber', '==', billnumber)
+      where('billNumber', '==', billnumber),
     ];
 
     return this.getBills(queryConditions);
