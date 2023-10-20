@@ -46,6 +46,7 @@ export class SearchByStoreComponent implements OnInit {
   storeMessage!: string;
   billMessage!: string;
   isAdmin!: boolean;
+  selectedRowIndex = -1;
 
   constructor(
     public routeService: RouteService,
@@ -67,6 +68,10 @@ export class SearchByStoreComponent implements OnInit {
     this.toBillDate = new FormControl();
     this.isAdmin = this.authService.isAdmin();
     this.onFetchRoute();
+  }
+
+  highlight(row: any) {
+    this.selectedRowIndex = row.id;
   }
 
   onRouteSelectionChange(selectedRoute: string) {

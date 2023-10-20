@@ -184,6 +184,11 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    [ngClass]="{ highlight: selectedRowIndex == row.id }"
+    (click)="highlight(row)"
+  ></tr>
   <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>
