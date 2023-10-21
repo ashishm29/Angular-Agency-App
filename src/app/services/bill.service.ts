@@ -51,9 +51,9 @@ export class BillService {
     }
 
     if (paidUnpaidSelection) {
-      if (paidUnpaidSelection.value === 'Paid') {
+      if (paidUnpaidSelection.value === 'UnPaid') {
         queryConditions.push(where('pendingAmount', '>', 0));
-      } else if (paidUnpaidSelection.value === 'UnPaid') {
+      } else if (paidUnpaidSelection.value === 'Paid') {
         queryConditions.push(where('pendingAmount', '==', 0));
       }
     }
