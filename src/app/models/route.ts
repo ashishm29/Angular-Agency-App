@@ -39,6 +39,7 @@ export class RecoveryDetails {
   pendingAmount!: string;
   receiptNumber!: string;
   modeOfPayment!: string;
+  recoveryDate!: string;
   createdDate!: string;
   recoveryAgent!: string;
 }

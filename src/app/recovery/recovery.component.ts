@@ -239,6 +239,7 @@ export class RecoveryComponent implements OnInit {
       pendingAmount: this.recoveryFormGroup.value.pendingAmount,
       receiptNumber: this.recoveryFormGroup.value.receiptNumber,
       modeOfPayment: this.recoveryFormGroup.value.modeOfPayment,
+      recoveryDate: new Date().toLocaleDateString(),
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
