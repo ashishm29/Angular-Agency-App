@@ -208,7 +208,7 @@
   <tr
     mat-row
     *matRowDef="let row; columns: displayedColumns"
-    [ngClass]="{ highlight: selectedRowIndex == row.id }"
+    [ngClass]="getRowClass(row)"
     (click)="highlight(row)"
   ></tr>
   <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>

@@ -13,7 +13,7 @@ mat-form-field
   color: black;
 }
 
-.highlight {
+.selected-row-highlight {
   background: #bff3c2;
 }
 
@@ -21,4 +21,17 @@ mat-form-field
 {
 width: 15em;
   margin-left: 1em;
+}
+
+.full-paid-bill-row-highlight
+{
+  background: #61ed66;
+}
+
+.paid-bill-row-selected-highlight {
+  background: #58dd68;
+}
+
+.partial-paid-bill-row-selected-highlight {
+  background: #f68a82;
 }

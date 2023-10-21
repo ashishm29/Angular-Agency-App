@@ -152,10 +152,12 @@ export class SearchByStoreComponent implements OnInit {
   onReset() {
     this.initFormFields();
     this.billCollection = [];
+    this.selectedRowIndex = -1;
   }
 
   onSearch() {
     this.billCollection = [];
+    this.selectedRowIndex = -1;
     this.billService
       .getFilteredBills(
         this.route?.value,
@@ -261,5 +263,24 @@ export class SearchByStoreComponent implements OnInit {
       this.fromBillDate?.value?.toLocaleDateString(),
       this.toBillDate?.value?.toLocaleDateString()
     );
+  }
+
+  getRowClass(row: any) {
+    if (row.pendingAmount == 0) {
+      if (this.selectedRowIndex == row.id) {
+        return 'selected-row-highlight';
+      } else {
+        return 'full-paid-bill-row-highlight';
+      }
+    } else {
+      if (this.selectedRowIndex == row.id) {
+        return 'selected-row-highlight';
+      } else {
+        if (row.billAmount !== row.pendingAmount) {
+          return 'partial-paid-bill-row-selected-highlight';
+        }
+        return '';
+      }
+    }
   }
 }
