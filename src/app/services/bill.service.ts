@@ -26,7 +26,7 @@ export class BillService {
     fromBillDate: string,
     toBillDate: string,
     billNumber: string,
-    excludeFullPaymentBills: boolean = false
+    paidUnpaidSelection: any = ''
   ) {
     const queryConditions: QueryConstraint[] = [];
 
@@ -50,8 +50,12 @@ export class BillService {
       queryConditions.push(where('billNumber', '==', billNumber));
     }
 
-    if (excludeFullPaymentBills) {
-      queryConditions.push(where('pendingAmount', '>', 0));
+    if (paidUnpaidSelection) {
+      if (paidUnpaidSelection.value === 'Paid') {
+        queryConditions.push(where('pendingAmount', '>', 0));
+      } else if (paidUnpaidSelection.value === 'UnPaid') {
+        queryConditions.push(where('pendingAmount', '==', 0));
+      }
     }
 
     return this.getBills(queryConditions);

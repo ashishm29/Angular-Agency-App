@@ -39,6 +39,7 @@ export class SearchByStoreComponent implements OnInit {
   ];
 
   route!: FormControl;
+  paidUnpaidSelection!: FormControl;
   storeName!: FormControl;
   billNumber!: FormControl;
   fromBillDate!: FormControl;
@@ -61,13 +62,20 @@ export class SearchByStoreComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
+    this.initFormFields();
+    this.onFetchRoute();
+  }
+
+  initFormFields() {
     this.route = new FormControl();
+    this.paidUnpaidSelection = new FormControl('Both');
     this.storeName = new FormControl();
     this.billNumber = new FormControl();
     this.fromBillDate = new FormControl();
     this.toBillDate = new FormControl();
-    this.isAdmin = this.authService.isAdmin();
-    this.onFetchRoute();
+    this.storeMessage;
+    this.billMessage = '';
   }
 
   highlight(row: any) {
@@ -82,6 +90,11 @@ export class SearchByStoreComponent implements OnInit {
     this.storeMessage;
     this.billMessage = '';
     this.onFetchStoreDetails(selectedRoute);
+  }
+
+  onPaidUnpaidSelectionChange(selectedRoute: string) {
+    this.billMessage = '';
+    this.onSearch();
   }
 
   onFetchRoute() {
@@ -136,6 +149,11 @@ export class SearchByStoreComponent implements OnInit {
     );
   }
 
+  onReset() {
+    this.initFormFields();
+    this.billCollection = [];
+  }
+
   onSearch() {
     this.billCollection = [];
     this.billService
@@ -145,7 +163,7 @@ export class SearchByStoreComponent implements OnInit {
         this.fromBillDate?.value?.toLocaleDateString(),
         this.toBillDate?.value?.toLocaleDateString(),
         this.billNumber.value,
-        true
+        this.paidUnpaidSelection
       )
       .then((result) => {
         if (result && result.length > 0) {
