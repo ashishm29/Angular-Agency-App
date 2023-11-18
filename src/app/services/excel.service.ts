@@ -54,11 +54,18 @@ export class ExcelService {
     this.addHeader(header);
 
     bills.forEach((d) => {
+      let billdate;
+      try {
+        billdate = this.datePipe.transform(d.billDate.toDate(), 'dd-MM-yyyy');
+      } catch {
+        billdate = d.billDate;
+      }
+
       let values = {
         route: d.route,
         storeName: d.storeName.storeName,
         billNumber: d.billNumber,
-        billDate: d.billDate,
+        billDate: billdate,
         billAmount: d.billAmount,
         receivedAmount: +d.billAmount - +d.pendingAmount,
         pendingAmount: d.pendingAmount,

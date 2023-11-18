@@ -1,3 +1,5 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export class Route {
   routeName!: string;
   id!: string;
@@ -21,7 +23,7 @@ export class BillDetails {
   route!: string;
   storeName!: StoreDetails;
   billNumber!: string;
-  billDate!: string;
+  billDate!: Timestamp;
   billAmount!: string;
   pendingAmount!: string;
   createdDate!: string;
@@ -39,7 +41,7 @@ export class RecoveryDetails {
   pendingAmount!: string;
   receiptNumber!: string;
   modeOfPayment!: string;
-  recoveryDate!: string;
+  recoveryDate!: Date;
   createdDate!: string;
   recoveryAgent!: string;
 }

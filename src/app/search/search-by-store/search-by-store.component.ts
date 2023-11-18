@@ -15,6 +15,7 @@ import { StoreService } from 'src/app/services/store.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { dateConverter } from 'src/app/shared/dateConverter';
 import { ExcelService } from 'src/app/services/excel.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-search-by-store',
@@ -58,7 +59,8 @@ export class SearchByStoreComponent implements OnInit {
     public dialog: MatDialog,
     private authService: AuthService,
     private snackbarService: SnackBarService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -162,8 +164,8 @@ export class SearchByStoreComponent implements OnInit {
       .getFilteredBills(
         this.route?.value,
         this.storeName?.value?.storeName,
-        this.fromBillDate?.value?.toLocaleDateString(),
-        this.toBillDate?.value?.toLocaleDateString(),
+        this.fromBillDate?.value,
+        this.toBillDate?.value,
         this.billNumber.value,
         this.paidUnpaidSelection
       )
@@ -182,15 +184,24 @@ export class SearchByStoreComponent implements OnInit {
 
   sortData(result: BillDetails[]) {
     return result.sort((a, b) => {
-      if (a.storeName.storeName === b.storeName.storeName) {
-        return (
-          <any>dateConverter.StringToDateConverter(a.billDate) -
-          <any>dateConverter.StringToDateConverter(b.billDate)
-        );
-      } else {
-        return a.storeName.storeName < b.storeName.storeName ? -1 : 1;
+      try {
+        if (a.storeName.storeName === b.storeName.storeName) {
+          return <any>a.billDate.toDate() - <any>b.billDate.toDate();
+        } else {
+          return a.storeName.storeName < b.storeName.storeName ? -1 : 1;
+        }
+      } catch {
+        return 0;
       }
     });
+  }
+
+  getBillDate(element: BillDetails) {
+    try {
+      return this.datePipe.transform(element.billDate.toDate(), 'dd-MM-yyyy');
+    } catch {
+      return element.billDate;
+    }
   }
 
   getTotalBillAmount() {

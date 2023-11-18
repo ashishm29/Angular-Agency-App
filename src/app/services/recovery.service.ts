@@ -8,6 +8,7 @@ import {
   deleteDoc,
   doc,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { AppConstant } from '../appConstant';
@@ -38,12 +39,28 @@ export class RecoveryService {
     return addDoc(this.firestoreService.recoveryCollectionInstance, details);
   }
 
-  async getRecoveryDetails(billNumber: string = '') {
+  async getRecoveryDetails(
+    billNumber: string = '',
+    fromDate: string = '',
+    toDate: string = ''
+  ) {
     let collectionData: RecoveryDetails[] = [];
     const queryConditions: QueryConstraint[] = [];
 
+    console.log('start : ' + fromDate);
+    console.log('end : ' + toDate);
     if (billNumber) {
       queryConditions.push(where('billNumber', '==', billNumber));
+    }
+
+    if (fromDate) {
+      queryConditions.push(where('recoveryDate', '>=', fromDate));
+
+      if (toDate) {
+        queryConditions.push(where('recoveryDate', '<=', toDate));
+      } else {
+        queryConditions.push(where('recoveryDate', '<=', fromDate));
+      }
     }
 
     // Create a query against the collection.
@@ -70,5 +87,18 @@ export class RecoveryService {
       docId
     );
     return deleteDoc(docRef);
+  }
+
+  updateRecoveryBillAmount(details: RecoveryDetails) {
+    return updateDoc(
+      doc(
+        this.firestoreService.firestore,
+        AppConstant.RECOVERY_COLLECTION_NAME,
+        details.id
+      ),
+      {
+        ...details,
+      }
+    );
   }
 }

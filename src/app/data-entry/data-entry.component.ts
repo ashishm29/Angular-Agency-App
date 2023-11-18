@@ -136,7 +136,7 @@ export class DataEntryComponent implements OnInit {
       route: this.billFormGroup.value.route,
       storeName: this.billFormGroup.value.storeName,
       billNumber: this.billFormGroup.value.billNumber,
-      billDate: this.billFormGroup.value.billDate.toLocaleDateString(),
+      billDate: this.billFormGroup.value.billDate,
       billAmount: this.billFormGroup.value.billAmount,
       pendingAmount: this.billFormGroup.value.billAmount,
       createdDate: this.datePipe.transform(

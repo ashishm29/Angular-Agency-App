@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
-import { BillDetails } from 'src/app/models/route';
+import { BillDetails, RecoveryDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
+import { RecoveryService } from 'src/app/services/recovery.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class EditBillDetailsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
     private billService: BillService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private recoveryService: RecoveryService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +39,7 @@ export class EditBillDetailsComponent implements OnInit {
       billNumber: new FormControl('', [Validators.required]),
       billDate: new FormControl('', [Validators.required]),
       billAmount: new FormControl('', [Validators.required]),
+      pendingAmount: new FormControl('', [Validators.required]),
       address: new FormControl(),
     });
   }
@@ -47,12 +50,23 @@ export class EditBillDetailsComponent implements OnInit {
       .getFilteredBills('', '', '', '', this.billFormBillNoControl.value)
       .then((result) => {
         if (result && result.length > 0) {
-          let splitDate = result[0].billDate.split('/');
           this.selectedBillToUpdate = result[0];
+
+          let billDate;
+          try {
+            billDate = result[0].billDate.toDate();
+          } catch {
+            let splitDate = result[0].billDate.toString().split('/');
+            billDate = new Date(
+              +splitDate[2],
+              +splitDate[1] - 1,
+              +splitDate[0]
+            );
+          }
 
           this.billFormGroup.patchValue({
             ...result[0],
-            billDate: new Date(+splitDate[2], +splitDate[1] - 1, +splitDate[0]),
+            billDate: billDate,
           });
         } else {
           console.log(AppConstant.BILL_NOT_FOUND_MSG);
@@ -73,9 +87,9 @@ export class EditBillDetailsComponent implements OnInit {
     let billDetails = {
       ...this.selectedBillToUpdate,
       billNumber: this.billFormGroup.value.billNumber,
-      billDate: this.billFormGroup.value.billDate.toLocaleDateString(),
+      billDate: this.billFormGroup.value.billDate,
       billAmount: this.billFormGroup.value.billAmount,
-      pendingAmount: this.billFormGroup.value.billAmount,
+      pendingAmount: this.billFormGroup.value.pendingAmount,
       updatedDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -90,11 +104,53 @@ export class EditBillDetailsComponent implements OnInit {
           AppConstant.BILL_UPDATED_SUCCESS_MSG,
           AppConstant.UPDAE_ACTION
         );
-        this.initializeBillUiFields();
+
+        this.recoveryService
+          .getRecoveryDetails(this.billFormGroup.value.billNumber)
+          .then((result) => {
+            if (result && result.length > 0) {
+              result.forEach((item) => {
+                let updatedRecoveryObject = {
+                  ...item,
+                  billAmount: this.billFormGroup.value.billAmount,
+                  pendingAmount: this.billFormGroup.value.pendingAmount,
+                } as RecoveryDetails;
+
+                this.recoveryService
+                  .updateRecoveryBillAmount(updatedRecoveryObject)
+                  .then(() => {
+                    this.snackbarService.openSnackBar(
+                      AppConstant.BILL_UPDATED_SUCCESS_MSG,
+                      AppConstant.UPDAE_ACTION
+                    );
+                  });
+              });
+            }
+
+            this.initializeBillUiFields();
+          });
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
+  onBillAmountChange() {
+    let billAmountDiff =
+      +this.billFormGroup.value.billAmount -
+      +this.selectedBillToUpdate.billAmount;
+
+    let updatedPendingAmount;
+    if (billAmountDiff > 0) {
+      updatedPendingAmount =
+        this.selectedBillToUpdate.pendingAmount + billAmountDiff;
+    } else {
+      updatedPendingAmount =
+        this.selectedBillToUpdate.pendingAmount + billAmountDiff;
+    }
+
+    this.billFormGroup.patchValue({
+      pendingAmount: updatedPendingAmount,
+    });
+  }
 }

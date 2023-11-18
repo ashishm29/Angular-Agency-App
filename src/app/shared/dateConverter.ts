@@ -19,17 +19,17 @@ export class dateConverter {
     return date;
   }
 
-  static StringToDateConverter(date: string) {
-    if (date) {
-      let dateValues = date.split('/');
+  // static StringToDateConverter(date: string) {
+  //   if (date) {
+  //     let dateValues = date.split('/');
 
-      let day = dateValues[0];
-      let month = dateValues[1];
-      let year = dateValues[2];
+  //     let day = dateValues[0];
+  //     let month = dateValues[1];
+  //     let year = dateValues[2];
 
-      return new Date(+year, +month, +day);
-    }
+  //     return new Date(+year, +month, +day);
+  //   }
 
-    return date;
-  }
+  //   return date;
+  // }
 }

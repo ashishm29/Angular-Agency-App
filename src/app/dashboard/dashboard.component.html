@@ -1,35 +1,106 @@
-<div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <span style="flex: 1, 1, Auto"></span>
+<h1 class="mat-h1">Dashboard</h1>
 
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile
-      *ngFor="let card of cards | async"
-      [colspan]="card.cols"
-      [rowspan]="card.rows"
+<div class="centerFlex">
+  <div>
+    <mat-form-field appearance="outline" class="mat-form-field-custome">
+      <mat-label>From date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [formControl]="fromDate"
+        placeholder="From date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="mat-form-field-custome">
+      <mat-label>To date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="toPicker"
+        [formControl]="toDate"
+        placeholder="To date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      style="margin-left: 1em"
+      (click)="onfetchRecoveryDetails()"
     >
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{ card.title }}
-            <button
-              mat-icon-button
-              class="more-button"
-              [matMenuTriggerFor]="menu"
-              aria-label="Toggle menu"
-            >
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+      Search
+    </button>
+  </div>
+</div>
+
+<div>
+  <table mat-table [dataSource]="recoveryCollection" class="mat-elevation-z8">
+    <ng-container matColumnDef="storeName">
+      <th mat-header-cell *matHeaderCellDef>Store Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.storeName.storeName }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        TOTAL : {{ recoveryCollection.length }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="billNo">
+      <th mat-header-cell *matHeaderCellDef>Bill No.</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.billNumber }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="recoveryDate">
+      <th mat-header-cell *matHeaderCellDef>Recovery Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.createdDate }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="salesman">
+      <th mat-header-cell *matHeaderCellDef>Salesman</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.recoveryAgent }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="receiptNo">
+      <th mat-header-cell *matHeaderCellDef>Receipt No.</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.receiptNumber }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentmode">
+      <th mat-header-cell *matHeaderCellDef>Mode</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.modeOfPayment }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="recoveryAmount">
+      <th mat-header-cell *matHeaderCellDef>Amount Received</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.amountReceived | currency : "₹" }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        {{ getTotalAmountReceived() | currency : "₹" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  </table>
 </div>

@@ -17,7 +17,6 @@ import { StoreService } from '../services/store.service';
 import { RouteService } from '../services/route.service';
 import { AuthService } from '../services/auth.service';
 import { SnackBarService } from '../services/snackbar.service';
-import { dateConverter } from '../shared/dateConverter';
 import { ValidationDialogService } from '../services/validation-dialog.service';
 
 @Component({
@@ -205,10 +204,12 @@ export class RecoveryComponent implements OnInit {
 
   sortData(result: BillDetails[]) {
     return result.sort((a, b) => {
-      return (
-        <any>dateConverter.StringToDateConverter(a.billDate) -
-        <any>dateConverter.StringToDateConverter(b.billDate)
-      );
+      try {
+        return <any>a.billDate.toDate() - <any>b.billDate.toDate();
+      } catch {
+        console.log('Exception occured ');
+        return 0;
+      }
     });
   }
 
@@ -239,7 +240,7 @@ export class RecoveryComponent implements OnInit {
       pendingAmount: this.recoveryFormGroup.value.pendingAmount,
       receiptNumber: this.recoveryFormGroup.value.receiptNumber,
       modeOfPayment: this.recoveryFormGroup.value.modeOfPayment,
-      recoveryDate: new Date().toLocaleDateString(),
+      recoveryDate: new Date(),
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -310,5 +311,13 @@ export class RecoveryComponent implements OnInit {
       pendingAmount: '',
       amountReceived: '',
     });
+  }
+
+  getBillDate(element: BillDetails) {
+    try {
+      return this.datePipe.transform(element.billDate.toDate(), 'dd-MM-yyyy');
+    } catch {
+      return element.billDate;
+    }
   }
 }
