@@ -50,14 +50,6 @@ export class BillService {
       queryConditions.push(where('billNumber', '==', billNumber));
     }
 
-    if (paidUnpaidSelection) {
-      if (paidUnpaidSelection.value === 'UnPaid') {
-        queryConditions.push(where('pendingAmount', '>', 0));
-      } else if (paidUnpaidSelection.value === 'Paid') {
-        queryConditions.push(where('pendingAmount', '==', 0));
-      }
-    }
-
     return this.getBills(queryConditions);
   }
 

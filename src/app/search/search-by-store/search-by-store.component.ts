@@ -171,7 +171,16 @@ export class SearchByStoreComponent implements OnInit {
       )
       .then((result) => {
         if (result && result.length > 0) {
-          this.billCollection = this.sortData(result);
+          let filterResult = result;
+          if (this.paidUnpaidSelection) {
+            if (this.paidUnpaidSelection.value === 'UnPaid') {
+              filterResult = result.filter((c) => +c.pendingAmount > 0);
+            } else if (this.paidUnpaidSelection.value === 'Paid') {
+              filterResult = result.filter((c) => +c.pendingAmount == 0);
+            }
+          }
+
+          this.billCollection = this.sortData(filterResult);
         } else {
           console.log(AppConstant.STORE_NOT_FOUND_MSG);
         }
