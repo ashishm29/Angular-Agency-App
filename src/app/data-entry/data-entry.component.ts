@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BillDetails, Route, StoreDetails } from '../models/route';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { Observable, map, startWith } from 'rxjs';
@@ -32,6 +32,9 @@ export class DataEntryComponent implements OnInit {
   storeCollection: StoreDetails[] = [];
   filteredOptions: Observable<StoreDetails[]> | undefined;
   myControl = new FormControl();
+  @ViewChild('routeFormDirective') private routeFormDirective!: NgForm;
+  @ViewChild('storeFormDirective') private storeFormDirective!: NgForm;
+  @ViewChild('billFormDirective') private billFormDirective!: NgForm;
 
   routeFormGroup!: FormGroup;
   shopFormGroup!: FormGroup;
@@ -189,6 +192,10 @@ export class DataEntryComponent implements OnInit {
       ]),
       altMobileNo: new FormControl(),
     });
+
+    if (this.storeFormDirective) {
+      this.storeFormDirective.resetForm();
+    }
   }
 
   initializeBillUiFields() {
@@ -200,12 +207,20 @@ export class DataEntryComponent implements OnInit {
       billAmount: new FormControl('', [Validators.required]),
       address: new FormControl(),
     });
+
+    if (this.billFormDirective) {
+      this.billFormDirective.resetForm();
+    }
   }
 
   initializeRouteUiFields() {
     this.routeFormGroup = new FormGroup({
       route: new FormControl('', [Validators.required]),
     });
+
+    if (this.routeFormDirective) {
+      this.routeFormDirective.resetForm();
+    }
   }
 
   onFetchRoute() {

@@ -14,7 +14,7 @@
   <div class="line"><mat-divider></mat-divider></div>
 </div>
 
-<form *ngIf="showRouteControls" [formGroup]="routeFormGroup">
+<form *ngIf="showRouteControls" [formGroup]="routeFormGroup" #routeFormDirective="ngForm">
   <div>
     <p>
       <mat-form-field appearance="outline">
@@ -35,7 +35,7 @@
   </div>
 </form>
 
-<form *ngIf="showShopControls" [formGroup]="shopFormGroup">
+<form *ngIf="showShopControls" [formGroup]="shopFormGroup" #storeFormDirective="ngForm">
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
@@ -94,7 +94,7 @@
   </p>
 </form>
 
-<form *ngIf="showBillControls" [formGroup]="billFormGroup">
+<form *ngIf="showBillControls" [formGroup]="billFormGroup" #billFormDirective="ngForm">
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
