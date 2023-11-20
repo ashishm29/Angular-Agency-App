@@ -55,3 +55,8 @@ export class PaymentMode {
   mode!: string;
   id!: string;
 }
+
+export class ModeWiseRecovery {
+  paymentMode!: string;
+  amount!: number;
+}
