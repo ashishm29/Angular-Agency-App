@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { RecoveryService } from '../services/recovery.service';
 import { ModeWiseRecovery, RecoveryDetails } from '../models/route';
 import { UserService } from '../services/user.service';
+import { PaymentModeService } from '../services/paymentMode.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,12 +13,14 @@ import { UserService } from '../services/user.service';
 export class DashboardComponent implements OnInit {
   fromDate!: FormControl;
   toDate!: FormControl;
-  salesman!: FormControl;
+  salesmanSelected!: FormControl;
+  paymentModeSelected!: FormControl;
 
   recoveryFixedCollection: RecoveryDetails[] = [];
   recoveryCollection: RecoveryDetails[] = [];
   recoveryModeWiseCollection: ModeWiseRecovery[] = [];
   salesmanCollection: string[] = [];
+  paymentModeCollection: string[] = [];
 
   displayedColumns: string[] = [
     'storeName',
@@ -33,7 +36,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private recoveryService: RecoveryService,
-    private userService: UserService
+    private userService: UserService,
+    private paymentModeService: PaymentModeService
   ) {}
 
   ngOnInit(): void {
@@ -43,8 +47,10 @@ export class DashboardComponent implements OnInit {
     let to = new Date();
     to.setHours(23, 59, 59, 0);
     this.toDate = new FormControl(to);
-    this.salesman = new FormControl('ALL');
+    this.salesmanSelected = new FormControl('ALL');
     this.getSalesmanDetail();
+    this.paymentModeSelected = new FormControl('ALL');
+    this.getPaymentModes();
   }
 
   onfetchRecoveryDetails() {
@@ -59,7 +65,7 @@ export class DashboardComponent implements OnInit {
       .getRecoveryDetails('', this.fromDate.value, this.toDate.value)
       .then((result) => {
         this.recoveryFixedCollection = this.sortData(result);
-        this.onSelectionChange(this.salesman.value);
+        this.onSelectionChange();
       })
       .catch((err) => {
         console.log(err);
@@ -127,15 +133,40 @@ export class DashboardComponent implements OnInit {
       .catch(() => {});
   }
 
-  onSelectionChange(selecetdValue: string) {
-    console.log(selecetdValue);
+  getPaymentModes() {
+    this.paymentModeCollection = [];
+    this.paymentModeService
+      .getPaymentModeList()
+      .then((records) => {
+        if (records && records.length > 0) {
+          this.paymentModeCollection.push('ALL');
+          records.forEach((item) => this.paymentModeCollection.push(item.mode));
+        }
+      })
+      .catch(() => {});
+  }
+
+  onSelectionChange() {
+    this.filterData();
+  }
+
+  filterData() {
     let result: RecoveryDetails[] = [];
 
-    if (selecetdValue == 'ALL') {
+    if (this.salesmanSelected.value == 'ALL') {
       result = this.recoveryFixedCollection;
     } else {
       result = this.recoveryFixedCollection.filter(
-        (c) => c.recoveryAgent == selecetdValue
+        (c) => c.recoveryAgent == this.salesmanSelected.value
+      );
+    }
+
+    if (
+      this.paymentModeSelected.value &&
+      this.paymentModeSelected.value != 'ALL'
+    ) {
+      result = result.filter(
+        (c) => c.modeOfPayment == this.paymentModeSelected.value
       );
     }
 
