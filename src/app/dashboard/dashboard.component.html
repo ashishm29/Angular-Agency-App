@@ -1,7 +1,16 @@
-<h1 class="mat-h1">Dashboard</h1>
-
 <div class="centerFlex">
   <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Salesman Filter</mat-label>
+      <mat-select
+        (selectionChange)="onSelectionChange($event.value)"
+        [formControl]="salesman"
+      >
+        <div *ngFor="let route of salesmanCollection">
+          <mat-option value="{{ route }}">{{ route }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field appearance="outline" class="mat-form-field-custome">
       <mat-label>From date</mat-label>
       <input

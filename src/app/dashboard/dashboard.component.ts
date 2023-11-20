@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { RecoveryService } from '../services/recovery.service';
 import { ModeWiseRecovery, RecoveryDetails } from '../models/route';
-import { dateConverter } from '../shared/dateConverter';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,8 +12,12 @@ import { dateConverter } from '../shared/dateConverter';
 export class DashboardComponent implements OnInit {
   fromDate!: FormControl;
   toDate!: FormControl;
+  salesman!: FormControl;
+
+  recoveryFixedCollection: RecoveryDetails[] = [];
   recoveryCollection: RecoveryDetails[] = [];
   recoveryModeWiseCollection: ModeWiseRecovery[] = [];
+  salesmanCollection: string[] = [];
 
   displayedColumns: string[] = [
     'storeName',
@@ -27,7 +31,10 @@ export class DashboardComponent implements OnInit {
 
   recoveryModeWisedisplayedColumns: string[] = ['paymentMode', 'amount'];
 
-  constructor(private recoveryService: RecoveryService) {}
+  constructor(
+    private recoveryService: RecoveryService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     let todaysDate = new Date();
@@ -36,6 +43,8 @@ export class DashboardComponent implements OnInit {
     let to = new Date();
     to.setHours(23, 59, 59, 0);
     this.toDate = new FormControl(to);
+    this.salesman = new FormControl('ALL');
+    this.getSalesmanDetail();
   }
 
   onfetchRecoveryDetails() {
@@ -49,8 +58,8 @@ export class DashboardComponent implements OnInit {
     this.recoveryService
       .getRecoveryDetails('', this.fromDate.value, this.toDate.value)
       .then((result) => {
-        this.recoveryCollection = this.sortData(result);
-        this.recoveryModeWiseCollection = this.GroupBy1(result);
+        this.recoveryFixedCollection = this.sortData(result);
+        this.onSelectionChange(this.salesman.value);
       })
       .catch((err) => {
         console.log(err);
@@ -59,14 +68,11 @@ export class DashboardComponent implements OnInit {
 
   sortData(result: RecoveryDetails[]) {
     return result.sort((a, b) => {
-      return (
-        <any>dateConverter.StringToDateTimeConverter(a.createdDate) -
-        <any>dateConverter.StringToDateTimeConverter(b.createdDate)
-      );
+      return <any>a.recoveryDate - <any>b.recoveryDate;
     });
   }
 
-  GroupBy1(arr: RecoveryDetails[]) {
+  GroupByPaymentMode(arr: RecoveryDetails[]) {
     let groupedList: ModeWiseRecovery[] = [];
     let paymentMode = arr.map((p) => p.modeOfPayment);
 
@@ -102,5 +108,38 @@ export class DashboardComponent implements OnInit {
         return +t.amount;
       })
       .reduce((acc, value) => acc + value, 0);
+  }
+
+  getSalesmanDetail() {
+    this.salesmanCollection = [];
+    this.userService
+      .getSalesmanList()
+      .then((records) => {
+        if (records && records.length > 0) {
+          let salesman = records.filter((c) => c.role == 'salesman');
+
+          this.salesmanCollection.push('ALL');
+          salesman.forEach((item) =>
+            this.salesmanCollection.push(item.username)
+          );
+        }
+      })
+      .catch(() => {});
+  }
+
+  onSelectionChange(selecetdValue: string) {
+    console.log(selecetdValue);
+    let result: RecoveryDetails[] = [];
+
+    if (selecetdValue == 'ALL') {
+      result = this.recoveryFixedCollection;
+    } else {
+      result = this.recoveryFixedCollection.filter(
+        (c) => c.recoveryAgent == selecetdValue
+      );
+    }
+
+    this.recoveryCollection = this.sortData(result);
+    this.recoveryModeWiseCollection = this.GroupByPaymentMode(result);
   }
 }
