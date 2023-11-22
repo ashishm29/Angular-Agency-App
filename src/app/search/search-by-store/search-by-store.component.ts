@@ -160,12 +160,29 @@ export class SearchByStoreComponent implements OnInit {
   onSearch() {
     this.billCollection = [];
     this.selectedRowIndex = -1;
+
+    let fromDate = this.fromBillDate.value;
+    let toDate = this.toBillDate.value;
+
+    if (this.fromBillDate.value) {
+      fromDate = this.fromBillDate.value as Date;
+      fromDate.setHours(0, 0, 0);
+
+      if (this.toBillDate.value) {
+        let toDate = this.toBillDate.value as Date;
+        toDate.setHours(23, 59, 59);
+      } else {
+        let toDate = this.fromBillDate.value as Date;
+        toDate.setHours(23, 59, 59);
+      }
+    }
+
     this.billService
       .getFilteredBills(
         this.route?.value,
         this.storeName?.value?.storeName,
-        this.fromBillDate?.value,
-        this.toBillDate?.value,
+        fromDate,
+        toDate,
         this.billNumber.value,
         this.paidUnpaidSelection
       )
