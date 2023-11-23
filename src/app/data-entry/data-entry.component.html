@@ -14,7 +14,11 @@
   <div class="line"><mat-divider></mat-divider></div>
 </div>
 
-<form *ngIf="showRouteControls" [formGroup]="routeFormGroup" #routeFormDirective="ngForm">
+<form
+  *ngIf="showRouteControls"
+  [formGroup]="routeFormGroup"
+  #routeFormDirective="ngForm"
+>
   <div>
     <p>
       <mat-form-field appearance="outline">
@@ -35,7 +39,11 @@
   </div>
 </form>
 
-<form *ngIf="showShopControls" [formGroup]="shopFormGroup" #storeFormDirective="ngForm">
+<form
+  *ngIf="showShopControls"
+  [formGroup]="shopFormGroup"
+  #storeFormDirective="ngForm"
+>
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
@@ -94,7 +102,11 @@
   </p>
 </form>
 
-<form *ngIf="showBillControls" [formGroup]="billFormGroup" #billFormDirective="ngForm">
+<form
+  *ngIf="showBillControls"
+  [formGroup]="billFormGroup"
+  #billFormDirective="ngForm"
+>
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
@@ -168,6 +180,13 @@
     <mat-form-field appearance="outline">
       <mat-label>Bill Amount</mat-label>
       <input matInput type="number" formControlName="billAmount" />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline" class="example-full-width">
+      <mat-label>Comment</mat-label>
+      <textarea matInput formControlName="comment"></textarea>
     </mat-form-field>
   </p>
 

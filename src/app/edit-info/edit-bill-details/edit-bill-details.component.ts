@@ -41,6 +41,7 @@ export class EditBillDetailsComponent implements OnInit {
       billAmount: new FormControl('', [Validators.required]),
       pendingAmount: new FormControl('', [Validators.required]),
       address: new FormControl(),
+      comment: new FormControl(),
     });
   }
 
@@ -90,6 +91,7 @@ export class EditBillDetailsComponent implements OnInit {
       billDate: this.billFormGroup.value.billDate,
       billAmount: this.billFormGroup.value.billAmount,
       pendingAmount: this.billFormGroup.value.pendingAmount,
+      comment: this.billFormGroup.value.comment,
       updatedDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT

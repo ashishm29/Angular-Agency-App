@@ -142,6 +142,7 @@ export class DataEntryComponent implements OnInit {
       billDate: this.billFormGroup.value.billDate,
       billAmount: this.billFormGroup.value.billAmount,
       pendingAmount: this.billFormGroup.value.billAmount,
+      comment: this.billFormGroup.value.comment,
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -206,6 +207,7 @@ export class DataEntryComponent implements OnInit {
       billDate: new FormControl('', [Validators.required]),
       billAmount: new FormControl('', [Validators.required]),
       address: new FormControl(),
+      comment: new FormControl(),
     });
 
     if (this.billFormDirective) {
@@ -287,6 +289,7 @@ export class DataEntryComponent implements OnInit {
       this.billFormGroup.get('billNumber')?.reset();
       this.billFormGroup.get('billDate')?.reset();
       this.billFormGroup.get('billAmount')?.reset();
+      this.billFormGroup.get('comment')?.reset();
       this.onFetchStoreDetails(selecetdValue);
     }
   }

@@ -28,6 +28,7 @@ export class BillDetails {
   pendingAmount!: string;
   createdDate!: string;
   updatedDate!: string;
+  comment!: string;
 }
 
 export class RecoveryDetails {
