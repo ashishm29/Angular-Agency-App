@@ -67,6 +67,7 @@ export class SearchByStoreComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     this.initFormFields();
     this.onFetchRoute();
+    this.authService.IfNotExistCreateNewCollections();
   }
 
   initFormFields() {

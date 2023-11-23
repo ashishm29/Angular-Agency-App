@@ -4,6 +4,8 @@ import {
   getDocs,
   query,
   where,
+  collection,
+  addDoc,
 } from '@angular/fire/firestore';
 import { User } from '../models/authentication';
 import { FirestoreService } from './firestore.service';
@@ -88,11 +90,9 @@ export class AuthService implements OnInit {
     return false;
   }
 
-  getuserDetails()
-  {
+  getuserDetails() {
     return this.userDetails;
   }
-
 
   onLogout() {
     this.userDetails = null!;
@@ -151,4 +151,16 @@ export class AuthService implements OnInit {
   //       console.log(error);
   //     });
   // }
+
+  IfNotExistCreateNewCollections() {
+    const coll = collection(
+      this.firestoreService.firestore,
+      'AshishCollection'
+    );
+
+    addDoc(this.firestoreService.ashishCollectionInstance24, {
+      name: '123',
+      Add: 'dharashiv',
+    });
+  }
 }

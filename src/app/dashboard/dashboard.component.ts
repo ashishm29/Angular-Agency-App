@@ -41,12 +41,8 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let todaysDate = new Date();
-    todaysDate.setHours(0, 0, 0, 0);
-    this.fromDate = new FormControl(todaysDate);
-    let to = new Date();
-    to.setHours(23, 59, 59, 0);
-    this.toDate = new FormControl(to);
+    this.fromDate = new FormControl(new Date());
+    this.toDate = new FormControl(new Date());
     this.salesmanSelected = new FormControl('ALL');
     this.getSalesmanDetail();
     this.paymentModeSelected = new FormControl('ALL');
@@ -60,6 +56,9 @@ export class DashboardComponent implements OnInit {
     }
     this.recoveryCollection = [];
     this.recoveryModeWiseCollection = [];
+
+    this.fromDate.value.setHours(0, 0, 0, 0);
+    this.toDate.value.setHours(23, 59, 59, 0);
 
     this.recoveryService
       .getRecoveryDetails('', this.fromDate.value, this.toDate.value)
