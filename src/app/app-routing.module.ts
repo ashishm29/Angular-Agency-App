@@ -16,17 +16,15 @@ import { DeleteInfoComponent } from './delete-info/delete-info.component';
 import { DeleteRouteComponent } from './delete-info/delete-route/delete-route.component';
 import { DeleteStoreComponent } from './delete-info/delete-store/delete-store.component';
 import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-recovery.component';
+import { BillDataEntryComponent } from './data-entry/bill-data-entry/bill-data-entry.component';
+import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-data-entry.component';
+import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'dataentry',
-    component: DataEntryComponent,
     canActivate: [AuthGuard],
   },
   { path: 'recovery', component: RecoveryComponent, canActivate: [AuthGuard] },
@@ -81,6 +79,28 @@ const routes: Routes = [
       {
         path: 'recovery',
         component: DeleteRecoveryComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+  },
+  {
+    path: 'dataentry',
+    component: DataEntryComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'billdataentry',
+        component: BillDataEntryComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'storedataentry',
+        component: StoreDataEntryComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'routedataentry',
+        component: RouteDataEntryComponent,
         canActivate: [AuthGuard],
       },
     ],

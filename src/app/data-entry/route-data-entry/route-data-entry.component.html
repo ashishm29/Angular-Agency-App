@@ -1,0 +1,23 @@
+<form
+  [formGroup]="routeFormGroup"
+  #routeFormDirective="ngForm"
+>
+  <div>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Route Name</mat-label>
+        <input matInput formControlName="route" toUppercase required #route />
+      </mat-form-field>
+    </p>
+    <p align="center">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="routeFormGroup.invalid"
+        (click)="onAddRoute()"
+      >
+        Add Route
+      </button>
+    </p>
+  </div>
+</form>

@@ -56,6 +56,9 @@ import { DeleteRouteComponent } from './delete-info/delete-route/delete-route.co
 import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-recovery.component';
 import { ValidationDialogComponent } from './dialog/validation-dialog/validation-dialog.component';
 import { UpperCaseInputDirective } from './shared/UpperCaseInputDirective';
+import { BillDataEntryComponent } from './data-entry/bill-data-entry/bill-data-entry.component';
+import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-data-entry.component';
+import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -93,6 +96,9 @@ const MY_DATE_FORMAT = {
     DeleteRecoveryComponent,
     ValidationDialogComponent,
     UpperCaseInputDirective,
+    BillDataEntryComponent,
+    StoreDataEntryComponent,
+    RouteDataEntryComponent,
   ],
   imports: [
     BrowserModule,

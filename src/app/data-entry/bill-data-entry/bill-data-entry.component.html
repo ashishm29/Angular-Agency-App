@@ -1,0 +1,99 @@
+<form
+  [formGroup]="billFormGroup"
+  #billFormDirective="ngForm"
+>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Route Name</mat-label>
+      <mat-select
+        formControlName="route"
+        (selectionChange)="onBillForm_RouteSelectionChange($event.value)"
+      >
+        <div *ngFor="let route of routeCollection">
+          <mat-option value="{{ route.routeName }}">{{
+            route.routeName
+          }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Store Name</mat-label>
+      <input
+        type="text"
+        formControlName="storeName"
+        matInput
+        oninput="this.value = this.value.toUpperCase()"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayFn"
+        (optionSelected)="onStoreSelected($event.option.value)"
+      >
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option.storeName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline" class="example-full-width">
+      <mat-label>Shop Address</mat-label>
+      <textarea readonly="true" matInput formControlName="address"></textarea>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Bill Number</mat-label>
+      <input matInput formControlName="billNumber" toUppercase />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="billDate"
+        placeholder="Choose a date"
+      />
+      <mat-hint>DD/MM/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Bill Amount</mat-label>
+      <input matInput type="number" formControlName="billAmount" />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline" class="example-full-width">
+      <mat-label>Comment</mat-label>
+      <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+  </p>
+
+  <p align="center">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="billFormGroup.invalid"
+      (click)="onAddBill()"
+    >
+      Add Bill
+    </button>
+  </p>
+</form>

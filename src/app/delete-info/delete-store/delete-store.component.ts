@@ -48,13 +48,13 @@ export class DeleteStoreComponent implements OnInit {
   }
 
   sortData(result: StoreDetails[]) {
-    return result
-      .sort((a, b) => {
-        return a.route < b.route ? -1 : 1;
-      })
-      .sort((a, b) => {
+    return result.sort((a, b) => {
+      if (a.route === b.route) {
         return a.storeName < b.storeName ? -1 : 1;
-      });
+      } else {
+        return a.route < b.route ? -1 : 1;
+      }
+    });
   }
 
   onDeleteStore(element: StoreDetails) {
