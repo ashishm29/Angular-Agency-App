@@ -64,6 +64,7 @@ export class RecoveryComponent implements OnInit {
       pendingAmount: new FormControl(),
       receiptNumber: new FormControl('', [Validators.required]),
       modeOfPayment: new FormControl('', [Validators.required]),
+      comment: new FormControl(),
     });
   }
 
@@ -98,6 +99,7 @@ export class RecoveryComponent implements OnInit {
       this.recoveryFormGroup.get('amountReceived')?.reset();
       this.recoveryFormGroup.get('pendingAmount')?.reset();
       this.recoveryFormGroup.get('modeOfPayment')?.reset();
+      this.recoveryFormGroup.get('comment')?.reset();
       this.onFetchStoreDetails(selecetdValue);
     }
   }
@@ -183,6 +185,7 @@ export class RecoveryComponent implements OnInit {
       this.recoveryFormGroup.patchValue({
         billAmount: billobject.pendingAmount ?? 0,
         pendingAmount: billobject.pendingAmount ?? 0,
+        comment: billobject.comment ?? '',
       });
     }
   }
@@ -231,15 +234,7 @@ export class RecoveryComponent implements OnInit {
     }
 
     let recoveryDetail = {
-      route: this.recoveryFormGroup.value.route,
-      storeName: this.recoveryFormGroup.value.storeName,
-      address: this.recoveryFormGroup.value.address,
-      billNumber: this.recoveryFormGroup.value.billNumber,
-      billAmount: this.recoveryFormGroup.value.billAmount,
-      amountReceived: this.recoveryFormGroup.value.amountReceived,
-      pendingAmount: this.recoveryFormGroup.value.pendingAmount,
-      receiptNumber: this.recoveryFormGroup.value.receiptNumber,
-      modeOfPayment: this.recoveryFormGroup.value.modeOfPayment,
+      ...this.recoveryFormGroup.value,
       recoveryDate: new Date(),
       createdDate: this.datePipe.transform(
         Date.now().toString(),
@@ -310,6 +305,9 @@ export class RecoveryComponent implements OnInit {
       billAmount: '',
       pendingAmount: '',
       amountReceived: '',
+      receiptNumber: '',
+      modeOfPayment: '',
+      comment: '',
     });
   }
 
