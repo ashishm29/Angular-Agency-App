@@ -139,10 +139,10 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="recoveryFormGroup.invalid"
+      [disabled]="!(!recoveryFormGroup.invalid && !isClicked)"
       (click)="onAddRecoveryData()"
     >
-      Submit
+      {{buttonText}}
     </button>
   </p>
 </form>

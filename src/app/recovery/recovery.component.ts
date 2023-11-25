@@ -34,6 +34,8 @@ export class RecoveryComponent implements OnInit {
   filteredBillNumbers: Observable<BillDetails[]> | undefined;
   selecetdBill!: BillDetails;
   pendingValidation!: boolean;
+  isClicked: boolean = false;
+  buttonText: string = AppConstant.SUBMIT_BTN_TEXT;
 
   constructor(
     public recoveryService: RecoveryService,
@@ -222,6 +224,12 @@ export class RecoveryComponent implements OnInit {
       return;
     }
 
+    if (this.isClicked) {
+      return;
+    }
+
+    this.isClicked = true;
+    this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
     if (
       +this.recoveryFormGroup.value.billAmount -
         +this.recoveryFormGroup.value.amountReceived <
@@ -256,6 +264,11 @@ export class RecoveryComponent implements OnInit {
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+      })
+      .finally(() => {
+        this.isClicked = false;
+        this.buttonText = AppConstant.SUBMIT_BTN_TEXT;
       });
   }
 

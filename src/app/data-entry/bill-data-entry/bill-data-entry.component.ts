@@ -23,6 +23,8 @@ export class BillDataEntryComponent implements OnInit {
   myControl = new FormControl();
   billFormGroup!: FormGroup;
   filteredOptions: Observable<StoreDetails[]> | undefined;
+  isClicked: boolean = false;
+  buttonText: string = AppConstant.ADD_BILL_BTN_TEXT;
 
   constructor(
     public storeService: StoreService,
@@ -44,14 +46,16 @@ export class BillDataEntryComponent implements OnInit {
       return;
     }
 
+    if (this.isClicked) {
+      return;
+    }
+
+    this.isClicked = true;
+    this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
+
     let billDetails = {
-      route: this.billFormGroup.value.route,
-      storeName: this.billFormGroup.value.storeName,
-      billNumber: this.billFormGroup.value.billNumber,
-      billDate: this.billFormGroup.value.billDate,
-      billAmount: this.billFormGroup.value.billAmount,
+      ...this.billFormGroup.value,
       pendingAmount: this.billFormGroup.value.billAmount,
-      comment: this.billFormGroup.value.comment,
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -65,12 +69,15 @@ export class BillDataEntryComponent implements OnInit {
           this.validationDialogService.openValidationDialog(
             AppConstant.ADD_BILL_VALIDATION
           );
+          this.reset();
         } else {
           this.addBill(billDetails);
         }
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+        this.reset();
       });
   }
 
@@ -83,11 +90,19 @@ export class BillDataEntryComponent implements OnInit {
           AppConstant.BILL_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
         );
-        this.initialize();
+        this.reset();
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+        this.reset();
       });
+  }
+
+  reset() {
+    this.isClicked = false;
+    this.buttonText = AppConstant.ADD_BILL_BTN_TEXT;
+    this.initialize();
   }
 
   initialize() {

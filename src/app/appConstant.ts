@@ -67,4 +67,7 @@ export class AppConstant {
     'Pending amount can not be less than 0.';
 
   static readonly REPORT_FONT_NAME: string = 'Times New Roman';
+  static readonly SUBMIT_BTN_TEXT: string = 'Submit';
+  static readonly ADD_BILL_BTN_TEXT: string = 'Add Bill';
+  static readonly PLEASE_WAIT_BTN_TEXT: string = 'Please wait...';
 }

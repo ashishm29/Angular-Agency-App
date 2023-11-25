@@ -1,7 +1,4 @@
-<form
-  [formGroup]="billFormGroup"
-  #billFormDirective="ngForm"
->
+<form [formGroup]="billFormGroup" #billFormDirective="ngForm">
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
@@ -90,10 +87,10 @@
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="billFormGroup.invalid"
+      [disabled]="!(!billFormGroup.invalid && !isClicked)"
       (click)="onAddBill()"
     >
-      Add Bill
+      {{ buttonText }}
     </button>
   </p>
 </form>
