@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
-import { StoreDetails } from 'src/app/models/route';
+import { Route, StoreDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
 import { RouteService } from 'src/app/services/route.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
@@ -21,6 +21,7 @@ export class EditStoreDetailsComponent implements OnInit {
   storeCollection: StoreDetails[] = [];
   filteredOptions: Observable<StoreDetails[]> | undefined;
   billStoreControl = new FormControl();
+  routeCollection: Route[] = [];
 
   constructor(
     public routeService: RouteService,
@@ -35,6 +36,7 @@ export class EditStoreDetailsComponent implements OnInit {
     this.billStoreControl = new FormControl();
     this.initializeStoreUiFields();
     this.onFetchStoreDetails();
+    this.onFetchRoute();
   }
 
   initializeStoreUiFields() {
@@ -109,11 +111,8 @@ export class EditStoreDetailsComponent implements OnInit {
     }
 
     let shopDetails = {
-      ...this.selectedStoreToUpdate,
-      storeName: this.shopFormGroup.value.storeName,
-      address: this.shopFormGroup.value.address,
-      mobileNo: this.shopFormGroup.value.mobileNo,
-      altMobileNo: this.shopFormGroup.value.altMobileNo,
+      ...this.shopFormGroup.value,
+      id: this.selectedStoreToUpdate.id,
       updatedDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -138,5 +137,16 @@ export class EditStoreDetailsComponent implements OnInit {
           AppConstant.UPDAE_ACTION
         );
       });
+  }
+
+  onFetchRoute() {
+    this.routeCollection = [];
+    this.routeService.getRoutes().then((result) => {
+      if (result && result.length > 0) {
+        this.routeCollection = result;
+      } else {
+        console.log(AppConstant.ROUTE_NOT_FOUND_MSG);
+      }
+    });
   }
 }

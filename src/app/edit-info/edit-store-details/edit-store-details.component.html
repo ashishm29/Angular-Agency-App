@@ -25,6 +25,19 @@
   </p>
 
   <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Select Route to update</mat-label>
+      <mat-select formControlName="route">
+        <div *ngFor="let route of routeCollection">
+          <mat-option value="{{ route.routeName }}">{{
+            route.routeName
+          }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <p>
     <mat-form-field class="example-full-width" appearance="outline">
       <mat-label>Store Name</mat-label>
       <input type="text" formControlName="storeName" matInput toUppercase />
