@@ -67,16 +67,19 @@ export class SearchByStoreComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     this.initFormFields();
     this.onFetchRoute();
-    this.authService.IfNotExistCreateNewCollections();
+    //this.authService.IfNotExistCreateNewCollections();
   }
 
   initFormFields() {
+    let fromdate = new Date();
+    fromdate.setDate(fromdate.getDate() - 30);
+
     this.route = new FormControl();
-    this.paidUnpaidSelection = new FormControl('Both');
+    this.paidUnpaidSelection = new FormControl('UnPaid');
     this.storeName = new FormControl();
     this.billNumber = new FormControl();
-    this.fromBillDate = new FormControl();
-    this.toBillDate = new FormControl();
+    this.fromBillDate = new FormControl(fromdate);
+    this.toBillDate = new FormControl(new Date());
     this.storeMessage;
     this.billMessage = '';
   }
@@ -161,6 +164,7 @@ export class SearchByStoreComponent implements OnInit {
   onSearch() {
     this.billCollection = [];
     this.selectedRowIndex = -1;
+    this.billMessage = '';
 
     let fromDate = this.fromBillDate.value;
     let toDate = this.toBillDate.value;
@@ -198,7 +202,15 @@ export class SearchByStoreComponent implements OnInit {
             }
           }
 
-          this.billCollection = this.sortData(filterResult);
+          let oldBills = this.checkifBillAreOlder(filterResult);
+          let soredBills = this.sortData(
+            filterResult.filter((c) => !c.isOlderBill)
+          );
+
+          let totalBills: BillDetails[] = [];
+          totalBills.push(...oldBills);
+          totalBills.push(...soredBills);
+          this.billCollection = totalBills;
         } else {
           console.log(AppConstant.STORE_NOT_FOUND_MSG);
         }
@@ -206,6 +218,7 @@ export class SearchByStoreComponent implements OnInit {
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
       });
   }
 
@@ -263,6 +276,7 @@ export class SearchByStoreComponent implements OnInit {
       })
       .catch((err) => {
         console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
       });
   }
 
@@ -303,12 +317,39 @@ export class SearchByStoreComponent implements OnInit {
     );
   }
 
+  checkifBillAreOlder(bills: BillDetails[]): BillDetails[] {
+    var deallineDate = new Date();
+    deallineDate.setDate(deallineDate.getDate() - 15);
+
+    bills
+      .filter((item) => +item.pendingAmount > 0)
+      .forEach((item) => {
+        try {
+          if (deallineDate.getDate() > item.billDate.toDate().getDate()) {
+            item.isOlderBill = true;
+          } else {
+            item.isOlderBill = false;
+          }
+        } catch {
+          item.isOlderBill = true;
+        }
+      });
+
+    return bills.filter((item) => item.isOlderBill);
+  }
+
   getRowClass(row: any) {
     if (row.pendingAmount == 0) {
       if (this.selectedRowIndex == row.id) {
         return 'selected-row-highlight';
       } else {
         return 'full-paid-bill-row-highlight';
+      }
+    } else if (row.isOlderBill) {
+      if (this.selectedRowIndex == row.id) {
+        return 'selected-row-highlight';
+      } else {
+        return 'older-bill-row-selected-highlight';
       }
     } else {
       if (this.selectedRowIndex == row.id) {

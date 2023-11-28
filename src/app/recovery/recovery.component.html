@@ -110,7 +110,12 @@
     <p>
       <mat-form-field appearance="outline">
         <mat-label>Pending Amount</mat-label>
-        <input matInput type="number" formControlName="pendingAmount" />
+        <input
+          matInput
+          readonly="true"
+          type="number"
+          formControlName="pendingAmount"
+        />
       </mat-form-field>
     </p>
   </div>
@@ -142,7 +147,7 @@
       [disabled]="!(!recoveryFormGroup.invalid && !isClicked)"
       (click)="onAddRecoveryData()"
     >
-      {{buttonText}}
+      {{ buttonText }}
     </button>
   </p>
 </form>

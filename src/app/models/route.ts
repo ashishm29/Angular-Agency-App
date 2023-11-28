@@ -29,6 +29,7 @@ export class BillDetails {
   createdDate!: string;
   updatedDate!: string;
   comment!: string;
+  isOlderBill!: boolean;
 }
 
 export class RecoveryDetails {
