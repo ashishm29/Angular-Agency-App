@@ -66,6 +66,9 @@ export class AppConstant {
   static readonly ADD_BILL_PENDING_AMT_VALIDATION: string =
     'Pending amount can not be less than 0.';
 
+  static readonly ADD_RECOVERY_BILL_AND_PENDING_AMT_VALIDATION: string =
+    'Bill amount and Pending amount can not be same.';
+
   static readonly REPORT_FONT_NAME: string = 'Times New Roman';
   static readonly SUBMIT_BTN_TEXT: string = 'Submit';
   static readonly ADD_BILL_BTN_TEXT: string = 'Add Bill';

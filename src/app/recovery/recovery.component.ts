@@ -224,12 +224,6 @@ export class RecoveryComponent implements OnInit {
       return;
     }
 
-    if (this.isClicked) {
-      return;
-    }
-
-    this.isClicked = true;
-    this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
     if (
       +this.recoveryFormGroup.value.billAmount -
         +this.recoveryFormGroup.value.amountReceived <
@@ -239,7 +233,21 @@ export class RecoveryComponent implements OnInit {
         AppConstant.ADD_BILL_PENDING_AMT_VALIDATION
       );
       return;
+    } else if (
+      +this.recoveryFormGroup.value.billAmount ===
+      +this.recoveryFormGroup.value.pendingAmount
+    ) {
+      this.validationService.openValidationDialog(
+        AppConstant.ADD_RECOVERY_BILL_AND_PENDING_AMT_VALIDATION
+      );
+      return;
     }
+
+    if (this.isClicked) {
+      return;
+    }
+    this.isClicked = true;
+    this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
 
     let recoveryDetail = {
       ...this.recoveryFormGroup.value,
