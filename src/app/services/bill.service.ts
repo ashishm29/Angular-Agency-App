@@ -13,12 +13,16 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { AppConstant } from '../appConstant';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BillService {
-  constructor(public firestoreService: FirestoreService) {}
+  constructor(
+    public firestoreService: FirestoreService,
+    public logService: LoggingService
+  ) {}
 
   async getFilteredBills(
     route: string,
@@ -100,6 +104,7 @@ export class BillService {
   }
 
   updateBillPendingAmount(details: BillDetails) {
+    this.logService.info('Update Bill Pending Amount', details);
     return updateDoc(
       doc(
         this.firestoreService.firestore,
@@ -117,6 +122,7 @@ export class BillService {
   }
 
   updateBillDetails(details: BillDetails) {
+    this.logService.info('Update Bill Details', details);
     return updateDoc(
       doc(
         this.firestoreService.firestore,

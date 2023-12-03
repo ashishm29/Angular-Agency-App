@@ -7,6 +7,7 @@ export class AppConstant {
   static readonly RECOVERY_COLLECTION_NAME: string = 'RecoveryCollection';
   static readonly PAYMENT_MODE_COLLECTION_NAME: string =
     'PaymentModeCollection';
+  static readonly LOGGING_COLLECTION_NAME: string = 'LoggingCollection';
 
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
   static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';

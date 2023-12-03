@@ -12,12 +12,16 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { AppConstant } from '../appConstant';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecoveryService {
-  constructor(public firestoreService: FirestoreService) {}
+  constructor(
+    public firestoreService: FirestoreService,
+    public logService: LoggingService
+  ) {}
 
   async getPaymentModes() {
     let resultData: PaymentMode[] = [];
@@ -36,6 +40,7 @@ export class RecoveryService {
   }
 
   addRecoveryDetails(details: RecoveryDetails) {
+    this.logService.info('Add Recovery', details);
     return addDoc(this.firestoreService.recoveryCollectionInstance, details);
   }
 
@@ -81,6 +86,7 @@ export class RecoveryService {
   }
 
   deleteRecovery(docId: string) {
+    this.logService.info('Delete Recovery', docId);
     const docRef = doc(
       this.firestoreService.firestore,
       AppConstant.RECOVERY_COLLECTION_NAME,
@@ -90,6 +96,7 @@ export class RecoveryService {
   }
 
   updateRecoveryBillAmount(details: RecoveryDetails) {
+    this.logService.info('Update Recovery Details', details);
     return updateDoc(
       doc(
         this.firestoreService.firestore,

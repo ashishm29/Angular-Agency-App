@@ -40,7 +40,15 @@ export class FirestoreService {
     AppConstant.ROUTE_COLLECTION_NAME
   );
 
-  ashishCollectionInstance24 = collection(this.firestore, 'AshishCollection_24');
+  loggingCollectionInstance = collection(
+    this.firestore,
+    AppConstant.LOGGING_COLLECTION_NAME
+  );
+
+  // ashishCollectionInstance24 = collection(
+  //   this.firestore,
+  //   'AshishCollection_24'
+  // );
 
   constructor(
     public firestore: Firestore,

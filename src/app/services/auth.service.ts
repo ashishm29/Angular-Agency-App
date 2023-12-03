@@ -152,15 +152,15 @@ export class AuthService implements OnInit {
   //     });
   // }
 
-  IfNotExistCreateNewCollections() {
-    const coll = collection(
-      this.firestoreService.firestore,
-      'AshishCollection'
-    );
+  // IfNotExistCreateNewCollections() {
+  //   const coll = collection(
+  //     this.firestoreService.firestore,
+  //     'AshishCollection'
+  //   );
 
-    addDoc(this.firestoreService.ashishCollectionInstance24, {
-      name: '123',
-      Add: 'dharashiv',
-    });
-  }
+  //   addDoc(this.firestoreService.ashishCollectionInstance24, {
+  //     name: '123',
+  //     Add: 'dharashiv',
+  //   });
+  // }
 }
