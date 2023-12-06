@@ -325,7 +325,7 @@ export class SearchByStoreComponent implements OnInit {
       .filter((item) => +item.pendingAmount > 0)
       .forEach((item) => {
         try {
-          if (deallineDate.getDate() > item.billDate.toDate().getDate()) {
+          if (deallineDate > item.billDate.toDate()) {
             item.isOlderBill = true;
           } else {
             item.isOlderBill = false;
