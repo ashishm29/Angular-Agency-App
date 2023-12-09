@@ -74,4 +74,11 @@ export class AppConstant {
   static readonly SUBMIT_BTN_TEXT: string = 'Submit';
   static readonly ADD_BILL_BTN_TEXT: string = 'Add Bill';
   static readonly PLEASE_WAIT_BTN_TEXT: string = 'Please wait...';
+
+  static readonly ROUTE_LOCAL_STORAGE_KEY: string = 'route';
+  static readonly PAID_SEARCH_LOCAL_STORAGE_KEY: string = 'paidUnpaidSearch';
+  static readonly STORE_SEARCH_LOCAL_STORAGE_KEY: string = 'storeSearch';
+  static readonly FROM_DATE_SEARCH_LOCAL_STORAGE_KEY: string = 'fromDateSearch';
+  static readonly TO_DATE_SEARCH_LOCAL_STORAGE_KEY: string = 'toDateSearch';
+  static readonly BILL_SEARCH_LOCAL_STORAGE_KEY: string = 'billNumber';
 }

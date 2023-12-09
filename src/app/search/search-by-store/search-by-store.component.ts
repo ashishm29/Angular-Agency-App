@@ -16,6 +16,7 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
 import { dateConverter } from 'src/app/shared/dateConverter';
 import { ExcelService } from 'src/app/services/excel.service';
 import { DatePipe } from '@angular/common';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-search-by-store',
@@ -60,7 +61,8 @@ export class SearchByStoreComponent implements OnInit {
     private authService: AuthService,
     private snackbarService: SnackBarService,
     private excelService: ExcelService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private localstorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -68,18 +70,51 @@ export class SearchByStoreComponent implements OnInit {
     this.initFormFields();
     this.onFetchRoute();
     //this.authService.IfNotExistCreateNewCollections();
+    this.onSearch();
   }
 
   initFormFields() {
+    let paidUnpaid = this.localstorageService.getKeyValue(
+      AppConstant.PAID_SEARCH_LOCAL_STORAGE_KEY
+    );
+
+    let route = this.localstorageService.getKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY
+    );
+    if (route) {
+      this.onFetchStoreDetails(route);
+    }
+
+    let store = this.localstorageService.getKeyValue(
+      AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY
+    ) as string;
+
+    let storeDetail = JSON.parse(store) as StoreDetails;
+
+    let billNumber = this.localstorageService.getKeyValue(
+      AppConstant.BILL_SEARCH_LOCAL_STORAGE_KEY
+    );
+
+    let localFromDate = this.localstorageService.getKeyValue(
+      AppConstant.FROM_DATE_SEARCH_LOCAL_STORAGE_KEY
+    ) as string;
+
+    let localToDate = this.localstorageService.getKeyValue(
+      AppConstant.TO_DATE_SEARCH_LOCAL_STORAGE_KEY
+    ) as string;
+
     let fromdate = new Date();
     fromdate.setDate(fromdate.getDate() - 30);
 
-    this.route = new FormControl();
-    this.paidUnpaidSelection = new FormControl('UnPaid');
-    this.storeName = new FormControl();
-    this.billNumber = new FormControl();
-    this.fromBillDate = new FormControl(fromdate);
-    this.toBillDate = new FormControl(new Date());
+    let convertLocalFromdate = localFromDate ? new Date(localFromDate) : null;
+    let convertLocalTodate = localToDate ? new Date(localToDate) : null;
+
+    this.route = new FormControl(route);
+    this.paidUnpaidSelection = new FormControl(paidUnpaid ?? 'UnPaid');
+    this.storeName = new FormControl(storeDetail);
+    this.billNumber = new FormControl(billNumber);
+    this.fromBillDate = new FormControl(convertLocalFromdate ?? fromdate);
+    this.toBillDate = new FormControl(convertLocalTodate ?? new Date());
     this.storeMessage;
     this.billMessage = '';
   }
@@ -156,6 +191,28 @@ export class SearchByStoreComponent implements OnInit {
   }
 
   onReset() {
+    this.localstorageService.removeKey(
+      AppConstant.PAID_SEARCH_LOCAL_STORAGE_KEY
+    );
+
+    this.localstorageService.removeKey(AppConstant.ROUTE_LOCAL_STORAGE_KEY);
+
+    this.localstorageService.removeKey(
+      AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY
+    );
+
+    this.localstorageService.removeKey(
+      AppConstant.BILL_SEARCH_LOCAL_STORAGE_KEY
+    );
+
+    this.localstorageService.removeKey(
+      AppConstant.FROM_DATE_SEARCH_LOCAL_STORAGE_KEY
+    );
+
+    this.localstorageService.removeKey(
+      AppConstant.TO_DATE_SEARCH_LOCAL_STORAGE_KEY
+    );
+
     this.initFormFields();
     this.billCollection = [];
     this.selectedRowIndex = -1;
@@ -180,6 +237,66 @@ export class SearchByStoreComponent implements OnInit {
         let toDate = this.fromBillDate.value as Date;
         toDate.setHours(23, 59, 59);
       }
+    }
+
+    if (this.paidUnpaidSelection) {
+      this.localstorageService.setKeyValue(
+        AppConstant.PAID_SEARCH_LOCAL_STORAGE_KEY,
+        this.paidUnpaidSelection.value
+      );
+    }
+
+    if (this.route?.value) {
+      this.localstorageService.setKeyValue(
+        AppConstant.ROUTE_LOCAL_STORAGE_KEY,
+        this.route?.value
+      );
+    } else {
+      this.localstorageService.removeKey(AppConstant.ROUTE_LOCAL_STORAGE_KEY);
+    }
+
+    if (this.storeName?.value) {
+      this.localstorageService.setKeyValue(
+        AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY,
+        JSON.stringify(this.storeName.value)
+      );
+    } else {
+      this.localstorageService.removeKey(
+        AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY
+      );
+    }
+
+    if (fromDate) {
+      this.localstorageService.setKeyValue(
+        AppConstant.FROM_DATE_SEARCH_LOCAL_STORAGE_KEY,
+        fromDate
+      );
+    } else {
+      this.localstorageService.removeKey(
+        AppConstant.FROM_DATE_SEARCH_LOCAL_STORAGE_KEY
+      );
+    }
+
+    if (toDate) {
+      this.localstorageService.setKeyValue(
+        AppConstant.TO_DATE_SEARCH_LOCAL_STORAGE_KEY,
+        toDate
+      );
+    } else {
+      this.localstorageService.removeKey(
+        AppConstant.TO_DATE_SEARCH_LOCAL_STORAGE_KEY
+      );
+    }
+
+    if (this.billNumber?.value) {
+      this.localstorageService.setKeyValue(
+        AppConstant.BILL_SEARCH_LOCAL_STORAGE_KEY,
+        this.billNumber.value
+      );
+    } else {
+      this.localstorageService.removeKey(
+        AppConstant.BILL_SEARCH_LOCAL_STORAGE_KEY
+      );
     }
 
     this.billService

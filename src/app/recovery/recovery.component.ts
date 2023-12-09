@@ -18,6 +18,7 @@ import { RouteService } from '../services/route.service';
 import { AuthService } from '../services/auth.service';
 import { SnackBarService } from '../services/snackbar.service';
 import { ValidationDialogService } from '../services/validation-dialog.service';
+import { LocalStorageService } from '../services/local-storage.service';
 
 @Component({
   selector: 'app-recovery',
@@ -36,6 +37,7 @@ export class RecoveryComponent implements OnInit {
   pendingValidation!: boolean;
   isClicked: boolean = false;
   buttonText: string = AppConstant.SUBMIT_BTN_TEXT;
+  localRouteValue!: string;
 
   constructor(
     public recoveryService: RecoveryService,
@@ -46,18 +48,27 @@ export class RecoveryComponent implements OnInit {
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
-    private validationService: ValidationDialogService
+    private validationService: ValidationDialogService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     this.initializeFormGroup();
     this.getPaymentModes();
     this.onFetchRoute();
+
+    if (this.localRouteValue) {
+      this.onRouteSelectionChange(this.localRouteValue);
+    }
   }
 
   initializeFormGroup() {
+    this.localRouteValue = this.localStorageService.getKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY
+    ) as string;
+
     this.recoveryFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
+      route: new FormControl(this.localRouteValue, [Validators.required]),
       storeName: new FormControl('', [Validators.required]),
       address: new FormControl(),
       billNumber: new FormControl('', [Validators.required]),
@@ -93,6 +104,10 @@ export class RecoveryComponent implements OnInit {
 
   onRouteSelectionChange(selecetdValue: string) {
     console.log(selecetdValue);
+    this.localStorageService.setKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY,
+      selecetdValue
+    );
     if (selecetdValue) {
       this.recoveryFormGroup.get('storeName')?.reset();
       this.recoveryFormGroup.get('address')?.reset();
