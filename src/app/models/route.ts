@@ -29,7 +29,8 @@ export class BillDetails {
   createdDate!: string;
   updatedDate!: string;
   comment!: string;
-  isOlderBill!: boolean;
+  isRedBill!: boolean;
+  isOrangeBill!: boolean;
 }
 
 export class RecoveryDetails {

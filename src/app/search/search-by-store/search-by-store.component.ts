@@ -319,13 +319,15 @@ export class SearchByStoreComponent implements OnInit {
             }
           }
 
-          let oldBills = this.checkifBillAreOlder(filterResult);
+          let oldRedBills = this.getRedBills(filterResult);
+          let oldOrangeBills = this.getOrangeBills(filterResult);
           let soredBills = this.sortData(
-            filterResult.filter((c) => !c.isOlderBill)
+            filterResult.filter((c) => !c.isRedBill && !c.isOrangeBill)
           );
 
           let totalBills: BillDetails[] = [];
-          totalBills.push(...oldBills);
+          totalBills.push(...oldOrangeBills);
+          totalBills.push(...oldRedBills);
           totalBills.push(...soredBills);
           this.billCollection = totalBills;
         } else {
@@ -434,25 +436,51 @@ export class SearchByStoreComponent implements OnInit {
     );
   }
 
-  checkifBillAreOlder(bills: BillDetails[]): BillDetails[] {
+  getRedBills(bills: BillDetails[]): BillDetails[] {
     var deallineDate = new Date();
-    deallineDate.setDate(deallineDate.getDate() - 15);
+    deallineDate.setDate(deallineDate.getDate() - 12);
 
     bills
       .filter((item) => +item.pendingAmount > 0)
       .forEach((item) => {
         try {
           if (deallineDate > item.billDate.toDate()) {
-            item.isOlderBill = true;
+            item.isRedBill = true;
           } else {
-            item.isOlderBill = false;
+            item.isRedBill = false;
           }
         } catch {
-          item.isOlderBill = true;
+          item.isRedBill = true;
         }
       });
 
-    return bills.filter((item) => item.isOlderBill);
+    return bills.filter((item) => item.isRedBill);
+  }
+
+  getOrangeBills(bills: BillDetails[]): BillDetails[] {
+    var deallineStartDate = new Date();
+    var deallineEndDate = new Date();
+    deallineStartDate.setDate(deallineStartDate.getDate() - 5);
+    deallineEndDate.setDate(deallineEndDate.getDate() - 12);
+
+    bills
+      .filter((item) => +item.pendingAmount > 0)
+      .forEach((item) => {
+        try {
+          if (
+            deallineStartDate > item.billDate.toDate() &&
+            deallineEndDate < item.billDate.toDate()
+          ) {
+            item.isOrangeBill = true;
+          } else {
+            item.isOrangeBill = false;
+          }
+        } catch {
+          item.isOrangeBill = false;
+        }
+      });
+
+    return bills.filter((item) => item.isOrangeBill);
   }
 
   getRowClass(row: any) {
@@ -462,11 +490,17 @@ export class SearchByStoreComponent implements OnInit {
       } else {
         return 'full-paid-bill-row-highlight';
       }
-    } else if (row.isOlderBill) {
+    } else if (row.isRedBill) {
       if (this.selectedRowIndex == row.id) {
         return 'selected-row-highlight';
       } else {
-        return 'older-bill-row-selected-highlight';
+        return 'older-red-bill-row-selected-highlight';
+      }
+    } else if (row.isOrangeBill) {
+      if (this.selectedRowIndex == row.id) {
+        return 'selected-row-highlight';
+      } else {
+        return 'older-orange-bill-row-selected-highlight';
       }
     } else {
       if (this.selectedRowIndex == row.id) {

@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit {
     this.getSalesmanDetail();
     this.paymentModeSelected = new FormControl('ALL');
     this.getPaymentModes();
+    this.onfetchRecoveryDetails();
   }
 
   onfetchRecoveryDetails() {
