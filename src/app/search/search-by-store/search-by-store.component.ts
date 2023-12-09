@@ -326,8 +326,8 @@ export class SearchByStoreComponent implements OnInit {
           );
 
           let totalBills: BillDetails[] = [];
-          totalBills.push(...oldOrangeBills);
           totalBills.push(...oldRedBills);
+          totalBills.push(...oldOrangeBills);
           totalBills.push(...soredBills);
           this.billCollection = totalBills;
         } else {
