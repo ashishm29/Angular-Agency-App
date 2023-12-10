@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
@@ -40,12 +40,12 @@ export class SearchByStoreComponent implements OnInit {
     'Action',
   ];
 
-  route!: FormControl;
-  paidUnpaidSelection!: FormControl;
-  storeName!: FormControl;
-  billNumber!: FormControl;
-  fromBillDate!: FormControl;
-  toBillDate!: FormControl;
+  route!: UntypedFormControl;
+  paidUnpaidSelection!: UntypedFormControl;
+  storeName!: UntypedFormControl;
+  billNumber!: UntypedFormControl;
+  fromBillDate!: UntypedFormControl;
+  toBillDate!: UntypedFormControl;
   storeMessage!: string;
   billMessage!: string;
   isAdmin!: boolean;
@@ -109,12 +109,14 @@ export class SearchByStoreComponent implements OnInit {
     let convertLocalFromdate = localFromDate ? new Date(localFromDate) : null;
     let convertLocalTodate = localToDate ? new Date(localToDate) : null;
 
-    this.route = new FormControl(route);
-    this.paidUnpaidSelection = new FormControl(paidUnpaid ?? 'UnPaid');
-    this.storeName = new FormControl(storeDetail);
-    this.billNumber = new FormControl(billNumber);
-    this.fromBillDate = new FormControl(convertLocalFromdate ?? fromdate);
-    this.toBillDate = new FormControl(convertLocalTodate ?? new Date());
+    this.route = new UntypedFormControl(route);
+    this.paidUnpaidSelection = new UntypedFormControl(paidUnpaid ?? 'UnPaid');
+    this.storeName = new UntypedFormControl(storeDetail);
+    this.billNumber = new UntypedFormControl(billNumber);
+    this.fromBillDate = new UntypedFormControl(
+      convertLocalFromdate ?? fromdate
+    );
+    this.toBillDate = new UntypedFormControl(convertLocalTodate ?? new Date());
     this.storeMessage;
     this.billMessage = '';
   }

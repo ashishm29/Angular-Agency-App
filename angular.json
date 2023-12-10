@@ -116,5 +116,7 @@
       }
     }
   },
-  "defaultProject": "agency-mapp"
+  "cli": {
+    "analytics": false
+  }
 }

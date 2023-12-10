@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { Route } from 'src/app/models/route';
@@ -14,7 +14,7 @@ import { StoreService } from 'src/app/services/store.service';
   styleUrls: ['./edit-route-details.component.scss'],
 })
 export class EditRouteDetailsComponent implements OnInit {
-  routeFormGroup!: FormGroup;
+  routeFormGroup!: UntypedFormGroup;
   routeName!: string;
   routeCollection: Route[] = [];
   selectedRouteToUpdate!: Route;
@@ -33,8 +33,8 @@ export class EditRouteDetailsComponent implements OnInit {
   }
 
   initializeRouteUiFields() {
-    this.routeFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
+    this.routeFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl('', [Validators.required]),
     });
   }
 

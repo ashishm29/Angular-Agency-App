@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, RecoveryDetails } from 'src/app/models/route';
@@ -14,8 +14,8 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
   styleUrls: ['./edit-bill-details.component.scss'],
 })
 export class EditBillDetailsComponent implements OnInit {
-  billFormGroup!: FormGroup;
-  billFormBillNoControl = new FormControl();
+  billFormGroup!: UntypedFormGroup;
+  billFormBillNoControl = new UntypedFormControl();
   selectedBillToUpdate!: BillDetails;
   billCollection: BillDetails[] = [];
 
@@ -28,20 +28,20 @@ export class EditBillDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.billFormBillNoControl = new FormControl();
+    this.billFormBillNoControl = new UntypedFormControl();
     this.initializeBillUiFields();
   }
 
   initializeBillUiFields() {
-    this.billFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
-      storeName: new FormControl('', [Validators.required]),
-      billNumber: new FormControl('', [Validators.required]),
-      billDate: new FormControl('', [Validators.required]),
-      billAmount: new FormControl('', [Validators.required]),
-      pendingAmount: new FormControl('', [Validators.required]),
-      address: new FormControl(),
-      comment: new FormControl(),
+    this.billFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl('', [Validators.required]),
+      storeName: new UntypedFormControl('', [Validators.required]),
+      billNumber: new UntypedFormControl('', [Validators.required]),
+      billDate: new UntypedFormControl('', [Validators.required]),
+      billAmount: new UntypedFormControl('', [Validators.required]),
+      pendingAmount: new UntypedFormControl('', [Validators.required]),
+      address: new UntypedFormControl(),
+      comment: new UntypedFormControl(),
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AppConstant } from '../appConstant';
 import {
   BillDetails,
@@ -26,7 +26,7 @@ import { LocalStorageService } from '../services/local-storage.service';
   styleUrls: ['./recovery.component.scss'],
 })
 export class RecoveryComponent implements OnInit {
-  recoveryFormGroup!: FormGroup;
+  recoveryFormGroup!: UntypedFormGroup;
   routeCollection: Route[] = [];
   modeOfPaymentCollection: PaymentMode[] = [];
   storeCollection: StoreDetails[] = [];
@@ -67,17 +67,17 @@ export class RecoveryComponent implements OnInit {
       AppConstant.ROUTE_LOCAL_STORAGE_KEY
     ) as string;
 
-    this.recoveryFormGroup = new FormGroup({
-      route: new FormControl(this.localRouteValue, [Validators.required]),
-      storeName: new FormControl('', [Validators.required]),
-      address: new FormControl(),
-      billNumber: new FormControl('', [Validators.required]),
-      billAmount: new FormControl('', [Validators.required]),
-      amountReceived: new FormControl('', [Validators.required]),
-      pendingAmount: new FormControl(),
-      receiptNumber: new FormControl('', [Validators.required]),
-      modeOfPayment: new FormControl('', [Validators.required]),
-      comment: new FormControl(),
+    this.recoveryFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl(this.localRouteValue, [Validators.required]),
+      storeName: new UntypedFormControl('', [Validators.required]),
+      address: new UntypedFormControl(),
+      billNumber: new UntypedFormControl('', [Validators.required]),
+      billAmount: new UntypedFormControl('', [Validators.required]),
+      amountReceived: new UntypedFormControl('', [Validators.required]),
+      pendingAmount: new UntypedFormControl(),
+      receiptNumber: new UntypedFormControl('', [Validators.required]),
+      modeOfPayment: new UntypedFormControl('', [Validators.required]),
+      comment: new UntypedFormControl(),
     });
   }
 

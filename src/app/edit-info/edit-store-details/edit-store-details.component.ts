@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
@@ -16,11 +16,11 @@ import { StoreService } from 'src/app/services/store.service';
   styleUrls: ['./edit-store-details.component.scss'],
 })
 export class EditStoreDetailsComponent implements OnInit {
-  shopFormGroup!: FormGroup;
+  shopFormGroup!: UntypedFormGroup;
   selectedStoreToUpdate!: StoreDetails;
   storeCollection: StoreDetails[] = [];
   filteredOptions: Observable<StoreDetails[]> | undefined;
-  billStoreControl = new FormControl();
+  billStoreControl = new UntypedFormControl();
   routeCollection: Route[] = [];
 
   constructor(
@@ -33,23 +33,23 @@ export class EditStoreDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.billStoreControl = new FormControl();
+    this.billStoreControl = new UntypedFormControl();
     this.initializeStoreUiFields();
     this.onFetchStoreDetails();
     this.onFetchRoute();
   }
 
   initializeStoreUiFields() {
-    this.shopFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
-      storeName: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      mobileNo: new FormControl('', [
+    this.shopFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl('', [Validators.required]),
+      storeName: new UntypedFormControl('', [Validators.required]),
+      address: new UntypedFormControl('', [Validators.required]),
+      mobileNo: new UntypedFormControl('', [
         Validators.required,
         Validators.min(1000000000),
         Validators.max(99999999999),
       ]),
-      altMobileNo: new FormControl(),
+      altMobileNo: new UntypedFormControl(),
     });
   }
 

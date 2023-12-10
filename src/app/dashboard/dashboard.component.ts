@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { RecoveryService } from '../services/recovery.service';
 import { ModeWiseRecovery, RecoveryDetails } from '../models/route';
 import { UserService } from '../services/user.service';
@@ -11,10 +11,10 @@ import { PaymentModeService } from '../services/paymentMode.service';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  fromDate!: FormControl;
-  toDate!: FormControl;
-  salesmanSelected!: FormControl;
-  paymentModeSelected!: FormControl;
+  fromDate!: UntypedFormControl;
+  toDate!: UntypedFormControl;
+  salesmanSelected!: UntypedFormControl;
+  paymentModeSelected!: UntypedFormControl;
 
   recoveryFixedCollection: RecoveryDetails[] = [];
   recoveryCollection: RecoveryDetails[] = [];
@@ -41,11 +41,11 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fromDate = new FormControl(new Date());
-    this.toDate = new FormControl(new Date());
-    this.salesmanSelected = new FormControl('ALL');
+    this.fromDate = new UntypedFormControl(new Date());
+    this.toDate = new UntypedFormControl(new Date());
+    this.salesmanSelected = new UntypedFormControl('ALL');
     this.getSalesmanDetail();
-    this.paymentModeSelected = new FormControl('ALL');
+    this.paymentModeSelected = new UntypedFormControl('ALL');
     this.getPaymentModes();
     this.onfetchRecoveryDetails();
   }

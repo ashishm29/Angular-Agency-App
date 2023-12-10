@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { AppConstant } from 'src/app/appConstant';
 import { Route } from 'src/app/models/route';
 import { RouteService } from 'src/app/services/route.service';
@@ -12,7 +12,7 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
   styleUrls: ['./route-data-entry.component.scss'],
 })
 export class RouteDataEntryComponent implements OnInit {
-  routeFormGroup!: FormGroup;
+  routeFormGroup!: UntypedFormGroup;
   @ViewChild('routeFormDirective') private routeFormDirective!: NgForm;
 
   constructor(
@@ -26,8 +26,8 @@ export class RouteDataEntryComponent implements OnInit {
   }
 
   initialize() {
-    this.routeFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
+    this.routeFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl('', [Validators.required]),
     });
 
     if (this.routeFormDirective) {

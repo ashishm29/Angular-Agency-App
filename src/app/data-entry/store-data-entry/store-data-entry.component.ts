@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { Route, StoreDetails } from 'src/app/models/route';
@@ -16,7 +16,7 @@ import { ValidationDialogService } from 'src/app/services/validation-dialog.serv
 })
 export class StoreDataEntryComponent implements OnInit {
   @ViewChild('storeFormDirective') private storeFormDirective!: NgForm;
-  shopFormGroup!: FormGroup;
+  shopFormGroup!: UntypedFormGroup;
   storeCollection: StoreDetails[] = [];
   routeCollection: Route[] = [];
   filteredOptions: Observable<StoreDetails[]> | undefined;
@@ -35,16 +35,16 @@ export class StoreDataEntryComponent implements OnInit {
   }
 
   initialize() {
-    this.shopFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
-      storeName: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      mobileNo: new FormControl('', [
+    this.shopFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl('', [Validators.required]),
+      storeName: new UntypedFormControl('', [Validators.required]),
+      address: new UntypedFormControl('', [Validators.required]),
+      mobileNo: new UntypedFormControl('', [
         Validators.required,
         Validators.min(1000000000),
         Validators.max(99999999999),
       ]),
-      altMobileNo: new FormControl(),
+      altMobileNo: new UntypedFormControl(),
     });
 
     if (this.storeFormDirective) {

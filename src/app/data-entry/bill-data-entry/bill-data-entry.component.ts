@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
@@ -20,8 +20,8 @@ export class BillDataEntryComponent implements OnInit {
   routeName!: string;
   routeCollection: Route[] = [];
   storeCollection: StoreDetails[] = [];
-  myControl = new FormControl();
-  billFormGroup!: FormGroup;
+  myControl = new UntypedFormControl();
+  billFormGroup!: UntypedFormGroup;
   filteredOptions: Observable<StoreDetails[]> | undefined;
   isClicked: boolean = false;
   buttonText: string = AppConstant.ADD_BILL_BTN_TEXT;
@@ -106,14 +106,14 @@ export class BillDataEntryComponent implements OnInit {
   }
 
   initialize() {
-    this.billFormGroup = new FormGroup({
-      route: new FormControl('', [Validators.required]),
-      storeName: new FormControl('', [Validators.required]),
-      billNumber: new FormControl('', [Validators.required]),
-      billDate: new FormControl('', [Validators.required]),
-      billAmount: new FormControl('', [Validators.required]),
-      address: new FormControl(),
-      comment: new FormControl(),
+    this.billFormGroup = new UntypedFormGroup({
+      route: new UntypedFormControl('', [Validators.required]),
+      storeName: new UntypedFormControl('', [Validators.required]),
+      billNumber: new UntypedFormControl('', [Validators.required]),
+      billDate: new UntypedFormControl('', [Validators.required]),
+      billAmount: new UntypedFormControl('', [Validators.required]),
+      address: new UntypedFormControl(),
+      comment: new UntypedFormControl(),
     });
 
     if (this.billFormDirective) {

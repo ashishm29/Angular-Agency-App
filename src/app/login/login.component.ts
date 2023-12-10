@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { User } from '../models/authentication';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   hide = true;
 
-  loginFormGroup!: FormGroup;
+  loginFormGroup!: UntypedFormGroup;
   loginFailed!: boolean;
 
   constructor(public authService: AuthService, private router: Router) {}
@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit {
   }
 
   initForm() {
-    this.loginFormGroup = new FormGroup({
-      mobileNumber: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
+    this.loginFormGroup = new UntypedFormGroup({
+      mobileNumber: new UntypedFormControl('', [Validators.required]),
+      password: new UntypedFormControl('', [Validators.required]),
     });
   }
 
