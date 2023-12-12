@@ -1,7 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Core Grid CSS */
+@import "ag-grid-community/styles/ag-grid.css";
+/* Quartz Theme Specific CSS */
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 :host {
   display: flex;
@@ -10,15 +21,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-top: 10px;
 }
 
-mat-form-field
-{
-  width: 25em ;
+mat-form-field {
+  width: 25em;
 }
 
 table {
   width: 100%;
 }
-
 
 .centerFlex {
   display: flex;
@@ -27,7 +36,6 @@ table {
   margin-top: 10px;
 }
 
-
 tr.mat-footer-row td,
 tr.mat-header-row th {
   font-weight: bold;
@@ -35,7 +43,6 @@ tr.mat-header-row th {
   font-size: small;
   background-color: lightgreen;
 }
-
 
 tr.mat-row td,
 tr.mat-header-row th,
@@ -51,3 +58,44 @@ tr.mat-footer-row td {
 //  {
 //   text-transform: uppercase;
 // }
+
+.ag-theme-quartz,
+.ag-theme-quartz-dark {
+  --ag-borders-input: dotted 2px;
+  --ag-input-border-color: rgb(42, 46, 242);
+}
+
+.ag-theme-quartz .ag-text-field-input,
+.ag-theme-quartz-dark .ag-text-field-input {
+  background-color: white;
+}
+
+.ag-theme-quartz .ag-text-field-input::placeholder,
+.ag-theme-quartz-dark .ag-text-field-input::placeholder {
+  color: black;
+}
+
+.ag-theme-quartz,
+.ag-theme-quartz-dark {
+  --ag-foreground-color: rgb(126, 46, 132);
+  --ag-background-color: rgb(249, 245, 227);
+  --ag-header-foreground-color: rgb(204, 245, 172);
+  --ag-header-background-color: rgb(209, 64, 129);
+  --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
+  --ag-header-column-resize-handle-color: rgb(126, 46, 132);
+  --ag-font-size: 17px;
+  --ag-font-family: monospace;
+  --ag-grid-size: 5px;
+  --ag-list-item-height: 40px;
+}
+
+.ag-row .ag-cell {
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  border-width: 1px;
+  border-style: solid;
+  border-bottom-width: 0px;
+  border-right-width: 0px;
+  border-color: rgb(126, 46, 132);
+}

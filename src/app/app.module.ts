@@ -59,6 +59,8 @@ import { UpperCaseInputDirective } from './shared/UpperCaseInputDirective';
 import { BillDataEntryComponent } from './data-entry/bill-data-entry/bill-data-entry.component';
 import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-data-entry.component';
 import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -99,6 +101,7 @@ const MY_DATE_FORMAT = {
     BillDataEntryComponent,
     StoreDataEntryComponent,
     RouteDataEntryComponent,
+    ButtonRendererComponent,
   ],
   imports: [
     BrowserModule,
@@ -126,6 +129,7 @@ const MY_DATE_FORMAT = {
     MatDialogModule,
     ReactiveFormsModule,
     FormsModule,
+    AgGridModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
   ],
