@@ -95,7 +95,13 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+@firebase/analytics
+Apache-2.0
+
 @firebase/app
+Apache-2.0
+
+@firebase/app-check
 Apache-2.0
 
 @firebase/auth
@@ -107,7 +113,16 @@ Apache-2.0
 @firebase/firestore
 Apache-2.0
 
+@firebase/installations
+Apache-2.0
+
 @firebase/logger
+Apache-2.0
+
+@firebase/messaging
+Apache-2.0
+
+@firebase/remote-config
 Apache-2.0
 
 @firebase/util
@@ -185,11 +200,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   [1]: http://eligrey.com
 
 
+firebase/analytics
+
 firebase/app
+
+firebase/app-check
 
 firebase/auth
 
 firebase/firestore
+
+firebase/messaging
+
+firebase/remote-config
 
 idb
 ISC
@@ -406,21 +429,6 @@ Apache-2.0
  limitations under the License.
  
 
-
-tslib
-0BSD
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
 
 zone.js
 MIT
