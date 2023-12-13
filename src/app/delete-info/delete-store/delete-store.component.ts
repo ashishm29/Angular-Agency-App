@@ -35,23 +35,9 @@ export class DeleteStoreComponent implements OnInit {
     columnHoverHighlight: false,
     pagination: false,
     paginationPageSize: 50,
-
-    // getRowStyle: (params: any) => {
-    //   if (params.node.rowIndex % 2 === 0) {
-    //     return { background: ' #e6ffe6' };
-    //   } else {
-    //     return { background: ' #ccffcc' };
-    //   }
-    // },
-    // rowHeight: 50,
+    suppressHorizontalScroll: false,
+    alwaysShowHorizontalScroll: true,
   };
-  // displayedColumns: string[] = [
-  //   'route',
-  //   'storeName',
-  //   'address',
-  //   'mobileNumber',
-  //   'Action',
-  // ];
 
   public defaultColDef: ColDef = {
     editable: true,
@@ -62,7 +48,9 @@ export class DeleteStoreComponent implements OnInit {
     {
       field: 'route',
       flex: 1.5,
+      minWidth: 200,
       wrapText: true,
+      editable: false,
       autoHeight: true,
       cellStyle: {
         wordBreak: 'normal',
@@ -72,7 +60,9 @@ export class DeleteStoreComponent implements OnInit {
     {
       field: 'storeName',
       flex: 2,
+      minWidth: 200,
       wrapText: true,
+      editable: false,
       autoHeight: true,
       cellStyle: {
         wordBreak: 'normal',
@@ -82,7 +72,9 @@ export class DeleteStoreComponent implements OnInit {
     {
       field: 'address',
       flex: 1.5,
+      minWidth: 200,
       wrapText: true,
+      editable: false,
       autoHeight: true,
       cellStyle: {
         wordBreak: 'normal',
@@ -92,23 +84,25 @@ export class DeleteStoreComponent implements OnInit {
     {
       headerName: 'Mobile Number',
       flex: 1,
+      minWidth: 200,
       wrapText: true,
+      editable: false,
       valueGetter: (params) => {
         if (params.data.altMobileNo) {
           return params.data.mobileNo + ' / ' + params.data.altMobileNo;
         }
         return params.data.mobileNo;
       },
-      cellStyle: { lineHeight: 'unset' },
+      cellStyle: { wordBreak: 'normal', lineHeight: 'unset' },
     },
     {
       headerName: 'Delete',
+      minWidth: 100,
       cellRenderer: 'buttonRenderer',
       cellRendererParams: {
         onClick: this.onDelete.bind(this),
-        label: 'Delete',
+        label: 'X',
       },
-      width: 100,
     },
   ];
 
@@ -128,13 +122,6 @@ export class DeleteStoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.onFetchStoreDetails();
-
-    // this.gridOptions.getRowStyle = function (params: any) {
-    //   if (params.node.rowIndex % 2 === 0) {
-    //     return { background: '#f0f1f4' };
-    //   }
-    //   return { background: '#f0f1f4' };
-    // };
   }
 
   onFetchStoreDetails() {
