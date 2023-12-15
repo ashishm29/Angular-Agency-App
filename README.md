@@ -25,3 +25,28 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Create Component
+
+-- ng g c componentName
+-- ng generate component <componentName>
+
+## Run project
+
+-- ng serve
+
+## Build project
+
+-- ng build
+-- npm ci && npm run build
+
+## Install AG grid:
+
+-- npm i ag-grid-angular
+-- npm i @ag-grid-community/core
+-- npm i @ag-grid-community/client-side-row-model
+
+## delete last commit
+
+-- git reset --hard HEAD~1
+-- git reset --hard 2b1ab85 (2b1ab85 is Commit SHA number you want to set to. Commits after this SHA will be removed)

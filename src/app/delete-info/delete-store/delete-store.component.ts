@@ -120,6 +120,14 @@ export class DeleteStoreComponent implements OnInit {
     this.api = params.api;
   }
 
+  setFooter() {
+    this.api.setPinnedBottomRowData([
+      {
+        route: 'COUNT : ' + this.collection?.length,
+      },
+    ]);
+  }
+
   ngOnInit(): void {
     this.onFetchStoreDetails();
   }
@@ -137,6 +145,9 @@ export class DeleteStoreComponent implements OnInit {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        this.setFooter();
       });
   }
 

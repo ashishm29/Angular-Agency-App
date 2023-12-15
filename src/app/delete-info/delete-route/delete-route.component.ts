@@ -5,6 +5,14 @@ import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirm
 import { Route } from 'src/app/models/route';
 import { RouteService } from 'src/app/services/route.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
+import { ColDef } from 'ag-grid-community';
+import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
+import {
+  ModuleRegistry,
+} from '@ag-grid-community/core';
+import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 @Component({
   selector: 'app-delete-route',
@@ -13,16 +21,90 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
 })
 export class DeleteRouteComponent implements OnInit {
   collection: Route[] = [];
-  displayedColumns: string[] = ['routeName', 'Action'];
+  frameworkComponents: any;
+  api: any;
+  gridOptions = {
+    // turns OFF row hover, it's on by default
+    suppressRowHoverHighlight: false,
+    // turns ON column hover, it's off by default
+    columnHoverHighlight: false,
+    pagination: false,
+    paginationPageSize: 50,
+    suppressHorizontalScroll: false,
+    alwaysShowHorizontalScroll: true,
+    // getRowStyle: function (params: any) {
+    //   if (params.node.rowPinned) {
+    //     return { 'font-weight': 'bold' };
+    //   } else {
+    //     return { 'font-weight': 'bold' };
+    //   }
+    // },
+  };
+
+  public defaultColDef: ColDef = {
+    editable: true,
+    filter: true,
+  };
+
+  colDefs: ColDef[] = [
+    {
+      headerName: 'Route',
+      field: 'routeName',
+      flex: 1.5,
+      minWidth: 200,
+      wrapText: true,
+      editable: false,
+      autoHeight: true,
+      cellStyle: {
+        wordBreak: 'normal',
+        lineHeight: 'unset',
+      },
+    },
+    {
+      headerName: 'Delete',
+      width: 100,
+      minWidth: 100,
+      cellRenderer: 'buttonRenderer',
+      cellRendererParams: {
+        onClick: this.onDelete.bind(this),
+        label: 'X',
+        visibility: false,
+      },
+    },
+  ];
+
+  onGridReady(params: any) {
+    this.api = params.api;
+    // this.setFooter();
+  }
+
+  onDelete(params: any) {
+    let index = this.collection.indexOf(params.rowData);
+    if (index >= 0) {
+      this.openDeleteConfirmationDialog(params.rowData);
+    }
+  }
 
   constructor(
     public dialog: MatDialog,
     private routeService: RouteService,
     private snackbarService: SnackBarService
-  ) {}
+  ) {
+    this.frameworkComponents = {
+      buttonRenderer: ButtonRendererComponent,
+    };
+  }
 
   ngOnInit(): void {
     this.onFetchRoutesDetails();
+  }
+
+  setFooter() {
+    this.api.setPinnedBottomRowData([
+      {
+        routeName: 'COUNT : ' + this.collection?.length,
+      },
+    ]);
   }
 
   onFetchRoutesDetails() {
@@ -38,6 +120,9 @@ export class DeleteRouteComponent implements OnInit {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        this.setFooter();
       });
   }
 
@@ -56,6 +141,7 @@ export class DeleteRouteComponent implements OnInit {
           this.collection.splice(index, 1);
           let array = this.collection.slice();
           this.collection = array;
+          this.api.updateGridOptions({ rowData: this.collection });
         }
 
         this.snackbarService.openSnackBar(
