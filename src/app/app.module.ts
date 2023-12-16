@@ -62,6 +62,8 @@ import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-dat
 import { AgGridModule } from 'ag-grid-angular';
 import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
 import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
+import { ExpenseManagerComponent } from './expense-manager/expense-manager.component';
+import { SalesmanSalaryComponent } from './expense-manager/salesman-salary/salesman-salary.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -104,6 +106,8 @@ const MY_DATE_FORMAT = {
     RouteDataEntryComponent,
     ButtonRendererComponent,
     EditRecoveryDetailsComponent,
+    ExpenseManagerComponent,
+    SalesmanSalaryComponent,
   ],
   imports: [
     BrowserModule,

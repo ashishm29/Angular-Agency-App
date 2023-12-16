@@ -20,6 +20,8 @@ import { BillDataEntryComponent } from './data-entry/bill-data-entry/bill-data-e
 import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-data-entry.component';
 import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
 import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
+import { ExpenseManagerComponent } from './expense-manager/expense-manager.component';
+import { SalesmanSalaryComponent } from './expense-manager/salesman-salary/salesman-salary.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -39,6 +41,18 @@ const routes: Routes = [
     path: 'search',
     component: SearchByStoreComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'expense',
+    component: ExpenseManagerComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'salesmansalary',
+        component: SalesmanSalaryComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
   },
   {
     path: 'editinfo',
