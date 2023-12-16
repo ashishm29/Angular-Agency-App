@@ -95,7 +95,7 @@ export class RecoveryService {
     return deleteDoc(docRef);
   }
 
-  updateRecoveryBillAmount(details: RecoveryDetails) {
+  updateRecovery(details: RecoveryDetails) {
     this.logService.info('Update Recovery Details', details);
     return updateDoc(
       doc(

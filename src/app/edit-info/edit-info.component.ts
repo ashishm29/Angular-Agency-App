@@ -27,6 +27,10 @@ export class EditInfoComponent implements OnInit {
         this.router.navigate(['editbill'], {
           relativeTo: this.activatedRoute,
         });
+      } else if (selecetdValue === 'recovery') {
+        this.router.navigate(['editrecovery'], {
+          relativeTo: this.activatedRoute,
+        });
       }
     }
   }

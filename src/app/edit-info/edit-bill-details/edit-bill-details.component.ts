@@ -1,6 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, RecoveryDetails } from 'src/app/models/route';
@@ -119,7 +123,7 @@ export class EditBillDetailsComponent implements OnInit {
                 } as RecoveryDetails;
 
                 this.recoveryService
-                  .updateRecoveryBillAmount(updatedRecoveryObject)
+                  .updateRecovery(updatedRecoveryObject)
                   .then(() => {
                     this.snackbarService.openSnackBar(
                       AppConstant.BILL_UPDATED_SUCCESS_MSG,

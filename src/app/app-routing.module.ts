@@ -19,6 +19,7 @@ import { DeleteRecoveryComponent } from './delete-info/delete-recovery/delete-re
 import { BillDataEntryComponent } from './data-entry/bill-data-entry/bill-data-entry.component';
 import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-data-entry.component';
 import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
+import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -57,6 +58,11 @@ const routes: Routes = [
       {
         path: 'editbill',
         component: EditBillDetailsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'editrecovery',
+        component: EditRecoveryDetailsComponent,
         canActivate: [AuthGuard],
       },
     ],

@@ -7,9 +7,7 @@ import { RouteService } from 'src/app/services/route.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { ColDef } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
-import {
-  ModuleRegistry,
-} from '@ag-grid-community/core';
+import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
@@ -42,8 +40,14 @@ export class DeleteRouteComponent implements OnInit {
   };
 
   public defaultColDef: ColDef = {
-    editable: true,
+    editable: false,
     filter: true,
+    wrapText: true,
+    autoHeight: true,
+    cellStyle: {
+      wordBreak: 'normal',
+      lineHeight: 'unset',
+    },
   };
 
   colDefs: ColDef[] = [
@@ -52,13 +56,7 @@ export class DeleteRouteComponent implements OnInit {
       field: 'routeName',
       flex: 1.5,
       minWidth: 200,
-      wrapText: true,
-      editable: false,
-      autoHeight: true,
-      cellStyle: {
-        wordBreak: 'normal',
-        lineHeight: 'unset',
-      },
+      floatingFilter: true,
     },
     {
       headerName: 'Delete',

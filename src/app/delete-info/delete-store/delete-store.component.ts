@@ -8,17 +8,6 @@ import { StoreService } from 'src/app/services/store.service';
 import { ColDef } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
 
-// Row Data Interface
-interface IRow {
-  mission: string;
-  company: string;
-  location: string;
-  date: string;
-  rocket: string;
-  price: number;
-  successful: boolean;
-}
-
 @Component({
   selector: 'app-delete-store',
   templateUrl: './delete-store.component.html',
@@ -40,60 +29,43 @@ export class DeleteStoreComponent implements OnInit {
   };
 
   public defaultColDef: ColDef = {
-    editable: true,
+    editable: false,
     filter: true,
+    minWidth: 200,
+    wrapText: true,
+    autoHeight: true,
+    cellStyle: {
+      wordBreak: 'normal',
+      lineHeight: 'unset',
+    },
   };
 
   colDefs: ColDef[] = [
     {
       field: 'route',
       flex: 1.5,
-      minWidth: 200,
-      wrapText: true,
-      editable: false,
-      autoHeight: true,
-      cellStyle: {
-        wordBreak: 'normal',
-        lineHeight: 'unset',
-      },
+      floatingFilter: true,
     },
     {
       field: 'storeName',
       flex: 2,
-      minWidth: 200,
-      wrapText: true,
-      editable: false,
-      autoHeight: true,
-      cellStyle: {
-        wordBreak: 'normal',
-        lineHeight: 'unset',
-      },
+      floatingFilter: true,
     },
     {
       field: 'address',
       flex: 1.5,
-      minWidth: 200,
-      wrapText: true,
-      editable: false,
-      autoHeight: true,
-      cellStyle: {
-        wordBreak: 'normal',
-        lineHeight: 'unset',
-      },
+      floatingFilter: true,
     },
     {
       headerName: 'Mobile Number',
       flex: 1,
-      minWidth: 200,
-      wrapText: true,
-      editable: false,
+      floatingFilter: true,
       valueGetter: (params) => {
         if (params.data.altMobileNo) {
           return params.data.mobileNo + ' / ' + params.data.altMobileNo;
         }
         return params.data.mobileNo;
       },
-      cellStyle: { wordBreak: 'normal', lineHeight: 'unset' },
     },
     {
       headerName: 'Delete',
@@ -139,6 +111,17 @@ export class DeleteStoreComponent implements OnInit {
       .then((result) => {
         if (result && result.length > 0) {
           this.collection = this.sortData(result);
+
+          // Keeping it for future reference
+          // let unique = [...new Set(result.map((item) => item.route))];
+          // let routeWiseStores: KeyValue<any, any>[] = [];
+          // for (let i = 0; i < unique.length - 1; i++) {
+          //   let records = this.collection.filter(
+          //     (item) => item.route === unique[i]
+          //   );
+          //   routeWiseStores.push({ key: unique[i], value: records });
+          //   console.log('Stores : ' + records.length);
+          // }
         } else {
           console.log(AppConstant.STORE_NOT_FOUND_MSG);
         }

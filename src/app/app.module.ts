@@ -61,6 +61,7 @@ import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-dat
 import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
+import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -102,6 +103,7 @@ const MY_DATE_FORMAT = {
     StoreDataEntryComponent,
     RouteDataEntryComponent,
     ButtonRendererComponent,
+    EditRecoveryDetailsComponent,
   ],
   imports: [
     BrowserModule,

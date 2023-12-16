@@ -39,6 +39,8 @@ export class AppConstant {
   static readonly ROUTE_NOT_FOUND_MSG: string = 'No Route details found...';
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
   static readonly BILL_NOT_FOUND_MSG: string = 'Bill details not found...';
+  static readonly RECOVERY_NOT_FOUND_MSG: string =
+    'Recovery details not found...';
 
   static readonly ROUTE_UPDATED_SUCCESS_MSG: string =
     'Route updated Successfully';
@@ -46,6 +48,9 @@ export class AppConstant {
     'Store updated Successfully';
   static readonly BILL_UPDATED_SUCCESS_MSG: string =
     'Bill details updated Successfully';
+
+  static readonly RECOVERY_UPDATED_SUCCESS_MSG: string =
+    'Recovery details updated Successfully';
 
   static readonly STORE_UPDATED_FAILED_MSG: string = 'Store updated failed...';
 
@@ -81,4 +86,7 @@ export class AppConstant {
   static readonly FROM_DATE_SEARCH_LOCAL_STORAGE_KEY: string = 'fromDateSearch';
   static readonly TO_DATE_SEARCH_LOCAL_STORAGE_KEY: string = 'toDateSearch';
   static readonly BILL_SEARCH_LOCAL_STORAGE_KEY: string = 'billNumber';
+
+  static readonly INDEX_NOT_FOUND_MSG: string =
+    'Can not update record... Index not found ';
 }
