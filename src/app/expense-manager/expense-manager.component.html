@@ -1,1 +1,17 @@
-<p>expense-manager in progress...</p>
+<p align="center" style="margin-top: 10px">
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="onSelectionChange('salary')"
+  >
+    Salesman Salary
+  </button>
+</p>
+
+<div class="container">
+  <div class="line"><mat-divider></mat-divider></div>
+  <div class="line"><mat-divider></mat-divider></div>
+</div>
+
+<router-outlet></router-outlet>

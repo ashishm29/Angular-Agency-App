@@ -63,3 +63,17 @@ export class ModeWiseRecovery {
   paymentMode!: string;
   amount!: number;
 }
+
+export interface Expense {
+  id: string;
+  createdDate: Date;
+}
+
+export class Salary implements Expense {
+  id!: string;
+  createdDate!: Date;
+  salesman!: string;
+  salary!: number;
+  pendingAmount!: number;
+  absendDays!: string[];
+}

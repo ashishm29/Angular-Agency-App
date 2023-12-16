@@ -8,6 +8,7 @@ export class AppConstant {
   static readonly PAYMENT_MODE_COLLECTION_NAME: string =
     'PaymentModeCollection';
   static readonly LOGGING_COLLECTION_NAME: string = 'LoggingCollection';
+  static readonly EXPENSE_COLLECTION_NAME: string = 'ExpenseCollection';
 
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
   static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';
