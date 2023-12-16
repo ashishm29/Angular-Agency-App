@@ -1,6 +1,8 @@
+import { ColDef } from 'ag-grid-community';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
+import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { BillDetails, RecoveryDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
@@ -14,14 +16,72 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
 })
 export class DeleteRecoveryComponent implements OnInit {
   collection: RecoveryDetails[] = [];
-  displayedColumns: string[] = [
-    'route',
-    'storeName',
-    'address',
-    'billNumber',
-    'amountReceived',
-    'receiptNumber',
-    'Action',
+  frameworkComponents: any;
+  api: any;
+  gridOptions = {
+    // turns OFF row hover, it's on by default
+    suppressRowHoverHighlight: false,
+    // turns ON column hover, it's off by default
+    columnHoverHighlight: false,
+    pagination: false,
+    paginationPageSize: 50,
+    suppressHorizontalScroll: false,
+    alwaysShowHorizontalScroll: true,
+  };
+
+  public defaultColDef: ColDef = {
+    editable: false,
+    filter: true,
+    minWidth: 200,
+    wrapText: true,
+    autoHeight: true,
+    cellStyle: {
+      wordBreak: 'normal',
+      lineHeight: 'unset',
+    },
+  };
+
+  colDefs: ColDef[] = [
+    {
+      field: 'route',
+      flex: 1.5,
+      floatingFilter: true,
+    },
+    {
+      headerName: 'Store Name',
+      field: 'storeName.storeName',
+      flex: 2,
+      floatingFilter: true,
+    },
+    {
+      field: 'address',
+      flex: 1.5,
+      floatingFilter: true,
+    },
+    {
+      field: 'billNumber',
+      flex: 1.5,
+      floatingFilter: true,
+    },
+    {
+      field: 'amountReceived',
+      flex: 1.5,
+      floatingFilter: true,
+    },
+    {
+      field: 'receiptNumber',
+      flex: 1.5,
+      floatingFilter: true,
+    },
+    {
+      headerName: 'Delete',
+      minWidth: 100,
+      cellRenderer: 'buttonRenderer',
+      cellRendererParams: {
+        onClick: this.onClick.bind(this),
+        label: 'X',
+      },
+    },
   ];
 
   constructor(
@@ -29,7 +89,15 @@ export class DeleteRecoveryComponent implements OnInit {
     private recoveryService: RecoveryService,
     private billService: BillService,
     private snackbarService: SnackBarService
-  ) {}
+  ) {
+    this.frameworkComponents = {
+      buttonRenderer: ButtonRendererComponent,
+    };
+  }
+
+  onGridReady(params: any) {
+    this.api = params.api;
+  }
 
   ngOnInit(): void {
     this.onFetchRecoveryDetails();
@@ -70,6 +138,7 @@ export class DeleteRecoveryComponent implements OnInit {
           this.collection.splice(index, 1);
           let array = this.collection.slice();
           this.collection = array;
+          this.api.updateGridOptions({ rowData: this.collection });
           this.updateBillPendingAmount(element);
         }
       })
@@ -125,5 +194,12 @@ export class DeleteRecoveryComponent implements OnInit {
         console.log(AppConstant.NO_ACTION);
       }
     });
+  }
+
+  onClick(params: any) {
+    let index = this.collection.indexOf(params.rowData);
+    if (index >= 0) {
+      this.openDeleteConfirmationDialog(params.rowData);
+    }
   }
 }
