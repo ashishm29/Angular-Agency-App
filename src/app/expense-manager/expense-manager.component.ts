@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -7,13 +8,20 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./expense-manager.component.scss'],
 })
 export class ExpenseManagerComponent implements OnInit {
-  constructor(public router: Router, public activatedRoute: ActivatedRoute) {}
+  constructor(public router: Router, public activatedRoute: ActivatedRoute) {
+    this.selectedValue = new FormControl('Attendance');
+  }
 
-  ngOnInit(): void {}
+  selectedValue!: FormControl;
+  ngOnInit(): void {
+    this.router.navigate(['salesmansalary'], {
+      relativeTo: this.activatedRoute,
+    });
+  }
 
   onSelectionChange(page: string) {
     if (page) {
-      if (page === 'salary') {
+      if (page === 'Attendance') {
         this.router.navigate(['salesmansalary'], {
           relativeTo: this.activatedRoute,
         });

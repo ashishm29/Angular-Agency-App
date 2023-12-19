@@ -64,16 +64,14 @@ export class ModeWiseRecovery {
   amount!: number;
 }
 
-export interface Expense {
-  id: string;
-  createdDate: Date;
-}
-
-export class Salary implements Expense {
+export class Attendance {
   id!: string;
   createdDate!: Date;
   salesman!: string;
+  absentDate!: Timestamp;
+  absentDayList!: string[];
+  totalAbsentDays!: number;
   salary!: number;
-  pendingAmount!: number;
-  absendDays!: string[];
+  paidAmount!: number;
+  salaryToPay!: number;
 }

@@ -1,12 +1,13 @@
-<p align="center" style="margin-top: 10px">
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-    (click)="onSelectionChange('salary')"
-  >
-    Salesman Salary
-  </button>
+<p style="margin-top: 10px">
+  <mat-form-field appearance="outline">
+    <mat-label>Select Option to Delete Data</mat-label>
+    <mat-select
+      (selectionChange)="onSelectionChange($event.value)"
+      [formControl]="selectedValue"
+    >
+      <mat-option value="Attendance">Attendance</mat-option>
+    </mat-select>
+  </mat-form-field>
 </p>
 
 <div class="container">

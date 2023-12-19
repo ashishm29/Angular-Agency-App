@@ -6,7 +6,7 @@ import { Route } from 'src/app/models/route';
 import { RouteService } from 'src/app/services/route.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { ColDef } from 'ag-grid-community';
-import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from 'src/app/renderer/button-renderer/button-renderer.component';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 

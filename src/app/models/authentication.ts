@@ -19,6 +19,7 @@ export class User {
   role!: string;
   mobileNumber!: string;
   password!: string;
+  salary!: number;
 }
 
 export class Role {

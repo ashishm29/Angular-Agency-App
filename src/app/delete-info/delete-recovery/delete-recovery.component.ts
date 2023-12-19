@@ -2,7 +2,7 @@ import { ColDef } from 'ag-grid-community';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppConstant } from 'src/app/appConstant';
-import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from 'src/app/renderer/button-renderer/button-renderer.component';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { BillDetails, RecoveryDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';

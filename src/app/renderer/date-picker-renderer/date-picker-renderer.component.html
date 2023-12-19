@@ -1,0 +1,10 @@
+<mat-form-field style="width: 160px">
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [formControl]="selectedDate"
+    (dateChange)="onChange($event)"
+  />
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker [dateClass]="dateClass" #picker></mat-datepicker>
+</mat-form-field>

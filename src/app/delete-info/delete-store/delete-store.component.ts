@@ -6,7 +6,7 @@ import { StoreDetails } from 'src/app/models/route';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
 import { ColDef } from 'ag-grid-community';
-import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from 'src/app/renderer/button-renderer/button-renderer.component';
 
 @Component({
   selector: 'app-delete-store',

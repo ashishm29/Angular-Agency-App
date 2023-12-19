@@ -5,7 +5,7 @@ import { AppConstant } from 'src/app/appConstant';
 import { RecoveryDetails } from 'src/app/models/route';
 import { RecoveryService } from 'src/app/services/recovery.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { ButtonRendererComponent } from 'src/app/button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from 'src/app/renderer/button-renderer/button-renderer.component';
 
 @Component({
   selector: 'app-edit-recovery-details',

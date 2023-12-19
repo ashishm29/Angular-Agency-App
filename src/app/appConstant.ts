@@ -25,6 +25,10 @@ export class AppConstant {
   static readonly BILL_ADDED_SUCCESS_MSG: string = 'Bill added Successfully';
   static readonly STORE_ADDED_SUCCESS_MSG: string = 'Store added Successfully';
   static readonly ROUTE_ADDED_SUCCESS_MSG: string = 'Route added Successfully';
+  static readonly RECORD_ADDED_SUCCESS_MSG: string =
+    'Record added Successfully';
+  static readonly RECORD_ALREADY_PRESENT_MSG: string =
+    'Record already present..';
   static readonly RECOVERY_ADDED_SUCCESS_MSG: string =
     'Recovery details added Successfully';
 
@@ -39,6 +43,7 @@ export class AppConstant {
 
   static readonly ROUTE_NOT_FOUND_MSG: string = 'No Route details found...';
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
+  static readonly RECORD_NOT_FOUND_MSG: string = 'Records not found...';
   static readonly BILL_NOT_FOUND_MSG: string = 'Bill details not found...';
   static readonly RECOVERY_NOT_FOUND_MSG: string =
     'Recovery details not found...';
@@ -64,6 +69,7 @@ export class AppConstant {
   static readonly STORE: string = 'Store';
   static readonly BILL: string = 'Bill';
   static readonly RECOVERY: string = 'Recovery';
+  static readonly ATTENDANCE: string = 'Attendance';
 
   static readonly ADD_STORE_VALIDATION: string =
     'Store with entered mobile number already exist.';

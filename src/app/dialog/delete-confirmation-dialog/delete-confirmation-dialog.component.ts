@@ -17,6 +17,7 @@ export class DeleteConfirmationDialogComponent implements OnInit {
       key: string;
       value: string;
       delete: string;
+      object: any;
     }
   ) {}
 
@@ -37,6 +38,10 @@ export class DeleteConfirmationDialogComponent implements OnInit {
         'Do you want to delete this recovery Receipt Number : ' +
         this.data.value +
         ' ?';
+    } else if (this.data.key === AppConstant.ATTENDANCE) {
+      this.message = `Do you want to add absent entry for Salesman : ${
+        this.data.object.salesman
+      } , Date : ${this.data.object.absentDate.toDate().toDateString()} `;
     }
   }
 

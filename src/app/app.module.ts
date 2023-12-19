@@ -60,10 +60,11 @@ import { BillDataEntryComponent } from './data-entry/bill-data-entry/bill-data-e
 import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-data-entry.component';
 import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
 import { AgGridModule } from 'ag-grid-angular';
-import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from './renderer/button-renderer/button-renderer.component';
 import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
 import { ExpenseManagerComponent } from './expense-manager/expense-manager.component';
 import { SalesmanSalaryComponent } from './expense-manager/salesman-salary/salesman-salary.component';
+import { DatePickerRendererComponent } from './renderer/date-picker-renderer/date-picker-renderer.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -108,6 +109,7 @@ const MY_DATE_FORMAT = {
     EditRecoveryDetailsComponent,
     ExpenseManagerComponent,
     SalesmanSalaryComponent,
+    DatePickerRendererComponent,
   ],
   imports: [
     BrowserModule,

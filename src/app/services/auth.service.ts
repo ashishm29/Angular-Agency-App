@@ -68,6 +68,7 @@ export class AuthService implements OnInit {
       id: string;
       role: string;
       username: string;
+      salary: number;
     } = JSON.parse(localStorage.getItem('userData')!);
 
     if (!userData) {
