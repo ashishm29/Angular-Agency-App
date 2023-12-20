@@ -18,11 +18,11 @@ import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-salesman-salary',
-  templateUrl: './salesman-salary.component.html',
-  styleUrls: ['./salesman-salary.component.scss'],
+  templateUrl: './salesman-attendance.component.html',
+  styleUrls: ['./salesman-attendance.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SalesmanSalaryComponent implements OnInit {
+export class SalesmanAttendanceComponent implements OnInit {
   collection: Attendance[] = [];
   tempAttendanceCollection: Attendance[] = [];
   salesmanCollection: Attendance[] = [];

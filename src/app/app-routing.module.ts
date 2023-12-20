@@ -21,7 +21,7 @@ import { StoreDataEntryComponent } from './data-entry/store-data-entry/store-dat
 import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-data-entry.component';
 import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
 import { ExpenseManagerComponent } from './expense-manager/expense-manager.component';
-import { SalesmanSalaryComponent } from './expense-manager/salesman-salary/salesman-salary.component';
+import { SalesmanAttendanceComponent } from './expense-manager/salesman-attendance/salesman-attendance.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -48,8 +48,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'salesmansalary',
-        component: SalesmanSalaryComponent,
+        path: 'attendance',
+        component: SalesmanAttendanceComponent,
         canActivate: [AuthGuard],
       },
     ],

@@ -63,7 +63,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ButtonRendererComponent } from './renderer/button-renderer/button-renderer.component';
 import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
 import { ExpenseManagerComponent } from './expense-manager/expense-manager.component';
-import { SalesmanSalaryComponent } from './expense-manager/salesman-salary/salesman-salary.component';
+import { SalesmanAttendanceComponent } from './expense-manager/salesman-attendance/salesman-attendance.component';
 import { DatePickerRendererComponent } from './renderer/date-picker-renderer/date-picker-renderer.component';
 
 const MY_DATE_FORMAT = {
@@ -108,7 +108,7 @@ const MY_DATE_FORMAT = {
     ButtonRendererComponent,
     EditRecoveryDetailsComponent,
     ExpenseManagerComponent,
-    SalesmanSalaryComponent,
+    SalesmanAttendanceComponent,
     DatePickerRendererComponent,
   ],
   imports: [

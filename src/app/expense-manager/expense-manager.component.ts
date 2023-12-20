@@ -14,7 +14,7 @@ export class ExpenseManagerComponent implements OnInit {
 
   selectedValue!: FormControl;
   ngOnInit(): void {
-    this.router.navigate(['salesmansalary'], {
+    this.router.navigate(['attendance'], {
       relativeTo: this.activatedRoute,
     });
   }
@@ -22,7 +22,7 @@ export class ExpenseManagerComponent implements OnInit {
   onSelectionChange(page: string) {
     if (page) {
       if (page === 'Attendance') {
-        this.router.navigate(['salesmansalary'], {
+        this.router.navigate(['attendance'], {
           relativeTo: this.activatedRoute,
         });
       }
