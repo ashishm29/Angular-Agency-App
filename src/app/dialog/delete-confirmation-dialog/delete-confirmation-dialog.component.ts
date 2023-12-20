@@ -41,7 +41,7 @@ export class DeleteConfirmationDialogComponent implements OnInit {
     } else if (this.data.key === AppConstant.ATTENDANCE) {
       this.message = `Do you want to add absent entry for Salesman : ${
         this.data.object.salesman
-      } , Date : ${this.data.object.absentDate.toDate().toDateString()} `;
+      } , Date : ${this.data.object.absentDate.toDateString()} `;
     }
   }
 

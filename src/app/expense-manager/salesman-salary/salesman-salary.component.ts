@@ -1,17 +1,20 @@
 import { ColDef } from 'ag-grid-community';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
+import {
+  MatCalendarCellClassFunction,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 import { ExpenseService } from 'src/app/services/expense.service';
 import { AppConstant } from 'src/app/appConstant';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { ButtonRendererComponent } from 'src/app/renderer/button-renderer/button-renderer.component';
 import { DatePickerRendererComponent } from 'src/app/renderer/date-picker-renderer/date-picker-renderer.component';
 import { UserService } from 'src/app/services/user.service';
-import { Timestamp } from '@angular/fire/firestore';
 import { Attendance } from 'src/app/models/route';
 import { DatePipe } from '@angular/common';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-salesman-salary',
@@ -23,6 +26,7 @@ export class SalesmanSalaryComponent implements OnInit {
   collection: Attendance[] = [];
   tempAttendanceCollection: Attendance[] = [];
   salesmanCollection: Attendance[] = [];
+  selectedMonthandYear!: FormControl;
 
   frameworkComponents: any;
   api!: any;
@@ -143,7 +147,7 @@ export class SalesmanSalaryComponent implements OnInit {
       (c) =>
         c.salesman === details.salesman &&
         c.absentDate.toDate().toDateString() ===
-          details.absentDate.toDate().toDateString()
+          details.absentDate.toDateString()
     );
 
     if (filteredRecord && filteredRecord.length > 0) {
@@ -170,6 +174,7 @@ export class SalesmanSalaryComponent implements OnInit {
       datePickerRenderer: DatePickerRendererComponent,
       buttonRenderer: ButtonRendererComponent,
     };
+    this.selectedMonthandYear = new FormControl();
   }
 
   ngOnInit(): void {
@@ -197,8 +202,17 @@ export class SalesmanSalaryComponent implements OnInit {
     this.tempAttendanceCollection = [];
     await this.expenseService.get().then((result) => {
       if (result && result.length > 0) {
-        this.collection = result;
-        this.tempAttendanceCollection = result;
+        let todaysDate = new Date();
+        let currentMonth = todaysDate.getMonth();
+        let currentYear = todaysDate.getFullYear();
+
+        let currentMonthAbsentList = result.filter(
+          (c) =>
+            c.absentDate.toDate().getMonth() === currentMonth &&
+            c.absentDate.toDate().getFullYear() === currentYear
+        );
+        this.collection = currentMonthAbsentList;
+        this.tempAttendanceCollection = currentMonthAbsentList;
         this.getSalesmanDetail();
       } else {
         this.getSalesmanDetail();
@@ -229,14 +243,14 @@ export class SalesmanSalaryComponent implements OnInit {
           );
 
           let empSal = salesman[i].salary;
-          let perdaySal = Math.round(empSal / daysInMonths);
+          let perdaySal = empSal / daysInMonths;
           let dueSal = Math.round(perdaySal * (daysInMonths - days.length));
 
           attendance.push({
             salesman: salesman[i].username,
             absentDayList: days,
             totalAbsentDays: days.length,
-            absentDate: Timestamp.now(),
+            absentDate: new Date(),
             salary: salesman[i].salary,
             salaryToPay: dueSal,
           } as any);
@@ -268,4 +282,16 @@ export class SalesmanSalaryComponent implements OnInit {
       }
     });
   }
+
+  // setMonthAndYear(normalizedMonthAndYear: any, datepicker: MatDatepicker<any>) {
+  //   const ctrlValue = new Date();
+  //   // ctrlValue.setMonth();
+  //   // ctrlValue.setFullYear();
+  //   let val =
+  //     normalizedMonthAndYear.getMonth() +
+  //     '/' +
+  //     normalizedMonthAndYear.getFullYear();
+  //   this.selectedMonthandYear.setValue(val);
+  //   datepicker.close();
+  // }
 }
