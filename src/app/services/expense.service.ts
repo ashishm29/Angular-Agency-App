@@ -16,13 +16,13 @@ export class ExpenseService {
   constructor(public firestoreService: FirestoreService) {}
 
   add(details: Attendance) {
-    return addDoc(this.firestoreService.expenseCollectionInstance, details);
+    return addDoc(this.firestoreService.attendacneCollectionInstance, details);
   }
 
   async get() {
     let collectionData: Attendance[] = [];
     // Create a query against the collection.
-    const q = query(this.firestoreService.expenseCollectionInstance);
+    const q = query(this.firestoreService.attendacneCollectionInstance);
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       console.log(doc.data());
