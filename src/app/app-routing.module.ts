@@ -22,6 +22,7 @@ import { RouteDataEntryComponent } from './data-entry/route-data-entry/route-dat
 import { EditRecoveryDetailsComponent } from './edit-info/edit-recovery-details/edit-recovery-details.component';
 import { ExpenseManagerComponent } from './expense-manager/expense-manager.component';
 import { SalesmanAttendanceComponent } from './expense-manager/salesman-attendance/salesman-attendance.component';
+import { ExpenseComponent } from './expense-manager/expense/expense.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -50,6 +51,11 @@ const routes: Routes = [
       {
         path: 'attendance',
         component: SalesmanAttendanceComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'expense',
+        component: ExpenseComponent,
         canActivate: [AuthGuard],
       },
     ],

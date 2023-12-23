@@ -1,22 +1,30 @@
-<!-- <mat-form-field
-  appearance="outline"
-  class="mat-form-field-custome"
-  class="centerFlex"
->
-  <mat-label>To date</mat-label>
-  <input
-    matInput
-    [matDatepicker]="toPicker"
-    placeholder="To date"
-    [formControl]="selectedMonthandYear"
-  />
-  <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-  <mat-datepicker
-    startView="multi-year"
-    (monthSelected)="setMonthAndYear($event, toPicker)"
-    #toPicker
-  ></mat-datepicker>
-</mat-form-field> -->
+<div class="centerFlex">
+  <div style="margin-top: 10px">
+    <mat-form-field appearance="outline">
+      <mat-label>Choose Month</mat-label>
+      <mat-select
+        (selectionChange)="onSelectionChange($event.value, 'month')"
+        [formControl]="selectedMonth"
+      >
+        <div *ngFor="let month of monthCollection">
+          <mat-option value="{{ month }}">{{ month }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="left-margin-10px" appearance="outline">
+      <mat-label>Choose Year</mat-label>
+      <mat-select
+        (selectionChange)="onSelectionChange($event.value, 'year')"
+        [formControl]="selectedYear"
+      >
+        <div *ngFor="let year of yearCollection">
+          <mat-option value="{{ year }}">{{ year }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
 
 <div class="content">
   <!-- The AG Grid component, with Dimensions, CSS Theme, Row Data, and Column Definition -->

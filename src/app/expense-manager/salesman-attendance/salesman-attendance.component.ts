@@ -1,9 +1,5 @@
 import { ColDef } from 'ag-grid-community';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {
-  MatCalendarCellClassFunction,
-  MatDatepicker,
-} from '@angular/material/datepicker';
 import { ExpenseService } from 'src/app/services/expense.service';
 import { AppConstant } from 'src/app/appConstant';
 import { SnackBarService } from 'src/app/services/snackbar.service';
@@ -26,7 +22,10 @@ export class SalesmanAttendanceComponent implements OnInit {
   collection: Attendance[] = [];
   tempAttendanceCollection: Attendance[] = [];
   salesmanCollection: Attendance[] = [];
-  selectedMonthandYear!: FormControl;
+  yearCollection: number[] = [];
+  monthCollection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  selectedMonth!: FormControl;
+  selectedYear!: FormControl;
 
   frameworkComponents: any;
   api!: any;
@@ -174,7 +173,18 @@ export class SalesmanAttendanceComponent implements OnInit {
       datePickerRenderer: DatePickerRendererComponent,
       buttonRenderer: ButtonRendererComponent,
     };
-    this.selectedMonthandYear = new FormControl();
+    let date = new Date();
+
+    let startYear = date.getFullYear() - 5;
+
+    let formYearCollection: number[] = [];
+    for (let i = startYear; i <= date.getFullYear(); i++) {
+      formYearCollection.push(i);
+    }
+    this.yearCollection = formYearCollection;
+
+    this.selectedMonth = new FormControl((date.getMonth() + 1).toString());
+    this.selectedYear = new FormControl(date.getFullYear().toString());
   }
 
   ngOnInit(): void {
@@ -202,17 +212,14 @@ export class SalesmanAttendanceComponent implements OnInit {
     this.tempAttendanceCollection = [];
     await this.expenseService.get().then((result) => {
       if (result && result.length > 0) {
-        let todaysDate = new Date();
-        let currentMonth = todaysDate.getMonth();
-        let currentYear = todaysDate.getFullYear();
-
         let currentMonthAbsentList = result.filter(
           (c) =>
-            c.absentDate.toDate().getMonth() === currentMonth &&
-            c.absentDate.toDate().getFullYear() === currentYear
+            c.absentDate.toDate().getMonth() ===
+              +this.selectedMonth.value - 1 &&
+            c.absentDate.toDate().getFullYear() === +this.selectedYear.value
         );
         this.collection = currentMonthAbsentList;
-        this.tempAttendanceCollection = currentMonthAbsentList;
+        this.tempAttendanceCollection = result;
         this.getSalesmanDetail();
       } else {
         this.getSalesmanDetail();
@@ -246,11 +253,15 @@ export class SalesmanAttendanceComponent implements OnInit {
           let perdaySal = empSal / daysInMonths;
           let dueSal = Math.round(perdaySal * (daysInMonths - days.length));
 
+          let defaultDate = new Date();
+          defaultDate.setMonth(+this.selectedMonth.value - 1);
+          defaultDate.setFullYear(+this.selectedYear.value);
+
           attendance.push({
             salesman: salesman[i].username,
             absentDayList: days,
             totalAbsentDays: days.length,
-            absentDate: new Date(),
+            absentDate: defaultDate,
             salary: salesman[i].salary,
             salaryToPay: dueSal,
           } as any);
@@ -283,15 +294,25 @@ export class SalesmanAttendanceComponent implements OnInit {
     });
   }
 
-  // setMonthAndYear(normalizedMonthAndYear: any, datepicker: MatDatepicker<any>) {
-  //   const ctrlValue = new Date();
-  //   // ctrlValue.setMonth();
-  //   // ctrlValue.setFullYear();
-  //   let val =
-  //     normalizedMonthAndYear.getMonth() +
-  //     '/' +
-  //     normalizedMonthAndYear.getFullYear();
-  //   this.selectedMonthandYear.setValue(val);
-  //   datepicker.close();
-  // }
+  onSelectionChange(value: string, controlName: string) {
+    if (value && controlName) {
+      let date = new Date();
+      if (controlName === 'month') {
+        date.setMonth(this.selectedMonth.value - 1);
+      }
+
+      if (controlName === 'year') {
+        date.setFullYear(this.selectedYear.value);
+      }
+
+      let currentMonthAbsentList = this.tempAttendanceCollection.filter(
+        (c) =>
+          c.absentDate.toDate().getMonth() === date.getMonth() &&
+          c.absentDate.toDate().getFullYear() === date.getFullYear()
+      );
+
+      this.collection = currentMonthAbsentList;
+      this.getSalesmanDetail();
+    }
+  }
 }

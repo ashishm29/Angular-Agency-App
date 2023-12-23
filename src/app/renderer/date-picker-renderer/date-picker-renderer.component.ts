@@ -22,7 +22,8 @@ export class DatePickerRendererComponent implements ICellRendererAngularComp {
   agInit(params: any): void {
     this.params = params;
     this.absentDays = this.params.data.absentDayList || null;
-    this.selectedDate = new FormControl(Timestamp.now().toDate());
+    // this.selectedDate = new FormControl(Timestamp.now().toDate());
+    this.selectedDate = new FormControl(this.params.data.absentDate);
     this.gridApi = this.params.gridApi;
   }
 
