@@ -89,6 +89,15 @@ export class SalesmanAttendanceComponent implements OnInit {
       },
     },
     {
+      headerName: 'Comment',
+      field: 'comment',
+      flex: 1,
+      minWidth: 200,
+      wrapText: true,
+      autoHeight: true,
+      editable: true,
+    },
+    {
       headerName: 'Delete',
       minWidth: 100,
       cellRenderer: 'buttonRenderer',
@@ -122,6 +131,15 @@ export class SalesmanAttendanceComponent implements OnInit {
         );
       },
     },
+    {
+      headerName: 'Comment',
+      field: 'comment',
+      flex: 1.5,
+      minWidth: 200,
+      wrapText: true,
+      autoHeight: true,
+      editable: true,
+    },
   ];
 
   onChange(params: any) {
@@ -140,6 +158,7 @@ export class SalesmanAttendanceComponent implements OnInit {
       salesman: params.rowData.salesman,
       createdDate: new Date(),
       absentDate: params.rowData.absentDate,
+      comment: params.rowData.comment,
     } as any;
 
     let filteredRecord = this.collection.filter(
@@ -264,6 +283,7 @@ export class SalesmanAttendanceComponent implements OnInit {
             absentDate: defaultDate,
             salary: salesman[i].salary,
             salaryToPay: dueSal,
+            comment: '',
           } as any);
         }
 

@@ -74,4 +74,5 @@ export class Attendance {
   salary!: number;
   paidAmount!: number;
   salaryToPay!: number;
+  comment!: string;
 }
