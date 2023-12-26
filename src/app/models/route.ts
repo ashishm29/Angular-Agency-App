@@ -76,3 +76,11 @@ export class Attendance {
   salaryToPay!: number;
   comment!: string;
 }
+
+export class Expense {
+  id!: string;
+  createdDate!: Date;
+  reason!: string;
+  comment!: string;
+  amount!: number;
+}

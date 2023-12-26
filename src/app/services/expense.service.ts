@@ -7,7 +7,7 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import { Attendance } from '../models/route';
+import { Attendance, Expense } from '../models/route';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +30,25 @@ export class ExpenseService {
         ...doc.data(),
         id: doc.id,
       } as Attendance);
+    });
+    return collectionData;
+  }
+
+  addExpense(details: Expense) {
+    return addDoc(this.firestoreService.expenseCollectionInstance, details);
+  }
+
+  async getExpense() {
+    let collectionData: Expense[] = [];
+    // Create a query against the collection.
+    const q = query(this.firestoreService.expenseCollectionInstance);
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      collectionData.push({
+        ...doc.data(),
+        id: doc.id,
+      } as Expense);
     });
     return collectionData;
   }
