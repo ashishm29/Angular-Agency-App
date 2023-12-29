@@ -113,10 +113,8 @@ export class SearchByStoreComponent implements OnInit {
     this.paidUnpaidSelection = new UntypedFormControl(paidUnpaid ?? 'UnPaid');
     this.storeName = new UntypedFormControl(storeDetail);
     this.billNumber = new UntypedFormControl(billNumber);
-    this.fromBillDate = new UntypedFormControl(
-      convertLocalFromdate ?? fromdate
-    );
-    this.toBillDate = new UntypedFormControl(convertLocalTodate ?? new Date());
+    this.fromBillDate = new UntypedFormControl(convertLocalFromdate ?? null);
+    this.toBillDate = new UntypedFormControl(convertLocalTodate ?? null);
     this.storeMessage;
     this.billMessage = '';
   }
@@ -145,10 +143,16 @@ export class SearchByStoreComponent implements OnInit {
 
     this.routeService.getRoutes().then((result) => {
       if (result && result.length > 0) {
-        this.routeCollection = result;
+        this.routeCollection = this.sortRouteData(result);
       } else {
         console.log(AppConstant.ROUTE_NOT_FOUND_MSG);
       }
+    });
+  }
+
+  sortRouteData(result: Route[]) {
+    return result.sort((a, b) => {
+      return a.routeName < b.routeName ? -1 : 1;
     });
   }
 
