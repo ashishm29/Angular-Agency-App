@@ -107,7 +107,7 @@ export class EditRecoveryDetailsComponent implements OnInit {
       });
     } else {
       this.snackbarService.openSnackBar(
-        AppConstant.RECOVERY_UPDATED_SUCCESS_MSG,
+        AppConstant.RECORD_NOT_FOUND_MSG,
         AppConstant.UPDAE_ACTION
       );
     }

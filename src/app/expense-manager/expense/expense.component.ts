@@ -40,13 +40,14 @@ export class ExpenseComponent implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
+      editable: true,
     },
     {
       field: 'comment',
       flex: 1.5,
       minWidth: 200,
       wrapText: true,
-      editable: false,
+      editable: true,
       autoHeight: true,
     },
     {
@@ -55,14 +56,15 @@ export class ExpenseComponent implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
+      editable: true,
     },
     {
-      headerName: 'Edit',
+      headerName: 'Update',
       minWidth: 100,
       cellRenderer: 'buttonRenderer',
       cellRendererParams: {
-        onClick: this.onEdit.bind(this),
-        label: 'Edit',
+        onClick: this.onUpdate.bind(this),
+        label: 'Update',
       },
     },
     {
@@ -111,8 +113,45 @@ export class ExpenseComponent implements OnInit {
     }
   }
 
-  onEdit(params: any) {}
-  onDelete(params: any) {}
+  onUpdate(element: any) {
+    let params = element.rowData;
+    let index = this.collection.indexOf(params);
+    if (index >= 0) {
+      let recoveryDetails = {
+        ...params,
+      };
+      this.expenseService.updateExpense(recoveryDetails).then(() => {
+        this.snackbarService.openSnackBar(
+          AppConstant.RECORD_UPDATED_SUCCESS_MSG,
+          AppConstant.UPDAE_ACTION
+        );
+      });
+    } else {
+      this.snackbarService.openSnackBar(
+        AppConstant.RECORD_NOT_FOUND_MSG,
+        AppConstant.UPDAE_ACTION
+      );
+    }
+  }
+
+  onDelete(record: any) {
+    let element = record.rowData;
+    this.expenseService
+      .deleteExpense(element.id)
+      .then(() => {
+        let index = this.collection.indexOf(element);
+        if (index >= 0) {
+          this.collection.splice(index, 1);
+          let array = this.collection.slice();
+          this.collection = array;
+          this.api.updateGridOptions({ rowData: this.collection });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+      });
+  }
 
   addRecord(params: any) {
     this.expenseService

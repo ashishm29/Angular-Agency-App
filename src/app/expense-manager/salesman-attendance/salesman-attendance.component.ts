@@ -10,7 +10,7 @@ import { Attendance } from 'src/app/models/route';
 import { DatePipe } from '@angular/common';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-salesman-salary',
@@ -23,9 +23,27 @@ export class SalesmanAttendanceComponent implements OnInit {
   tempAttendanceCollection: Attendance[] = [];
   salesmanCollection: Attendance[] = [];
   yearCollection: number[] = [];
-  monthCollection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  monthCollection: { monthNumber: number; monthName: string }[] = [
+    { monthNumber: 1, monthName: '1- JAN' },
+    { monthNumber: 2, monthName: '2 - FEB' },
+    { monthNumber: 3, monthName: '3 - MAR' },
+    { monthNumber: 4, monthName: '4 - APR' },
+    { monthNumber: 5, monthName: '5 - MAY' },
+    { monthNumber: 6, monthName: '6 - JUN' },
+    { monthNumber: 7, monthName: '7 - JUL' },
+    { monthNumber: 8, monthName: '8 - AUG' },
+    { monthNumber: 9, monthName: '9 - SEP' },
+    { monthNumber: 10, monthName: '10 - OCT' },
+    { monthNumber: 11, monthName: '11 - NOV' },
+    { monthNumber: 12, monthName: '12 - DEC' },
+  ];
   selectedMonth!: FormControl;
   selectedYear!: FormControl;
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
 
   frameworkComponents: any;
   api!: any;
@@ -50,6 +68,7 @@ export class SalesmanAttendanceComponent implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
+      floatingFilter: true,
     },
     {
       field: 'salary',
@@ -98,7 +117,7 @@ export class SalesmanAttendanceComponent implements OnInit {
       editable: true,
     },
     {
-      headerName: 'Delete',
+      headerName: '',
       minWidth: 100,
       cellRenderer: 'buttonRenderer',
       cellRendererParams: {
@@ -116,6 +135,7 @@ export class SalesmanAttendanceComponent implements OnInit {
       wrapText: true,
       editable: false,
       autoHeight: true,
+      floatingFilter: true,
     },
     {
       field: 'absentDate',
@@ -138,7 +158,6 @@ export class SalesmanAttendanceComponent implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
-      editable: true,
     },
   ];
 
@@ -246,6 +265,20 @@ export class SalesmanAttendanceComponent implements OnInit {
     });
   }
 
+  async getDateFilterWiseRecords() {
+    this.collection = [];
+    await this.expenseService.get().then((result) => {
+      if (result && result.length > 0) {
+        let absentList = result.filter(
+          (c) =>
+            c.absentDate.toDate() >= this.range.value.start! &&
+            c.absentDate.toDate() <= this.range.value.end!
+        );
+        this.collection = absentList;
+      }
+    });
+  }
+
   async getSalesmanDetail() {
     this.salesmanCollection = [];
     this.userService.getSalesmanList().then((records) => {
@@ -334,5 +367,9 @@ export class SalesmanAttendanceComponent implements OnInit {
       this.collection = currentMonthAbsentList;
       this.getSalesmanDetail();
     }
+  }
+
+  onSearch() {
+    this.getDateFilterWiseRecords();
   }
 }

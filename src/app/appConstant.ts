@@ -49,6 +49,9 @@ export class AppConstant {
   static readonly RECOVERY_NOT_FOUND_MSG: string =
     'Recovery details not found...';
 
+  static readonly RECORD_UPDATED_SUCCESS_MSG: string =
+    'Record updated Successfully';
+
   static readonly ROUTE_UPDATED_SUCCESS_MSG: string =
     'Route updated Successfully';
   static readonly STORE_UPDATED_SUCCESS_MSG: string =

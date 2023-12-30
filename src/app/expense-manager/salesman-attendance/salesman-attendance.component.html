@@ -1,13 +1,15 @@
 <div class="centerFlex">
   <div style="margin-top: 10px">
-    <mat-form-field appearance="outline">
+    <mat-form-field class="left-margin-10px" appearance="outline">
       <mat-label>Choose Month</mat-label>
       <mat-select
         (selectionChange)="onSelectionChange($event.value, 'month')"
         [formControl]="selectedMonth"
       >
         <div *ngFor="let month of monthCollection">
-          <mat-option value="{{ month }}">{{ month }}</mat-option>
+          <mat-option value="{{ month.monthNumber }}">{{
+            month.monthName
+          }}</mat-option>
         </div>
       </mat-select>
     </mat-form-field>
@@ -26,7 +28,7 @@
   </div>
 </div>
 
-<div class="content">
+<div>
   <!-- The AG Grid component, with Dimensions, CSS Theme, Row Data, and Column Definition -->
   <ag-grid-angular
     style="width: 100%; height: 350px"
@@ -41,7 +43,47 @@
   </ag-grid-angular>
 </div>
 
-<div class="content">
+<div>
+  <div class="centerFlex" style="margin-top: 10px">
+    <div [formGroup]="range">
+      <mat-form-field appearance="outline">
+        <mat-label>From date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="start"
+          placeholder="From date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>To date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="toPicker"
+          formControlName="end"
+          placeholder="To date"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="toPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        style="margin-left: 1em"
+        (click)="onSearch()"
+      >
+        Search
+      </button>
+    </div>
+  </div>
+
   <ag-grid-angular
     style="width: 100%; height: 600px"
     [rowData]="collection"

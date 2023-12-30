@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import {
-  QueryConstraint,
   addDoc,
+  deleteDoc,
+  doc,
   getDocs,
   query,
-  where,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Attendance, Expense } from '../models/route';
+import { AppConstant } from '../appConstant';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +38,28 @@ export class ExpenseService {
 
   addExpense(details: Expense) {
     return addDoc(this.firestoreService.expenseCollectionInstance, details);
+  }
+
+  deleteExpense(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.EXPENSE_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
+  }
+
+  updateExpense(details: Expense) {
+    return updateDoc(
+      doc(
+        this.firestoreService.firestore,
+        AppConstant.EXPENSE_COLLECTION_NAME,
+        details.id
+      ),
+      {
+        ...details,
+      }
+    );
   }
 
   async getExpense() {
