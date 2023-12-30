@@ -100,4 +100,7 @@ export class AppConstant {
 
   static readonly INDEX_NOT_FOUND_MSG: string =
     'Can not update record... Index not found ';
+
+  static readonly ENTER_VALID_DATES_MSG: string =
+    'Please enter valid date to search..';
 }

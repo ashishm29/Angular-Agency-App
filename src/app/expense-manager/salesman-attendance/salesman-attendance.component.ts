@@ -366,10 +366,18 @@ export class SalesmanAttendanceComponent implements OnInit {
 
       this.collection = currentMonthAbsentList;
       this.getSalesmanDetail();
+      this.range.reset();
     }
   }
 
   onSearch() {
-    this.getDateFilterWiseRecords();
+    if (this.range.value.start && this.range.value.end) {
+      this.getDateFilterWiseRecords();
+    } else {
+      this.snackbarService.openSnackBar(
+        AppConstant.ENTER_VALID_DATES_MSG,
+        AppConstant.SEARCH_ACTION
+      );
+    }
   }
 }
