@@ -164,3 +164,13 @@
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
   </table>
 </div>
+<br />
+<div>
+  <app-recovery-from-salesman
+    *ngIf="isAdmin"
+    [fromDate]="fromDate"
+    [toDate]="toDate"
+    [salesman]="salesmanSelected"
+    [totalAmount]="totalAmount"
+  ></app-recovery-from-salesman>
+</div>

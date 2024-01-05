@@ -55,6 +55,11 @@ export class FirestoreService {
     AppConstant.ATTENDANCE_COLLECTION_NAME
   );
 
+  recoveryHistoryCollectionInstance = collection(
+    this.firestore,
+    AppConstant.RECOVERY_HISTORY_COLLECTION_NAME
+  );
+
   // ashishCollectionInstance24 = collection(
   //   this.firestore,
   //   'AshishCollection_24'

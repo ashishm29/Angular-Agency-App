@@ -84,3 +84,14 @@ export class Expense {
   comment!: string;
   amount!: number;
 }
+
+export class RecoveryHistory {
+  id!: string;
+  salesman!: string;
+  createdDate!: Date;
+  fromDate!: Date;
+  toDate!: Date;
+  totalAmount!: number;
+  receivedAmount!: number;
+  pendingAmount!: number;
+}

@@ -66,6 +66,7 @@ import { ExpenseManagerComponent } from './expense-manager/expense-manager.compo
 import { SalesmanAttendanceComponent } from './expense-manager/salesman-attendance/salesman-attendance.component';
 import { DatePickerRendererComponent } from './renderer/date-picker-renderer/date-picker-renderer.component';
 import { ExpenseComponent } from './expense-manager/expense/expense.component';
+import { RecoveryFromSalesmanComponent } from './dashboard/recovery-from-salesman/recovery-from-salesman.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -112,6 +113,7 @@ const MY_DATE_FORMAT = {
     SalesmanAttendanceComponent,
     DatePickerRendererComponent,
     ExpenseComponent,
+    RecoveryFromSalesmanComponent,
   ],
   imports: [
     BrowserModule,

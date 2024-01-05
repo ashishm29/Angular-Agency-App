@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { getDocs } from '@firebase/firestore';
-import { PaymentMode, RecoveryDetails } from '../models/route';
+import { PaymentMode, RecoveryDetails, RecoveryHistory } from '../models/route';
 import {
   QueryConstraint,
   addDoc,
@@ -40,7 +40,6 @@ export class RecoveryService {
   }
 
   addRecoveryDetails(details: RecoveryDetails) {
-    this.logService.info('Add Recovery', details);
     return addDoc(this.firestoreService.recoveryCollectionInstance, details);
   }
 
@@ -52,8 +51,6 @@ export class RecoveryService {
     let collectionData: RecoveryDetails[] = [];
     const queryConditions: QueryConstraint[] = [];
 
-    console.log('start : ' + fromDate);
-    console.log('end : ' + toDate);
     if (billNumber) {
       queryConditions.push(where('billNumber', '==', billNumber));
     }
@@ -107,5 +104,48 @@ export class RecoveryService {
         ...details,
       }
     );
+  }
+
+  addRecoveryFromSalesman(details: RecoveryHistory) {
+    return addDoc(
+      this.firestoreService.recoveryHistoryCollectionInstance,
+      details
+    );
+  }
+
+  async getRecoveryFromSalesman() {
+    let resultData: RecoveryHistory[] = [];
+    const docsSnap = await getDocs(
+      this.firestoreService.recoveryHistoryCollectionInstance
+    );
+    docsSnap.forEach((doc) => {
+      console.log(doc.data());
+      resultData.push({
+        ...doc.data(),
+        id: doc.id,
+      } as RecoveryHistory);
+    });
+    return resultData;
+  }
+  updateRecoveryFromSalesman(details: RecoveryHistory) {
+    return updateDoc(
+      doc(
+        this.firestoreService.firestore,
+        AppConstant.RECOVERY_HISTORY_COLLECTION_NAME,
+        details.id
+      ),
+      {
+        ...details,
+      }
+    );
+  }
+
+  deleteRecoveryFromSalesman(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.RECOVERY_HISTORY_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
   }
 }

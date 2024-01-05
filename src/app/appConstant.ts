@@ -10,6 +10,8 @@ export class AppConstant {
   static readonly LOGGING_COLLECTION_NAME: string = 'LoggingCollection';
   static readonly EXPENSE_COLLECTION_NAME: string = 'ExpenseCollection';
   static readonly ATTENDANCE_COLLECTION_NAME: string = 'AttendanceCollection';
+  static readonly RECOVERY_HISTORY_COLLECTION_NAME: string =
+    'RecoveryHistoryCollection';
 
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
   static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';
@@ -51,6 +53,9 @@ export class AppConstant {
 
   static readonly RECORD_UPDATED_SUCCESS_MSG: string =
     'Record updated Successfully';
+
+  static readonly RECORD_DELETED_SUCCESS_MSG: string =
+    'Record deleted Successfully';
 
   static readonly ROUTE_UPDATED_SUCCESS_MSG: string =
     'Route updated Successfully';

@@ -4,6 +4,7 @@ import { RecoveryService } from '../services/recovery.service';
 import { ModeWiseRecovery, RecoveryDetails } from '../models/route';
 import { UserService } from '../services/user.service';
 import { PaymentModeService } from '../services/paymentMode.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,8 @@ export class DashboardComponent implements OnInit {
   toDate!: UntypedFormControl;
   salesmanSelected!: UntypedFormControl;
   paymentModeSelected!: UntypedFormControl;
+  totalAmount!: number;
+  isAdmin!: boolean;
 
   recoveryFixedCollection: RecoveryDetails[] = [];
   recoveryCollection: RecoveryDetails[] = [];
@@ -37,6 +40,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private recoveryService: RecoveryService,
     private userService: UserService,
+    private authService: AuthService,
     private paymentModeService: PaymentModeService
   ) {}
 
@@ -48,6 +52,8 @@ export class DashboardComponent implements OnInit {
     this.paymentModeSelected = new UntypedFormControl('ALL');
     this.getPaymentModes();
     this.onfetchRecoveryDetails();
+
+    this.isAdmin = this.authService.isAdmin();
   }
 
   onfetchRecoveryDetails() {
@@ -101,11 +107,15 @@ export class DashboardComponent implements OnInit {
   }
 
   getTotalAmountReceived() {
-    return this.recoveryCollection
+    this.totalAmount = 0;
+
+    this.totalAmount = this.recoveryCollection
       .map((t) => {
         return +t.amountReceived;
       })
       .reduce((acc, value) => acc + value, 0);
+
+    return this.totalAmount;
   }
 
   getTotalModeWiseAmountReceived() {
