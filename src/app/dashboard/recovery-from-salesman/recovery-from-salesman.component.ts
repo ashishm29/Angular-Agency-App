@@ -8,6 +8,8 @@ import { AppConstant } from 'src/app/appConstant';
 import { RecoveryService } from 'src/app/services/recovery.service';
 import { DatePipe } from '@angular/common';
 import { ButtonRendererComponent } from 'src/app/renderer/button-renderer/button-renderer.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-recovery-from-salesman',
@@ -24,13 +26,15 @@ export class RecoveryFromSalesmanComponent implements OnInit {
   @Input() fromDate!: Date | any;
   @Input() toDate!: Date | any;
   @Input() salesman!: string | any;
+  @Input() paymentMode!: string | any;
   @Input() totalAmount!: number | any;
 
   constructor(
     private userService: UserService,
     private recoveryService: RecoveryService,
     private snackbarService: SnackBarService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    public dialog: MatDialog
   ) {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
@@ -63,6 +67,7 @@ export class RecoveryFromSalesmanComponent implements OnInit {
   public defaultColDef: ColDef = {
     editable: false,
     filter: true,
+    floatingFilter: true,
   };
 
   colDefs: ColDef[] = [
@@ -72,7 +77,6 @@ export class RecoveryFromSalesmanComponent implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
-      floatingFilter: true,
     },
     {
       field: 'fromDate',
@@ -136,18 +140,20 @@ export class RecoveryFromSalesmanComponent implements OnInit {
       minWidth: 100,
       cellRenderer: 'buttonRenderer',
       cellRendererParams: {
-        onClick: this.onUpdate.bind(this),
+        onClick: this.openUpdateConfirmationDialog.bind(this),
         label: 'Update',
       },
+      floatingFilter: false,
     },
     {
       headerName: '',
       minWidth: 100,
       cellRenderer: 'buttonRenderer',
       cellRendererParams: {
-        onClick: this.onDelete.bind(this),
+        onClick: this.openDeleteConfirmationDialog.bind(this),
         label: 'X',
       },
+      floatingFilter: false,
     },
   ];
 
@@ -171,6 +177,24 @@ export class RecoveryFromSalesmanComponent implements OnInit {
   }
 
   onAdd() {
+    this.receivedAmount.reset();
+    this.pendingAmount.reset();
+    if (this.paymentMode.value !== 'Cash') {
+      this.snackbarService.openSnackBar(
+        AppConstant.ONLY_CASH_ENTRIES_ALLOWED_MSG,
+        AppConstant.SAVE_ACTION
+      );
+      return;
+    }
+
+    if (this.salesman.value === 'ALL') {
+      this.snackbarService.openSnackBar(
+        AppConstant.SELECT_SALESMAN_MSG,
+        AppConstant.SAVE_ACTION
+      );
+      return;
+    }
+
     if (
       this.fromDate.value &&
       this.toDate.value &&
@@ -188,6 +212,19 @@ export class RecoveryFromSalesmanComponent implements OnInit {
         totalAmount: this.totalAmount,
       } as unknown as RecoveryHistory;
 
+      let salemanEntries = this.collection.filter(
+        (item) => item.salesman === param.salesman
+      );
+
+      if (this.checkDateOverlap(param.fromDate, param.toDate, salemanEntries)) {
+        this.snackbarService.openSnackBar(
+          AppConstant.RECORD_ALREADY_PRESENT_FOR_DATE_RANGE_MSG,
+          AppConstant.SAVE_ACTION
+        );
+
+        return;
+      }
+
       this.recoveryService
         .addRecoveryFromSalesman(param)
         .then(() => {
@@ -197,11 +234,32 @@ export class RecoveryFromSalesmanComponent implements OnInit {
           );
 
           this.getRecords();
+          this.receivedAmount.reset();
         })
         .catch((err) => {
           this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
         });
     }
+  }
+
+  checkDateOverlap(
+    newStartDate: Date,
+    newEndDate: Date,
+    salemanEntries: any
+  ): boolean {
+    for (const entry of salemanEntries) {
+      if (
+        (newStartDate >= entry.fromDate.toDate() &&
+          newStartDate <= entry.toDate.toDate()) ||
+        (newEndDate >= entry.fromDate.toDate() &&
+          newEndDate <= entry.toDate.toDate()) ||
+        (newStartDate <= entry.fromDate.toDate() &&
+          newEndDate >= entry.toDate.toDate())
+      ) {
+        return true; // Overlapping date range found
+      }
+    }
+    return false; // No overlapping date range found
   }
 
   getRecords() {
@@ -261,5 +319,41 @@ export class RecoveryFromSalesmanComponent implements OnInit {
           this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
         });
     }
+  }
+
+  openDeleteConfirmationDialog(element: any): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        key: AppConstant.SALESMAN_RECOVERY_DELETE,
+        object: element.rowData,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.delete == AppConstant.YES_ACTION) {
+        console.log(AppConstant.YES_ACTION);
+        this.onDelete(element);
+      } else {
+        console.log(AppConstant.NO_ACTION);
+      }
+    });
+  }
+
+  openUpdateConfirmationDialog(element: any): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        key: AppConstant.SALESMAN_RECOVERY_UPDATE,
+        object: element.rowData,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.delete == AppConstant.YES_ACTION) {
+        console.log(AppConstant.YES_ACTION);
+        this.onUpdate(element);
+      } else {
+        console.log(AppConstant.NO_ACTION);
+      }
+    });
   }
 }

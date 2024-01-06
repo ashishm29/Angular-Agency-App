@@ -76,6 +76,8 @@ export class AppConstant {
 
   static readonly ROUTE: string = 'Route';
   static readonly STORE: string = 'Store';
+  static readonly SALESMAN_RECOVERY_DELETE: string = 'Salesman-recovery-delete';
+  static readonly SALESMAN_RECOVERY_UPDATE: string = 'Salesman-recovery-update';
   static readonly BILL: string = 'Bill';
   static readonly RECOVERY: string = 'Recovery';
   static readonly ATTENDANCE: string = 'Attendance';
@@ -108,4 +110,12 @@ export class AppConstant {
 
   static readonly ENTER_VALID_DATES_MSG: string =
     'Please enter valid date to search..';
+
+  static readonly RECORD_ALREADY_PRESENT_FOR_DATE_RANGE_MSG: string =
+    'Record already present for this salesman for this Date range.';
+
+  static readonly ONLY_CASH_ENTRIES_ALLOWED_MSG: string =
+    'Only CASH Payment Mode entries are allowed.';
+
+  static readonly SELECT_SALESMAN_MSG: string = 'Please select SALESMAN.';
 }

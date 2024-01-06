@@ -42,6 +42,22 @@ export class DeleteConfirmationDialogComponent implements OnInit {
       this.message = `Do you want to add absent entry for Salesman : ${
         this.data.object.salesman
       } , Date : ${this.data.object.absentDate.toDateString()} `;
+    } else if (this.data.key === AppConstant.SALESMAN_RECOVERY_DELETE) {
+      this.message = `Do you want to delete record for  SALESMAN: ${
+        this.data.object.salesman
+      } , FROM DATE : ${this.data.object.fromDate
+        .toDate()
+        .toDateString()}  , TO DATE : ${this.data.object.toDate
+        .toDate()
+        .toDateString()} `;
+    } else if (this.data.key === AppConstant.SALESMAN_RECOVERY_UPDATE) {
+      this.message = `Do you want to update record for  SALESMAN: ${
+        this.data.object.salesman
+      } , FROM DATE : ${this.data.object.fromDate
+        .toDate()
+        .toDateString()}  , TO DATE : ${this.data.object.toDate
+        .toDate()
+        .toDateString()} `;
     }
   }
 

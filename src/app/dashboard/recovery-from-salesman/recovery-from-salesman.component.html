@@ -8,6 +8,7 @@
     <mat-label>Received amount</mat-label>
     <input
       matInput
+      type="number"
       [formControl]="receivedAmount"
       (keyup)="OnAmountReceivedChanged()"
       toUppercase
@@ -16,7 +17,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Pending amount</mat-label>
-    <input matInput [formControl]="pendingAmount" toUppercase />
+    <input matInput type="number" [formControl]="pendingAmount" toUppercase />
   </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit" (click)="onAdd()">
