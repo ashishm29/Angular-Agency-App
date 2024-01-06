@@ -1,10 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RouteService } from 'src/app/services/route.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -25,6 +31,7 @@ export class BillDataEntryComponent implements OnInit {
   filteredOptions: Observable<StoreDetails[]> | undefined;
   isClicked: boolean = false;
   buttonText: string = AppConstant.ADD_BILL_BTN_TEXT;
+  localRouteValue!: string;
 
   constructor(
     public storeService: StoreService,
@@ -32,12 +39,17 @@ export class BillDataEntryComponent implements OnInit {
     private routeService: RouteService,
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
-    private validationDialogService: ValidationDialogService
+    private validationDialogService: ValidationDialogService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     this.initialize();
     this.onFetchRoute();
+
+    if (this.localRouteValue) {
+      this.onRouteSelectionChange(this.localRouteValue);
+    }
   }
 
   onAddBill() {
@@ -106,8 +118,14 @@ export class BillDataEntryComponent implements OnInit {
   }
 
   initialize() {
+    this.localRouteValue = this.localStorageService.getKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY
+    ) as string;
+
     this.billFormGroup = new UntypedFormGroup({
-      route: new UntypedFormControl('', [Validators.required]),
+      route: new UntypedFormControl(this.localRouteValue, [
+        Validators.required,
+      ]),
       storeName: new UntypedFormControl('', [Validators.required]),
       billNumber: new UntypedFormControl('', [Validators.required]),
       billDate: new UntypedFormControl('', [Validators.required]),
@@ -157,7 +175,7 @@ export class BillDataEntryComponent implements OnInit {
     );
   }
 
-  onBillForm_RouteSelectionChange(selecetdValue: string) {
+  onRouteSelectionChange(selecetdValue: string) {
     console.log(selecetdValue);
     if (selecetdValue) {
       this.billFormGroup.get('storeName')?.reset();

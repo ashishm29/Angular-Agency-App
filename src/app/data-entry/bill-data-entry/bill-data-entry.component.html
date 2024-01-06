@@ -4,7 +4,7 @@
       <mat-label>Route Name</mat-label>
       <mat-select
         formControlName="route"
-        (selectionChange)="onBillForm_RouteSelectionChange($event.value)"
+        (selectionChange)="onRouteSelectionChange($event.value)"
       >
         <div *ngFor="let route of routeCollection">
           <mat-option value="{{ route.routeName }}">{{
