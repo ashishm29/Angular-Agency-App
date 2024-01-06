@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { FirestoreService } from './firestore.service';
 import { User } from '../models/authentication';
-import { getDocs, query } from '@angular/fire/firestore';
+import { addDoc, getDocs, query } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +22,9 @@ export class UserService {
       } as User);
     });
     return responseCollection;
+  }
+
+  addUser(details: User) {
+    return addDoc(this.firestoreService.userCollectionInstance, details);
   }
 }

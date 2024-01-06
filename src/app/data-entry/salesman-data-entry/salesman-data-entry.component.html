@@ -1,0 +1,56 @@
+<form [formGroup]="formGroup" #formDirective="ngForm">
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter User Name</mat-label>
+      <input matInput formControlName="username" toUppercase />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter User Mobile Number</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="mobileNumber"
+        toUppercase
+      />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter User Password</mat-label>
+      <input matInput formControlName="password" />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter User Salary</mat-label>
+      <input matInput type="number" formControlName="salary" toUppercase />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Select User Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option value="salesman">Salesman</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <p align="center">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="formGroup.invalid"
+      (click)="onAddUser()"
+    >
+      Add User
+    </button>
+  </p>
+</form>

@@ -27,6 +27,10 @@ export class DataEntryComponent implements OnInit {
         this.router.navigate(['billdataentry'], {
           relativeTo: this.activatedRoute,
         });
+      } else if (selecetdValue === 'salesman') {
+        this.router.navigate(['salesmandataentry'], {
+          relativeTo: this.activatedRoute,
+        });
       }
     }
   }
