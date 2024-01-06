@@ -177,8 +177,6 @@ export class RecoveryFromSalesmanComponent implements OnInit {
   }
 
   onAdd() {
-    this.receivedAmount.reset();
-    this.pendingAmount.reset();
     if (this.paymentMode.value !== 'Cash') {
       this.snackbarService.openSnackBar(
         AppConstant.ONLY_CASH_ENTRIES_ALLOWED_MSG,
@@ -235,6 +233,7 @@ export class RecoveryFromSalesmanComponent implements OnInit {
 
           this.getRecords();
           this.receivedAmount.reset();
+          this.pendingAmount.reset();
         })
         .catch((err) => {
           this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
