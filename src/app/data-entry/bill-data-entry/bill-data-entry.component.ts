@@ -177,6 +177,10 @@ export class BillDataEntryComponent implements OnInit {
 
   onRouteSelectionChange(selecetdValue: string) {
     console.log(selecetdValue);
+    this.localStorageService.setKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY,
+      selecetdValue
+    );
     if (selecetdValue) {
       this.billFormGroup.get('storeName')?.reset();
       this.billFormGroup.get('billNumber')?.reset();
