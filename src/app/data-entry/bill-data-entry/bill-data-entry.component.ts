@@ -137,6 +137,8 @@ export class BillDataEntryComponent implements OnInit {
     if (this.billFormDirective) {
       this.billFormDirective.resetForm();
     }
+
+    this.storeNameValueChange();
   }
 
   onFetchRoute() {
@@ -155,14 +157,14 @@ export class BillDataEntryComponent implements OnInit {
     this.storeService.getStores(selecetdValue).then((result) => {
       if (result && result.length > 0) {
         this.storeCollection = result;
-        this.subscribeBill_StoreNameValueChange();
+        this.storeNameValueChange();
       } else {
         console.log(AppConstant.STORE_NOT_FOUND_MSG);
       }
     });
   }
 
-  subscribeBill_StoreNameValueChange() {
+  storeNameValueChange() {
     let routeControl = this.billFormGroup.controls['storeName'];
     this.filteredOptions = routeControl?.valueChanges.pipe(
       startWith(''),
