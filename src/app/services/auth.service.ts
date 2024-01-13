@@ -63,7 +63,7 @@ export class AuthService implements OnInit {
 
   autoLogin() {
     const userData: {
-      mobileNumber: string;
+      mobileNumber: number;
       password: string;
       id: string;
       role: string;

@@ -17,7 +17,7 @@ export class User {
   id!: string;
   username!: string;
   role!: string;
-  mobileNumber!: string;
+  mobileNumber!: number;
   password!: string;
   salary!: number;
 }

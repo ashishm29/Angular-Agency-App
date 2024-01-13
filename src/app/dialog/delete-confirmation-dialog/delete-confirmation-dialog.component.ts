@@ -58,6 +58,10 @@ export class DeleteConfirmationDialogComponent implements OnInit {
         .toDateString()}  , TO DATE : ${this.data.object.toDate
         .toDate()
         .toDateString()} `;
+    } else if (this.data.key === AppConstant.USER_DELETE) {
+      this.message = `Do you want to delete this user : ${this.data.object.username}`;
+    } else if (this.data.key === AppConstant.USER_UPDATE) {
+      this.message = `Do you want to update this user : ${this.data.object.username}`;
     }
   }
 

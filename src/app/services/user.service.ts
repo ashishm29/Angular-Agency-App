@@ -2,7 +2,15 @@ import { Injectable } from '@angular/core';
 
 import { FirestoreService } from './firestore.service';
 import { User } from '../models/authentication';
-import { addDoc, getDocs, query } from '@angular/fire/firestore';
+import {
+  addDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+} from '@angular/fire/firestore';
+import { AppConstant } from '../appConstant';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +34,27 @@ export class UserService {
 
   addUser(details: User) {
     return addDoc(this.firestoreService.userCollectionInstance, details);
+  }
+
+  updateUser(details: User) {
+    return updateDoc(
+      doc(
+        this.firestoreService.firestore,
+        AppConstant.USER_COLLECTION_NAME,
+        details.id
+      ),
+      {
+        ...details,
+      }
+    );
+  }
+
+  deleteUser(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.USER_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
   }
 }
