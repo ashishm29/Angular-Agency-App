@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AppConstant } from 'src/app/appConstant';
+import { User } from 'src/app/models/authentication';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -48,7 +49,8 @@ export class SalesmanDataEntryComponent implements OnInit {
   onAddUser() {
     let params = {
       ...this.formGroup.value,
-    };
+      salary: +this.formGroup.value.salary,
+    } as User;
 
     this.userService
       .addUser(params)
