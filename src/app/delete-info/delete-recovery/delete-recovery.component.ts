@@ -8,6 +8,7 @@ import { BillDetails, RecoveryDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
 import { RecoveryService } from 'src/app/services/recovery.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
+import { RecoveryExcelService } from 'src/app/services/ExcelExport/recovery-excel-service.service';
 
 @Component({
   selector: 'app-delete-recovery',
@@ -88,7 +89,8 @@ export class DeleteRecoveryComponent implements OnInit {
     public dialog: MatDialog,
     private recoveryService: RecoveryService,
     private billService: BillService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private excelService: RecoveryExcelService
   ) {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
@@ -201,5 +203,9 @@ export class DeleteRecoveryComponent implements OnInit {
     if (index >= 0) {
       this.openDeleteConfirmationDialog(params.rowData);
     }
+  }
+
+  exportToExcel() {
+    this.excelService.ExportReportExcel(this.collection, undefined, new Date());
   }
 }

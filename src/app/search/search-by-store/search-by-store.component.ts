@@ -14,7 +14,7 @@ import { RouteService } from 'src/app/services/route.service';
 import { StoreService } from 'src/app/services/store.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { dateConverter } from 'src/app/shared/dateConverter';
-import { ExcelService } from 'src/app/services/excel.service';
+import { BillExcelService } from 'src/app/services/ExcelExport/bill-excel.service';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
@@ -60,7 +60,7 @@ export class SearchByStoreComponent implements OnInit {
     public dialog: MatDialog,
     private authService: AuthService,
     private snackbarService: SnackBarService,
-    private excelService: ExcelService,
+    private excelService: BillExcelService,
     private datePipe: DatePipe,
     private localstorageService: LocalStorageService
   ) {}

@@ -1,15 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Borders, Workbook, Worksheet } from 'exceljs';
-import { BillDetails } from '../models/route';
 import * as FileSaver from 'file-saver';
-import { DatePipe } from '@angular/common';
-import { AppConstant } from '../appConstant';
+import { AppConstant } from 'src/app/appConstant';
+import { RecoveryDetails } from 'src/app/models/route';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExcelService {
-  list!: BillDetails;
+export class RecoveryExcelService {
+  list!: RecoveryDetails;
   workbook!: Workbook;
   worksheet!: Worksheet;
 
@@ -41,45 +41,51 @@ export class ExcelService {
 
   constructor(private datePipe: DatePipe) {}
 
-  ExportBillReportExcel(
-    bills: BillDetails[],
-    fromDate: string,
-    toDate: string
+  ExportReportExcel(
+    records: RecoveryDetails[],
+    fromDate: Date | undefined,
+    toDate: Date
   ) {
     this.workbook = new Workbook();
-    this.worksheet = this.workbook.addWorksheet('Bill Report');
+    this.worksheet = this.workbook.addWorksheet('Recovery Report');
     this.addFilterRows(fromDate, toDate);
 
-    let header = this.prepareBillReportHeader();
+    let header = this.prepareReportHeader();
     this.addHeader(header);
 
-    bills.forEach((d) => {
-      let billdate;
+    records.forEach((d: any) => {
+      let recoveryDate;
       try {
-        billdate = this.datePipe.transform(d.billDate.toDate(), 'dd-MM-yyyy');
+        recoveryDate = this.datePipe.transform(
+          d.recoveryDate.toDate(),
+          'dd-MM-yyyy'
+        );
       } catch {
-        billdate = d.billDate;
+        recoveryDate = d.recoveryDate;
       }
 
       let values = {
         route: d.route,
         storeName: d.storeName.storeName,
         billNumber: d.billNumber,
-        billDate: billdate,
         billAmount: d.billAmount,
-        receivedAmount: +d.billAmount - +d.pendingAmount,
+        receiptNumber: d.receiptNumber,
+        modeOfPayment: d.modeOfPayment,
+        amountReceived: +d.amountReceived,
         pendingAmount: d.pendingAmount,
+        recoveryDate: recoveryDate,
+        recoveryAgent: d.recoveryAgent,
       };
       this.addDetails(values);
     });
 
     this.adjustColumnWidth();
 
-    let totalBillAmt = bills.reduce(
+    let totalBillAmt = records.reduce(
       (prevTotal, newVal) => prevTotal + +newVal.billAmount,
       0
     );
-    let totalPendingAmt = bills.reduce(
+    let totalPendingAmt = records.reduce(
       (prevTotal, newVal) => +prevTotal + +newVal.pendingAmount,
       0
     );
@@ -89,14 +95,17 @@ export class ExcelService {
       route: 'Total :',
       storeName: '',
       billNumber: '',
-      billDate: '',
       billAmount: totalBillAmt,
-      receivedAmount: totalReceivedAmt,
+      receiptNumber: '',
+      modeOfPayment: '',
+      amountReceived: totalReceivedAmt,
       pendingAmount: totalPendingAmt,
+      recoveryDate: '',
+      recoveryAgent: '',
     };
 
     this.addFooter(values);
-    this.exportToExcel('_BillReport');
+    this.exportToExcel('_RecoveryReport');
   }
 
   exportToExcel(fileName: string) {
@@ -114,24 +123,30 @@ export class ExcelService {
     });
   }
 
-  prepareBillReportHeader() {
+  prepareReportHeader() {
     return [
       'Route',
       'Store Name',
       'Bill Number',
-      'Bill Date',
       'Bill Amount',
-      'Received Amount',
+      'Receipt Number',
+      'Mode of Payment',
+      'Amount Received',
       'Pending Amount',
+      'Recovery Date',
+      'Recovery Agent',
     ];
   }
 
-  addFilterRows(fromDate: string, toDate: string) {
+  addFilterRows(fromDate: Date | undefined, toDate: Date) {
     let row = this.worksheet.addRow([]);
-    row = this.worksheet.addRow(['FROM DATE : ', fromDate]);
+    row = this.worksheet.addRow([
+      'FROM DATE : ',
+      fromDate ? fromDate!.toDateString() : 'FROM START',
+    ]);
     row.getCell(1).font = this.fontWithBoldCell;
     row.getCell(2).font = this.fontWithoutBoldCell;
-    row = this.worksheet.addRow(['TO DATE : ', toDate]);
+    row = this.worksheet.addRow(['TO DATE : ', toDate.toDateString()]);
     row.getCell(1).font = this.fontWithBoldCell;
     row.getCell(2).font = this.fontWithoutBoldCell;
     row = this.worksheet.addRow([]);

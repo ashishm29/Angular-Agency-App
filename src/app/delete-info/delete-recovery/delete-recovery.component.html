@@ -1,3 +1,13 @@
+<button
+  mat-raised-button
+  color="primary"
+  style="margin: 1em"
+  [disabled]="this.collection.length == 0"
+  (click)="exportToExcel()"
+>
+  Export to Excel
+</button>
+
 <div class="content">
   <!-- The AG Grid component, with Dimensions, CSS Theme, Row Data, and Column Definition -->
   <ag-grid-angular

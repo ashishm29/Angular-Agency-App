@@ -5,6 +5,7 @@ import { ModeWiseRecovery, RecoveryDetails } from '../models/route';
 import { UserService } from '../services/user.service';
 import { PaymentModeService } from '../services/paymentMode.service';
 import { AuthService } from '../services/auth.service';
+import { RecoveryExcelService } from '../services/ExcelExport/recovery-excel-service.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,7 +42,8 @@ export class DashboardComponent implements OnInit {
     private recoveryService: RecoveryService,
     private userService: UserService,
     private authService: AuthService,
-    private paymentModeService: PaymentModeService
+    private paymentModeService: PaymentModeService,
+    private excelService: RecoveryExcelService
   ) {}
 
   ngOnInit(): void {
@@ -182,5 +184,15 @@ export class DashboardComponent implements OnInit {
 
     this.recoveryCollection = this.sortData(result);
     this.recoveryModeWiseCollection = this.GroupByPaymentMode(result);
+  }
+
+  exportToExcel() {
+    let fromDate = this.fromDate.value;
+    let toDate = this.toDate.value;
+    this.excelService.ExportReportExcel(
+      this.recoveryCollection,
+      fromDate,
+      toDate
+    );
   }
 }
