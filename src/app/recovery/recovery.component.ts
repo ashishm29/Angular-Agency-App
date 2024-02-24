@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { AppConstant } from '../appConstant';
 import {
   BillDetails,
@@ -68,7 +72,9 @@ export class RecoveryComponent implements OnInit {
     ) as string;
 
     this.recoveryFormGroup = new UntypedFormGroup({
-      route: new UntypedFormControl(this.localRouteValue, [Validators.required]),
+      route: new UntypedFormControl(this.localRouteValue, [
+        Validators.required,
+      ]),
       storeName: new UntypedFormControl('', [Validators.required]),
       address: new UntypedFormControl(),
       billNumber: new UntypedFormControl('', [Validators.required]),
@@ -189,7 +195,7 @@ export class RecoveryComponent implements OnInit {
       mobileNo: selectedStore.mobileNo,
     });
 
-    this.getBillsForSelectedStore(selectedStore.storeName);
+    this.getBillsForSelectedStore(selectedStore.storeName, selectedStore.route);
   }
 
   onBillSelected(selectedBill: string) {
@@ -207,10 +213,10 @@ export class RecoveryComponent implements OnInit {
     }
   }
 
-  getBillsForSelectedStore(selecetdValue: string) {
+  getBillsForSelectedStore(selecetdValue: string, route: string) {
     this.billCollection = [];
     this.billService
-      .getFilteredBillsByStoreName(selecetdValue)
+      .getFilteredBillsByStoreName(selecetdValue, route)
       .then((result) => {
         if (result && result.length > 0) {
           this.billCollection = this.sortData(result);

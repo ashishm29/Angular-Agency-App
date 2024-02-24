@@ -66,8 +66,9 @@ export class BillService {
     return deleteDoc(docRef);
   }
 
-  async getFilteredBillsByStoreName(storeName: string) {
+  async getFilteredBillsByStoreName(storeName: string, route: string) {
     const queryConditions: QueryConstraint[] = [
+      where('route', '==', route),
       where('storeName.storeName', '==', storeName),
       where('pendingAmount', '>', 0),
       orderBy('pendingAmount', 'asc'),
