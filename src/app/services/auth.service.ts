@@ -10,12 +10,16 @@ import {
 import { User } from '../models/authentication';
 import { FirestoreService } from './firestore.service';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService implements OnInit {
-  constructor(public firestoreService: FirestoreService) {}
+  constructor(
+    public firestoreService: FirestoreService,
+    private router: Router
+  ) {}
 
   userSubject = new BehaviorSubject<User>(null!);
   _users: User[] = [];
@@ -61,7 +65,7 @@ export class AuthService implements OnInit {
     return responseCollection;
   }
 
-  autoLogin() {
+  async autoLogin() {
     const userData: {
       mobileNumber: number;
       password: string;
@@ -75,10 +79,38 @@ export class AuthService implements OnInit {
       return;
     }
 
-    if (userData) {
-      this.userDetails = userData;
-      this.userSubject.next(userData);
-    }
+    this.validateUser(userData).then((result) => {
+      if (result) {
+        if (userData) {
+          this.userDetails = userData;
+          this.userSubject.next(userData);
+        }
+      } else {
+        localStorage.removeItem('userData');
+        this.router.navigate(['/logindetails']);
+      }
+    });
+  }
+
+  async validateUser(details: User) {
+    const queryConditions: QueryConstraint[] = [];
+    let isValidUser = false;
+    queryConditions.push(where('mobileNumber', '==', details.mobileNumber));
+
+    const q = await query(
+      this.firestoreService.userCollectionInstance,
+      ...queryConditions
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      let details = doc.data();
+      if (details) {
+        isValidUser = true;
+      }
+    });
+
+    return isValidUser;
   }
 
   isAdmin() {
