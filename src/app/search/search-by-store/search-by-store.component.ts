@@ -83,6 +83,8 @@ export class SearchByStoreComponent implements OnInit {
     );
     if (route) {
       this.onFetchStoreDetails(route);
+    } else {
+      this.onFetchStoreDetails('');
     }
 
     let store = this.localstorageService.getKeyValue(
