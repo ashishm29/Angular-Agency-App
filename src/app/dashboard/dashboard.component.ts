@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
     'receiptNo',
     'paymentmode',
     'recoveryAmount',
+    'pendingAmount',
   ];
 
   recoveryModeWisedisplayedColumns: string[] = ['paymentMode', 'amount'];
