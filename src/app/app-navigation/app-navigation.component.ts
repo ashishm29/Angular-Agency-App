@@ -6,6 +6,9 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../models/authentication';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+import { AppConstant } from '../appConstant';
+import { DeleteConfirmationDialogComponent } from '../dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-app-navigation',
@@ -28,7 +31,8 @@ export class AppNavigationComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {}
   ngOnInit(): void {
     this.authService.userSubject.subscribe((userdata: User) => {
@@ -48,5 +52,20 @@ export class AppNavigationComponent implements OnInit {
   onLogout() {
     this.authService.onLogout();
     this.router.navigate(['/']);
+  }
+
+  openDeleteConfimationDialog(): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: { key: AppConstant.LOGOUT },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.delete == AppConstant.YES_ACTION) {
+        console.log(AppConstant.YES_ACTION);
+        this.onLogout();
+      } else {
+        console.log(AppConstant.NO_ACTION);
+      }
+    });
   }
 }

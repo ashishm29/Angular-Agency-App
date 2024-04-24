@@ -62,6 +62,8 @@ export class DeleteConfirmationDialogComponent implements OnInit {
       this.message = `Do you want to delete this user : ${this.data.object.username}`;
     } else if (this.data.key === AppConstant.USER_UPDATE) {
       this.message = `Do you want to update this user : ${this.data.object.username}`;
+    } else if (this.data.key === AppConstant.LOGOUT) {
+      this.message = `Do you want to Logout ?`;
     }
   }
 

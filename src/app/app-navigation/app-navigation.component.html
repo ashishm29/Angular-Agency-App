@@ -68,7 +68,7 @@
       <a
         mat-list-item
         *ngIf="isAuthenticate"
-        (click)="drawer.toggle(); onLogout()"
+        (click)="drawer.toggle(); openDeleteConfimationDialog()"
         >Logout</a
       >
     </mat-nav-list>
@@ -149,7 +149,7 @@
           mat-button
           *ngIf="isAuthenticate"
           routerLinkActive="active-link"
-          (click)="onLogout()"
+          (click)="openDeleteConfimationDialog()"
           >Logout</a
         >
       </div>

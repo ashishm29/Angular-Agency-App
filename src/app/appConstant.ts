@@ -83,6 +83,7 @@ export class AppConstant {
   static readonly BILL: string = 'Bill';
   static readonly RECOVERY: string = 'Recovery';
   static readonly ATTENDANCE: string = 'Attendance';
+  static readonly LOGOUT: string = 'Logout';
 
   static readonly ADD_STORE_VALIDATION: string =
     'Store with entered mobile number already exist.';
