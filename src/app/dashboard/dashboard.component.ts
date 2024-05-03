@@ -170,7 +170,9 @@ export class DashboardComponent implements OnInit {
       result = this.recoveryFixedCollection;
     } else {
       result = this.recoveryFixedCollection.filter(
-        (c) => c.recoveryAgent == this.salesmanSelected.value
+        (c) =>
+          c.recoveryAgent.toLowerCase() ==
+          this.salesmanSelected.value.toLowerCase()
       );
     }
 
