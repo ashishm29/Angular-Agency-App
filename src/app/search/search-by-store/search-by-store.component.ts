@@ -333,9 +333,12 @@ export class SearchByStoreComponent implements OnInit {
             filterResult.filter((c) => !c.isRedBill && !c.isOrangeBill)
           );
 
+          let soredRedBills = this.sortData(oldRedBills);
+          let soredOrangeBills = this.sortData(oldOrangeBills);
+
           let totalBills: BillDetails[] = [];
-          totalBills.push(...oldRedBills);
-          totalBills.push(...oldOrangeBills);
+          totalBills.push(...soredRedBills);
+          totalBills.push(...soredOrangeBills);
           totalBills.push(...soredBills);
           this.billCollection = totalBills;
         } else {
@@ -356,6 +359,24 @@ export class SearchByStoreComponent implements OnInit {
           return <any>a.billDate.toDate() - <any>b.billDate.toDate();
         } else {
           return a.storeName.storeName < b.storeName.storeName ? -1 : 1;
+        }
+      } catch {
+        return 0;
+      }
+    });
+  }
+
+  sortColoredData(result: BillDetails[]) {
+    return result.sort((a, b) => {
+      try {
+        if (a.storeName.route === b.storeName.route) {
+          if (a.storeName.storeName === b.storeName.storeName) {
+            return <any>a.billDate.toDate() - <any>b.billDate.toDate();
+          } else {
+            return a.storeName.storeName < b.storeName.storeName ? -1 : 1;
+          }
+        } else {
+          return a.storeName.route < b.storeName.route ? -1 : 1;
         }
       } catch {
         return 0;
