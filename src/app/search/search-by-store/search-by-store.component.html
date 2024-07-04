@@ -182,7 +182,9 @@
       </div>
     </td>
     <td mat-footer-cell *matFooterCellDef>
-      {{ getTotalPendingAmount() | currency : "₹" }}
+      <span *ngIf="isAdmin">
+        {{ getTotalPendingAmount() | currency : "₹" }}
+      </span>
     </td>
   </ng-container>
 
