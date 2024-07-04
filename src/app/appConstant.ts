@@ -13,6 +13,8 @@ export class AppConstant {
   static readonly RECOVERY_HISTORY_COLLECTION_NAME: string =
     'RecoveryHistoryCollection';
 
+  static readonly ORDER_COLLECTION_NAME: string = 'OrderCollection';
+
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
   static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';
   static readonly DATE_TIME_FORMAT_PLAIN: string = 'yyyyMMddHHmmss';
@@ -24,6 +26,7 @@ export class AppConstant {
   static readonly YES_ACTION: string = 'Yes';
   static readonly NO_ACTION: string = 'No';
   static readonly ERROR_ACTION: string = 'Error';
+  static readonly ADD_ACTION: string = 'Add';
 
   static readonly BILL_ADDED_SUCCESS_MSG: string = 'Bill added Successfully';
   static readonly STORE_ADDED_SUCCESS_MSG: string = 'Store added Successfully';
@@ -43,6 +46,9 @@ export class AppConstant {
     'Store deleted Successfully';
   static readonly RECOVERY_DELETED_SUCCESS_MSG: string =
     'Recovery deleted Successfully';
+
+  static readonly ORDER_ADDED_SUCCESS_MSG: string =
+    'Order added Successfully';
 
   static readonly ROUTE_NOT_FOUND_MSG: string = 'No Route details found...';
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
@@ -121,4 +127,7 @@ export class AppConstant {
     'Only CASH Payment Mode entries are allowed.';
 
   static readonly SELECT_SALESMAN_MSG: string = 'Please select SALESMAN.';
+
+  static readonly PLEASE_SELECT_STORE: string =
+    'Please select store before adding item.';
 }

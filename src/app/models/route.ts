@@ -95,3 +95,14 @@ export class RecoveryHistory {
   receivedAmount!: number;
   pendingAmount!: number;
 }
+
+export class Order {
+  orderId!: string;
+  store!: StoreDetails;
+  createdDate!: Date;
+  //items!: string[];
+}
+
+export class itemDetail {
+  item!: string;
+}

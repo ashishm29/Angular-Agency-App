@@ -99,7 +99,6 @@ export class RecoveryExcelService {
       receiptNumber: '',
       modeOfPayment: '',
       amountReceived: totalReceivedAmt,
-      pendingAmount: totalPendingAmt,
       recoveryDate: '',
       recoveryAgent: '',
     };
@@ -132,7 +131,6 @@ export class RecoveryExcelService {
       'Receipt Number',
       'Mode of Payment',
       'Amount Received',
-      'Pending Amount',
       'Recovery Date',
       'Recovery Agent',
     ];

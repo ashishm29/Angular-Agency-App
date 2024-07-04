@@ -60,6 +60,11 @@ export class FirestoreService {
     AppConstant.RECOVERY_HISTORY_COLLECTION_NAME
   );
 
+  orderCollectionInstance = collection(
+    this.firestore,
+    AppConstant.ORDER_COLLECTION_NAME
+  );
+
   // ashishCollectionInstance24 = collection(
   //   this.firestore,
   //   'AshishCollection_24'
