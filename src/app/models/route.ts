@@ -100,7 +100,7 @@ export class Order {
   orderId!: string;
   store!: StoreDetails;
   createdDate!: Date;
-  //items!: string[];
+  items!: itemDetail[];
 }
 
 export class itemDetail {

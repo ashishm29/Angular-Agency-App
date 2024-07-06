@@ -10,7 +10,11 @@ export class OrderService {
   constructor(public firestoreService: FirestoreService) {}
 
   add(details: Order) {
-    return addDoc(this.firestoreService.orderCollectionInstance, details);
+    var data = {
+      ...details,
+    };
+
+    return addDoc(this.firestoreService.orderCollectionInstance, data);
   }
 
   // async get() {

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
-  FormGroup,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators,
 } from '@angular/forms';
 import { Order, Route, StoreDetails, itemDetail } from '../models/route';
 import { Observable, map, startWith } from 'rxjs';
@@ -14,10 +12,10 @@ import { StoreService } from '../services/store.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { AppConstant } from '../appConstant';
 import { ColDef } from 'ag-grid-community';
-import { runTransaction } from '@angular/fire/firestore';
 import { DatePipe } from '@angular/common';
 import { SnackBarService } from '../services/snackbar.service';
 import { OrderService } from '../services/order.service';
+import { ButtonRendererComponent } from '../renderer/button-renderer/button-renderer.component';
 
 @Component({
   selector: 'app-orders',
@@ -37,7 +35,6 @@ export class OrdersComponent implements OnInit {
 
   order: Order = new Order();
   collection: itemDetail[] = [];
-  // itemCollection!: itemDetail[];
   frameworkComponents: any;
   api!: any;
   gridOptions = {
@@ -55,14 +52,6 @@ export class OrdersComponent implements OnInit {
   };
 
   colDefs: ColDef[] = [
-    // {
-    //   field: 'orderId',
-    //   flex: 0.5,
-    //   minWidth: 200,
-    //   wrapText: true,
-    //   autoHeight: true,
-    //   editable: true,
-    // },
     {
       field: 'item',
       flex: 2,
@@ -94,7 +83,11 @@ export class OrdersComponent implements OnInit {
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
     private orderService: OrderService
-  ) {}
+  ) {
+    this.frameworkComponents = {
+      buttonRenderer: ButtonRendererComponent,
+    };
+  }
 
   ngOnInit(): void {
     this.item = new FormControl();
@@ -105,24 +98,7 @@ export class OrdersComponent implements OnInit {
       address: new UntypedFormControl(),
     });
 
-    this.initFormFields();
     this.onFetchRoute();
-  }
-
-  initFormFields() {
-    // let paidUnpaid = this.localstorageService.getKeyValue(
-    //   AppConstant.PAID_SEARCH_LOCAL_STORAGE_KEY
-    // );
-    // let route = this.localstorageService.getKeyValue(
-    //   AppConstant.ROUTE_LOCAL_STORAGE_KEY
-    // );
-    // if (route) {
-    //   this.onFetchStoreDetails(route);
-    // } else {
-    //   this.onFetchStoreDetails('');
-    // }
-    // this.route = new UntypedFormControl();
-    // this.storeName = new UntypedFormControl();
   }
 
   onRouteSelectionChange(selectedRoute: string) {
@@ -234,14 +210,6 @@ export class OrdersComponent implements OnInit {
         ) as unknown as Date;
       }
       this.collection.push({ item: this.item.value });
-
-      // this.collection?.items.push({
-      //   item: this.item.value,
-      //   // createdDate: '',
-      //   // orderId: this.generateOrderId(),
-      //   // store: this.selectedStore.id,
-      // } as unknown as Order);
-
       this.updateGrid();
       this.item.reset();
     }
@@ -253,9 +221,7 @@ export class OrdersComponent implements OnInit {
 
   onSaveOrder() {
     if (this.order) {
-      //this.order.items = this.collection;
-      //this.order.items = [];
-      //this.collection.forEach((record) => this.order.items.push(record.item));
+      this.order.items = this.collection;
 
       this.orderService
         .add(this.order)
@@ -264,8 +230,6 @@ export class OrdersComponent implements OnInit {
             AppConstant.ORDER_ADDED_SUCCESS_MSG,
             AppConstant.SAVE_ACTION
           );
-          // this.getRecords();
-          // this.initForm();
           this.item.reset();
           this.order = new Order();
           this.collection = [];
@@ -278,20 +242,10 @@ export class OrdersComponent implements OnInit {
 
   onDelete(record: any) {
     let element = record.rowData;
-    // this.expenseService
-    //   .deleteExpense(element.id)
-    //   .then(() => {
-    //     let index = this.collection.indexOf(element);
-    //     if (index >= 0) {
-    //       this.collection.splice(index, 1);
-    //       let array = this.collection.slice();
-    //       this.collection = array;
-    //       this.api.updateGridOptions({ rowData: this.collection });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
-    //   });
+    let index = this.collection.indexOf(element);
+    this.collection.splice(index, 1);
+    let array = this.collection.slice();
+    this.collection = array;
+    this.api.updateGridOptions({ rowData: this.collection });
   }
 }
