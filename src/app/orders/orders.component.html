@@ -62,10 +62,26 @@
 </div>
 
 <div class="centerFlex">
-  <form #formDirective="ngForm">
-    <mat-form-field style="width: 500px" appearance="outline">
-      <mat-label>Item</mat-label>
-      <input matInput [formControl]="item" toUppercase />
+  <form>
+    <mat-form-field appearance="outline">
+      <mat-label>Select Company Name</mat-label>
+      <mat-select
+        [formControl]="companyNameFormControl"
+        (selectionChange)="onCompanySelectionChange($event.value)"
+      >
+        <div *ngFor="let company of companyCollection">
+          <mat-option [value]="company">{{ company.companyName }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Select product Name</mat-label>
+      <mat-select [formControl]="productNameFormControl">
+        <div *ngFor="let product of productCollection">
+          <mat-option [value]="product">{{ product.productName }}</mat-option>
+        </div>
+      </mat-select>
     </mat-form-field>
 
     <button

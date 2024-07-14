@@ -25,6 +25,7 @@ import { SalesmanAttendanceComponent } from './expense-manager/salesman-attendan
 import { ExpenseComponent } from './expense-manager/expense/expense.component';
 import { SalesmanDataEntryComponent } from './data-entry/salesman-data-entry/salesman-data-entry.component';
 import { OrdersComponent } from './orders/orders.component';
+import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -134,6 +135,11 @@ const routes: Routes = [
       {
         path: 'salesmandataentry',
         component: SalesmanDataEntryComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'productdataentry',
+        component: ProductDataEntryComponent,
         canActivate: [AuthGuard],
       },
     ],

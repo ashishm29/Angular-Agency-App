@@ -101,8 +101,32 @@ export class Order {
   store!: StoreDetails;
   createdDate!: Date;
   items!: itemDetail[];
+  orderStatus!: orderStatus;
 }
 
 export class itemDetail {
-  item!: string;
+  productName!: string;
+  productId!: string;
+  companyId!: string;
+  companyName!: string;
+}
+
+export class ProductDetail {
+  id!: string;
+  productId!: string;
+  productName!: string;
+  companyId!: string;
+  companyName!: string;
+}
+
+export class CompanyDetail {
+  id!: string;
+  companyId!: string;
+  companyName!: string;
+}
+
+export enum orderStatus {
+  NEW = 0,
+  IN_PROCESS = 1,
+  DELIVERED = 2,
 }

@@ -14,6 +14,8 @@ export class AppConstant {
     'RecoveryHistoryCollection';
 
   static readonly ORDER_COLLECTION_NAME: string = 'OrderCollection';
+  static readonly PRODUCT_COLLECTION_NAME: string = 'ProductCollection';
+  static readonly COMPANY_COLLECTION_NAME: string = 'CompanyCollection';
 
   static readonly DEFAULT_DATE_TIME_FORMAT: string = 'MM/dd/YYYY';
   static readonly DATE_TIME_FORMAT: string = 'dd/MM/yyyy HH:mm:ss';
@@ -47,10 +49,11 @@ export class AppConstant {
   static readonly RECOVERY_DELETED_SUCCESS_MSG: string =
     'Recovery deleted Successfully';
 
-  static readonly ORDER_ADDED_SUCCESS_MSG: string =
-    'Order added Successfully';
+  static readonly ORDER_ADDED_SUCCESS_MSG: string = 'Order added Successfully';
 
   static readonly ROUTE_NOT_FOUND_MSG: string = 'No Route details found...';
+  static readonly COMPANY_NOT_FOUND_MSG: string = 'No company details found...';
+  static readonly PRODUCT_NOT_FOUND_MSG: string = 'No product details found...';
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
   static readonly RECORD_NOT_FOUND_MSG: string = 'Records not found...';
   static readonly BILL_NOT_FOUND_MSG: string = 'Bill details not found...';
@@ -90,6 +93,8 @@ export class AppConstant {
   static readonly RECOVERY: string = 'Recovery';
   static readonly ATTENDANCE: string = 'Attendance';
   static readonly LOGOUT: string = 'Logout';
+  static readonly PRODUCT_UPDATE: string = 'Product_Update';
+  static readonly PRODUCT_DELETE: string = 'Product_DELETE';
 
   static readonly ADD_STORE_VALIDATION: string =
     'Store with entered mobile number already exist.';

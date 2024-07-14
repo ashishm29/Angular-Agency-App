@@ -69,6 +69,7 @@ import { ExpenseComponent } from './expense-manager/expense/expense.component';
 import { RecoveryFromSalesmanComponent } from './dashboard/recovery-from-salesman/recovery-from-salesman.component';
 import { SalesmanDataEntryComponent } from './data-entry/salesman-data-entry/salesman-data-entry.component';
 import { OrdersComponent } from './orders/orders.component';
+import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -118,6 +119,7 @@ const MY_DATE_FORMAT = {
     RecoveryFromSalesmanComponent,
     SalesmanDataEntryComponent,
     OrdersComponent,
+    ProductDataEntryComponent,
   ],
   imports: [
     BrowserModule,

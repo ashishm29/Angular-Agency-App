@@ -65,6 +65,16 @@ export class FirestoreService {
     AppConstant.ORDER_COLLECTION_NAME
   );
 
+  productCollectionInstance = collection(
+    this.firestore,
+    AppConstant.PRODUCT_COLLECTION_NAME
+  );
+
+  companyCollectionInstance = collection(
+    this.firestore,
+    AppConstant.COMPANY_COLLECTION_NAME
+  );
+
   // ashishCollectionInstance24 = collection(
   //   this.firestore,
   //   'AshishCollection_24'

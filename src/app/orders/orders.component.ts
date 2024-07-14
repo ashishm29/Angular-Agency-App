@@ -4,7 +4,15 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
-import { Order, Route, StoreDetails, itemDetail } from '../models/route';
+import {
+  CompanyDetail,
+  Order,
+  ProductDetail,
+  Route,
+  StoreDetails,
+  itemDetail,
+  orderStatus,
+} from '../models/route';
 import { Observable, map, startWith } from 'rxjs';
 import { RouteService } from '../services/route.service';
 import { BillService } from '../services/bill.service';
@@ -16,6 +24,7 @@ import { DatePipe } from '@angular/common';
 import { SnackBarService } from '../services/snackbar.service';
 import { OrderService } from '../services/order.service';
 import { ButtonRendererComponent } from '../renderer/button-renderer/button-renderer.component';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-orders',
@@ -30,6 +39,11 @@ export class OrdersComponent implements OnInit {
   selectedStore!: StoreDetails | null;
   item!: FormControl;
   orderId!: string | null;
+  companyNameFormControl!: UntypedFormControl;
+  productNameFormControl!: UntypedFormControl;
+
+  productCollection: ProductDetail[] = [];
+  companyCollection: CompanyDetail[] = [];
 
   headerFormGroup!: UntypedFormGroup;
 
@@ -53,7 +67,15 @@ export class OrdersComponent implements OnInit {
 
   colDefs: ColDef[] = [
     {
-      field: 'item',
+      field: 'companyName',
+      flex: 2,
+      minWidth: 200,
+      wrapText: true,
+      autoHeight: true,
+      editable: true,
+    },
+    {
+      field: 'productName',
       flex: 2,
       minWidth: 200,
       wrapText: true,
@@ -82,7 +104,8 @@ export class OrdersComponent implements OnInit {
     private localstorageService: LocalStorageService,
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private productService: ProductService
   ) {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
@@ -98,7 +121,11 @@ export class OrdersComponent implements OnInit {
       address: new UntypedFormControl(),
     });
 
+    this.companyNameFormControl = new UntypedFormControl();
+    this.productNameFormControl = new UntypedFormControl();
+
     this.onFetchRoute();
+    this.onFetchCompanys();
   }
 
   onRouteSelectionChange(selectedRoute: string) {
@@ -209,7 +236,12 @@ export class OrdersComponent implements OnInit {
           'MM/dd/yyyy HH-mm-ss'
         ) as unknown as Date;
       }
-      this.collection.push({ item: this.item.value });
+      this.collection.push({
+        productId: this.productNameFormControl.value.productId,
+        productName: this.productNameFormControl.value.productName,
+        companyId: this.companyNameFormControl.value.companyId,
+        companyName: this.companyNameFormControl.value.companyName,
+      });
       this.updateGrid();
       this.item.reset();
     }
@@ -222,6 +254,7 @@ export class OrdersComponent implements OnInit {
   onSaveOrder() {
     if (this.order) {
       this.order.items = this.collection;
+      this.order.orderStatus = orderStatus.NEW;
 
       this.orderService
         .add(this.order)
@@ -247,5 +280,32 @@ export class OrdersComponent implements OnInit {
     let array = this.collection.slice();
     this.collection = array;
     this.api.updateGridOptions({ rowData: this.collection });
+  }
+
+  onCompanySelectionChange(selectedRoute: any) {
+    console.log(selectedRoute);
+    this.onFetchProducts(selectedRoute.companyId);
+  }
+
+  onFetchCompanys() {
+    this.companyCollection = [];
+    this.productService.getCompany().then((result) => {
+      if (result && result.length > 0) {
+        this.companyCollection = result;
+      } else {
+        console.log(AppConstant.COMPANY_NOT_FOUND_MSG);
+      }
+    });
+  }
+
+  onFetchProducts(companyId: string) {
+    this.productCollection = [];
+    this.productService.getProductsByCompany(companyId).then((result) => {
+      if (result && result.length > 0) {
+        this.productCollection = result;
+      } else {
+        console.log(AppConstant.PRODUCT_NOT_FOUND_MSG);
+      }
+    });
   }
 }
