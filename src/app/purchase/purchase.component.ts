@@ -156,11 +156,23 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
   onAdd() {
     if (this.formGroup) {
       console.log(this.formGroup);
+      let request = {
+        ...this.formGroup.value,
+        createdDate: new Date(),
+      } as Purchase;
+
       if (this.formGroup.valid) {
-        let request = {
-          ...this.formGroup.value,
-          createdDate: new Date(),
-        } as Purchase;
+        if (this.validateBillNumber(request.billNumber) >= 0) {
+          this.snackbarService.openSnackBar(
+            'This Bill number already exist',
+            AppConstant.SAVE_ACTION
+          );
+          return;
+        }
+
+        let isValid = this.validateBillNumber(request.billNumber);
+        console.log('ISValid : ' + isValid);
+
         this.purchaseService
           .add(request)
           .then(() => {
@@ -182,6 +194,10 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
         );
       }
     }
+  }
+
+  validateBillNumber(billNumber: string): number {
+    return this.collection.findIndex((c) => c.billNumber === billNumber);
   }
 
   getPurchaseDetails() {
