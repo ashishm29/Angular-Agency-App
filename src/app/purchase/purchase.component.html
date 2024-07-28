@@ -1,0 +1,91 @@
+<div [formGroup]="formGroup" style="margin-top: 10px">
+  <mat-form-field appearance="outline">
+    <mat-label>Select Party</mat-label>
+    <mat-select
+      formControlName="companyName"
+      (selectionChange)="onCompanySelectionChange($event.value)"
+    >
+      <div *ngFor="let company of companyCollection">
+        <mat-option [value]="company.companyName">{{
+          company.companyName
+        }}</mat-option>
+      </div>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Bill date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="billDate"
+      placeholder="Bill date"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="mat-form-field-custome">
+    <mat-label>Bill Number</mat-label>
+    <input matInput formControlName="billNumber" toUppercase />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="mat-form-field-custome">
+    <mat-label>Bill Amount</mat-label>
+    <input matInput formControlName="billAmount" type="number" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="mat-form-field-custome">
+    <mat-label>Revised Amount</mat-label>
+    <input matInput formControlName="revisedAmount" type="number" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Payment date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="paymentPicker"
+      formControlName="paymentDate"
+      placeholder="Payment date"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="paymentPicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #paymentPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Payment Status</mat-label>
+    <mat-select formControlName="paymentStatus">
+      <div *ngFor="let product of paymentStatusList">
+        <mat-option [value]="product.value">{{ product.value }}</mat-option>
+      </div>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="mat-form-field-custome">
+    <mat-label>Comment</mat-label>
+    <input matInput formControlName="comment"  toUppercase />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary"
+  [disabled]="formGroup.invalid"
+  type="submit" (click)="onAdd()">
+    Add
+  </button>
+</div>
+
+<div class="content">
+  <ag-grid-angular
+    style="width: 100%; height: 600px"
+    [rowData]="collection"
+    [columnDefs]="colDefs"
+    [defaultColDef]="defaultColDef"
+    [components]="frameworkComponents"
+    [gridOptions]="gridOptions"
+    class="ag-theme-quartz"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>

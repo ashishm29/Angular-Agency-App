@@ -5,6 +5,7 @@ export class AppConstant {
   static readonly STORE_COLLECTION_NAME: string = 'StoreCollection';
   static readonly BILL_COLLECTION_NAME: string = 'BillCollection';
   static readonly RECOVERY_COLLECTION_NAME: string = 'RecoveryCollection';
+  static readonly PURCHASE_COLLECTION_NAME: string = 'PurchaseCollection';
   static readonly PAYMENT_MODE_COLLECTION_NAME: string =
     'PaymentModeCollection';
   static readonly LOGGING_COLLECTION_NAME: string = 'LoggingCollection';
@@ -33,6 +34,8 @@ export class AppConstant {
   static readonly BILL_ADDED_SUCCESS_MSG: string = 'Bill added Successfully';
   static readonly STORE_ADDED_SUCCESS_MSG: string = 'Store added Successfully';
   static readonly ROUTE_ADDED_SUCCESS_MSG: string = 'Route added Successfully';
+  static readonly DETAILS_ADDED_SUCCESS_MSG: string =
+    'Details added Successfully';
   static readonly RECORD_ADDED_SUCCESS_MSG: string =
     'Record added Successfully';
   static readonly RECORD_ALREADY_PRESENT_MSG: string =
@@ -57,6 +60,7 @@ export class AppConstant {
   static readonly STORE_NOT_FOUND_MSG: string = 'No Store details found...';
   static readonly RECORD_NOT_FOUND_MSG: string = 'Records not found...';
   static readonly BILL_NOT_FOUND_MSG: string = 'Bill details not found...';
+  static readonly DETAILS_NOT_FOUND_MSG: string = 'Details not found...';
   static readonly RECOVERY_NOT_FOUND_MSG: string =
     'Recovery details not found...';
 
@@ -89,12 +93,14 @@ export class AppConstant {
   static readonly SALESMAN_RECOVERY_UPDATE: string = 'Salesman-recovery-update';
   static readonly USER_DELETE: string = 'User-delete';
   static readonly USER_UPDATE: string = 'User-update';
+  static readonly PURCHASE_UPDATE: string = 'Purchase-update';
   static readonly BILL: string = 'Bill';
   static readonly RECOVERY: string = 'Recovery';
   static readonly ATTENDANCE: string = 'Attendance';
   static readonly LOGOUT: string = 'Logout';
   static readonly PRODUCT_UPDATE: string = 'Product_Update';
   static readonly PRODUCT_DELETE: string = 'Product_DELETE';
+  static readonly PURCHASE_DELETE: string = 'PURCHASE_DELETE';
 
   static readonly ADD_STORE_VALIDATION: string =
     'Store with entered mobile number already exist.';

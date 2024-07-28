@@ -25,13 +25,14 @@ import { SnackBarService } from '../services/snackbar.service';
 import { OrderService } from '../services/order.service';
 import { ButtonRendererComponent } from '../renderer/button-renderer/button-renderer.component';
 import { ProductService } from '../services/product.service';
+import { BaseCompany } from '../abstract/baseCompany';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss'],
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent extends BaseCompany implements OnInit {
   paidUnpaidSelection!: UntypedFormControl;
   routeCollection: Route[] = [];
   storeCollection: StoreDetails[] = [];
@@ -41,9 +42,6 @@ export class OrdersComponent implements OnInit {
   orderId!: string | null;
   companyNameFormControl!: UntypedFormControl;
   productNameFormControl!: UntypedFormControl;
-
-  productCollection: ProductDetail[] = [];
-  companyCollection: CompanyDetail[] = [];
 
   headerFormGroup!: UntypedFormGroup;
 
@@ -101,12 +99,12 @@ export class OrdersComponent implements OnInit {
     public routeService: RouteService,
     public billService: BillService,
     public storeService: StoreService,
-    private localstorageService: LocalStorageService,
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
     private orderService: OrderService,
-    private productService: ProductService
+    productService: ProductService
   ) {
+    super(productService);
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
     };
@@ -280,32 +278,5 @@ export class OrdersComponent implements OnInit {
     let array = this.collection.slice();
     this.collection = array;
     this.api.updateGridOptions({ rowData: this.collection });
-  }
-
-  onCompanySelectionChange(selectedRoute: any) {
-    console.log(selectedRoute);
-    this.onFetchProducts(selectedRoute.companyId);
-  }
-
-  onFetchCompanys() {
-    this.companyCollection = [];
-    this.productService.getCompany().then((result) => {
-      if (result && result.length > 0) {
-        this.companyCollection = result;
-      } else {
-        console.log(AppConstant.COMPANY_NOT_FOUND_MSG);
-      }
-    });
-  }
-
-  onFetchProducts(companyId: string) {
-    this.productCollection = [];
-    this.productService.getProductsByCompany(companyId).then((result) => {
-      if (result && result.length > 0) {
-        this.productCollection = result;
-      } else {
-        console.log(AppConstant.PRODUCT_NOT_FOUND_MSG);
-      }
-    });
   }
 }

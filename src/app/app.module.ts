@@ -70,6 +70,7 @@ import { RecoveryFromSalesmanComponent } from './dashboard/recovery-from-salesma
 import { SalesmanDataEntryComponent } from './data-entry/salesman-data-entry/salesman-data-entry.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
+import { PurchaseComponent } from './purchase/purchase.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -120,6 +121,7 @@ const MY_DATE_FORMAT = {
     SalesmanDataEntryComponent,
     OrdersComponent,
     ProductDataEntryComponent,
+    PurchaseComponent,
   ],
   imports: [
     BrowserModule,

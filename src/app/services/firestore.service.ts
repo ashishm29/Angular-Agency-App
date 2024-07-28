@@ -75,6 +75,11 @@ export class FirestoreService {
     AppConstant.COMPANY_COLLECTION_NAME
   );
 
+  purchaseCollectionInstance = collection(
+    this.firestore,
+    AppConstant.PURCHASE_COLLECTION_NAME
+  );
+
   // ashishCollectionInstance24 = collection(
   //   this.firestore,
   //   'AshishCollection_24'

@@ -130,3 +130,21 @@ export enum orderStatus {
   IN_PROCESS = 1,
   DELIVERED = 2,
 }
+
+export enum PaymentStatus {
+  PENDING = 0,
+  PAID = 1,
+}
+
+export class Purchase {
+  partyName!: string;
+  billDate!: Timestamp;
+  billNumber!: string;
+  amount!: string;
+  revisedAmount!: string;
+  comment!: string;
+  paymentDate!: Timestamp;
+  paymentStatus!: string;
+  id!: string;
+  createdDate!: Timestamp;
+}

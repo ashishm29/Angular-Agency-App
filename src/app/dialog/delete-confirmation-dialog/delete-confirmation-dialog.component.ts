@@ -68,6 +68,10 @@ export class DeleteConfirmationDialogComponent implements OnInit {
       this.message = `Do you want to update this product : ${this.data.object.productName}`;
     } else if (this.data.key === AppConstant.PRODUCT_DELETE) {
       this.message = `Do you want to delete this product : ${this.data.object.productName}`;
+    } else if (this.data.key === AppConstant.PURCHASE_UPDATE) {
+      this.message = `Do you want to Update this record : ${this.data.object.billNumber}`;
+    } else if (this.data.key === AppConstant.PURCHASE_DELETE) {
+      this.message = `Do you want to delete this record : ${this.data.object.billNumber}`;
     }
   }
 
