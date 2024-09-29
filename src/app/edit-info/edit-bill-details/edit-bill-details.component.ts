@@ -72,6 +72,7 @@ export class EditBillDetailsComponent implements OnInit {
           this.billFormGroup.patchValue({
             ...result[0],
             billDate: billDate,
+            storeName: result[0].storeName.storeName,
           });
         } else {
           console.log(AppConstant.BILL_NOT_FOUND_MSG);

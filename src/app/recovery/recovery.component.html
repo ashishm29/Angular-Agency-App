@@ -130,13 +130,21 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Payment option</mat-label>
-      <mat-select formControlName="modeOfPayment">
+      <mat-select formControlName="modeOfPayment"
+        (selectionChange)="onPaymentModeChange($event.value)">
         <div *ngFor="let paymentMode of modeOfPaymentCollection">
           <mat-option value="{{ paymentMode.mode }}">
             {{ paymentMode.mode }}
           </mat-option>
         </div>
       </mat-select>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline" *ngIf="isCheque">
+      <mat-label>Cheque Number</mat-label>
+      <input matInput formControlName="chequeNo" toUppercase />
     </mat-form-field>
   </p>
 

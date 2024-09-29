@@ -42,6 +42,7 @@ export class RecoveryComponent implements OnInit {
   isClicked: boolean = false;
   buttonText: string = AppConstant.SUBMIT_BTN_TEXT;
   localRouteValue!: string;
+  isCheque!: boolean;
 
   constructor(
     public recoveryService: RecoveryService,
@@ -83,6 +84,7 @@ export class RecoveryComponent implements OnInit {
       pendingAmount: new UntypedFormControl(),
       receiptNumber: new UntypedFormControl('', [Validators.required]),
       modeOfPayment: new UntypedFormControl('', [Validators.required]),
+      chequeNo: new UntypedFormControl(''),
       comment: new UntypedFormControl(),
     });
   }
@@ -123,7 +125,26 @@ export class RecoveryComponent implements OnInit {
       this.recoveryFormGroup.get('pendingAmount')?.reset();
       this.recoveryFormGroup.get('modeOfPayment')?.reset();
       this.recoveryFormGroup.get('comment')?.reset();
+      this.recoveryFormGroup.get('chequeNo')?.reset();
+      this.recoveryFormGroup
+        .get('chequeNo')
+        ?.removeValidators(Validators.required);
+      this.isCheque = false;
       this.onFetchStoreDetails(selecetdValue);
+    }
+  }
+
+  onPaymentModeChange(val: string) {
+    if (val == 'Cheque') {
+      this.isCheque = true;
+      this.recoveryFormGroup
+        .get('chequeNo')
+        ?.addValidators(Validators.required);
+    } else {
+      this.isCheque = false;
+      this.recoveryFormGroup
+        .get('chequeNo')
+        ?.removeValidators(Validators.required);
     }
   }
 

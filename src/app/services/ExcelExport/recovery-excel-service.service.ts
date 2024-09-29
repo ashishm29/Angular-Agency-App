@@ -70,9 +70,11 @@ export class RecoveryExcelService {
         billNumber: d.billNumber,
         billAmount: d.billAmount,
         receiptNumber: d.receiptNumber,
-        modeOfPayment: d.modeOfPayment,
+        modeOfPayment:
+          d.modeOfPayment === 'Cheque' && d.chequeNo !== undefined
+            ? d.modeOfPayment + '/' + d.chequeNo
+            : d.modeOfPayment,
         amountReceived: +d.amountReceived,
-        pendingAmount: d.pendingAmount,
         recoveryDate: recoveryDate,
         recoveryAgent: d.recoveryAgent,
       };
