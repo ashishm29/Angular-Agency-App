@@ -7,16 +7,16 @@ import {
 } from '@angular/forms';
 import { BaseCompany } from '../abstract/baseCompany';
 import { ProductService } from '../services/product.service';
-import { IAgGrid } from '../interface/iagGrid';
 import { ColDef } from 'ag-grid-community';
 import { ButtonRendererComponent } from '../renderer/button-renderer/button-renderer.component';
-import { itemDetail, Purchase } from '../models/route';
+import { Purchase } from '../models/route';
 import { PurchaseService } from '../services/purchase.service';
 import { DatePipe, KeyValue } from '@angular/common';
 import { AppConstant } from '../appConstant';
 import { SnackBarService } from '../services/snackbar.service';
 import { DeleteConfirmationDialogComponent } from '../dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DropdownRendererComponent } from '../renderer/dropdown-renderer/dropdown-renderer.component';
 
 @Component({
   selector: 'app-purchase',
@@ -99,6 +99,16 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       field: 'paymentStatus',
       flex: 2,
       editable: true,
+      cellEditor: DropdownRendererComponent,
+      cellEditorParams: {
+        values: this.paymentStatusList,
+      },
+      valueFormatter: this.dropdownValueFormatter,
+      valueGetter: (params) => params.data.paymentStatus,
+      valueSetter: (params) => {
+        params.data.paymentStatus = params.newValue;
+        return true;
+      },
     },
     {
       headerName: 'Update',
@@ -289,5 +299,9 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
         console.log(AppConstant.NO_ACTION);
       }
     });
+  }
+
+  dropdownValueFormatter(params: any): string {
+    return params.value;
   }
 }

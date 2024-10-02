@@ -71,6 +71,7 @@ import { SalesmanDataEntryComponent } from './data-entry/salesman-data-entry/sal
 import { OrdersComponent } from './orders/orders.component';
 import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
 import { PurchaseComponent } from './purchase/purchase.component';
+import { DropdownRendererComponent } from './renderer/dropdown-renderer/dropdown-renderer.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -122,6 +123,7 @@ const MY_DATE_FORMAT = {
     OrdersComponent,
     ProductDataEntryComponent,
     PurchaseComponent,
+    DropdownRendererComponent,
   ],
   imports: [
     BrowserModule,
