@@ -144,7 +144,7 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       billNumber: new FormControl('', [Validators.required]),
       billAmount: new FormControl('', [Validators.required]),
       revisedAmount: new FormControl('', [Validators.required]),
-      paymentDate: new FormControl('', [Validators.required]),
+      paymentDate: new FormControl(''),
       paymentStatus: new FormControl('', [Validators.required]),
       comment: new FormControl(''),
     });
