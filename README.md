@@ -50,3 +50,43 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 -- git reset --hard HEAD~1
 -- git reset --hard 2b1ab85 (2b1ab85 is Commit SHA number you want to set to. Commits after this SHA will be removed)
+
+
+
+## AG-GRID :
+# Curreny formatter :
+{
+      field: 'billAmount',
+      flex: 2,
+      editable: true,
+      filter: 'agNumberColumnFilter',
+      valueFormatter: (params) => this.currencyFormatter(params),
+    },
+
+  currencyFormatter(params: any) {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+    }).format(params.value);
+  }
+
+  # Value Getter/Setter and formatter :
+    {
+      field: 'paymentStatus',
+      flex: 2,
+      editable: true,
+      cellEditor: DropdownRendererComponent,
+      cellEditorParams: {
+        values: this.paymentStatusList,
+      },
+      valueFormatter: this.dropdownValueFormatter,
+      valueGetter: (params) => params.data.paymentStatus,
+      valueSetter: (params) => {
+        params.data.paymentStatus = params.newValue;
+        return true;
+      },
+    },
+
+    dropdownValueFormatter(params: any): string {
+    return params.value;
+  }

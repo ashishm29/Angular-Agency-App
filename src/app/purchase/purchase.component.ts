@@ -74,11 +74,18 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       field: 'billAmount',
       flex: 2,
       editable: true,
+      filter: 'agNumberColumnFilter',
+      valueFormatter: (params) => this.currencyFormatter(params),
+      // filterParams: {
+      //   suppressAndOrCondition: true,
+      //   filterOptions: ['greaterThan', 'equals'],
+      // },
     },
     {
       field: 'revisedAmount',
       flex: 2,
       editable: true,
+      valueFormatter: (params) => this.currencyFormatter(params),
     },
     {
       field: 'comment',
@@ -303,5 +310,12 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
 
   dropdownValueFormatter(params: any): string {
     return params.value;
+  }
+
+  currencyFormatter(params: any) {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+    }).format(params.value);
   }
 }
