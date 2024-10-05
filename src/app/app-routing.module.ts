@@ -27,6 +27,7 @@ import { SalesmanDataEntryComponent } from './data-entry/salesman-data-entry/sal
 import { OrdersComponent } from './orders/orders.component';
 import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
 import { PurchaseComponent } from './purchase/purchase.component';
+import { SaleBookComponent } from './sale-book/sale-book.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -153,6 +154,11 @@ const routes: Routes = [
   {
     path: 'purchase',
     component: PurchaseComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'salebook',
+    component: SaleBookComponent,
     canActivate: [AuthGuard],
   },
 ];

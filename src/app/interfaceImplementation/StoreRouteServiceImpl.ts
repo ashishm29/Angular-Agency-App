@@ -1,21 +1,25 @@
 import { map, Observable, startWith } from 'rxjs';
 import { AppConstant } from '../appConstant';
-import { IStore } from '../interface/iStore';
-import { StoreDetails } from '../models/route';
+import { StoreRouteService } from '../interface/StoreRouteService';
+import { Route, StoreDetails } from '../models/route';
 import { StoreService } from '../services/store.service';
 import { UntypedFormGroup } from '@angular/forms';
+import { RouteService } from '../services/route.service';
+import { Injectable } from '@angular/core';
 
-export class IStoreImplementation implements IStore {
+@Injectable({
+  providedIn: 'root',
+})
+export class StoreRouteServiceImpl implements StoreRouteService {
   storeCollection: StoreDetails[] = [];
   filteredOptions: Observable<StoreDetails[]> | undefined;
   selectedStore!: StoreDetails | null;
-  //collection: itemDetail[] = [];
-
-  // headerFormGroup!: UntypedFormGroup;
+  routeCollection: Route[] = [];
+  billFormGroup!: UntypedFormGroup;
 
   constructor(
     private storeService: StoreService,
-    private headerFormGroup: UntypedFormGroup
+    private routeService: RouteService
   ) {}
 
   onFetchStoreDetails(selecetdValue: string) {
@@ -32,17 +36,14 @@ export class IStoreImplementation implements IStore {
 
   onStoreSelected(selectedStore: StoreDetails) {
     this.selectedStore = selectedStore;
-    this.headerFormGroup.patchValue({
+    this.billFormGroup.patchValue({
       mobileNumber: selectedStore.mobileNo,
       address: selectedStore.address,
     });
-
-    //this.collection = [];
-    //this.updateGrid();
   }
 
   subscribeStoreNameValueChange() {
-    let routeControl = this.headerFormGroup.controls['storeName'];
+    let routeControl = this.billFormGroup.controls['storeName'];
     this.filteredOptions = routeControl?.valueChanges.pipe(
       startWith(''),
       map((value) => {
@@ -64,5 +65,36 @@ export class IStoreImplementation implements IStore {
 
   displayFn(user: StoreDetails): string {
     return user && user.storeName ? user.storeName : '';
+  }
+
+  // =============================ROUTE==========================
+
+  onFetchRoute() {
+    this.routeCollection = [];
+    this.routeService.getRoutes().then((result) => {
+      if (result && result.length > 0) {
+        this.routeCollection = result;
+      } else {
+        console.log(AppConstant.ROUTE_NOT_FOUND_MSG);
+      }
+    });
+
+    return this.routeCollection;
+  }
+
+  onRouteSelectionChange(selecetdValue: string) {
+    console.log(selecetdValue);
+    // this.localStorageService.setKeyValue(
+    //   AppConstant.ROUTE_LOCAL_STORAGE_KEY,
+    //   selecetdValue
+    // );
+    if (selecetdValue) {
+      this.billFormGroup.get('storeName')?.reset();
+      this.billFormGroup.get('billNumber')?.reset();
+      this.billFormGroup.get('billDate')?.reset();
+      this.billFormGroup.get('billAmount')?.reset();
+      this.billFormGroup.get('comment')?.reset();
+      this.onFetchStoreDetails(selecetdValue);
+    }
   }
 }

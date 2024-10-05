@@ -81,6 +81,13 @@
       >
       <a
         mat-list-item
+        routerLink="/salebook"
+        *ngIf="isAuthenticate && isAdmin"
+        (click)="drawer.toggle()"
+        >Sale Book</a
+      >
+      <a
+        mat-list-item
         *ngIf="isAuthenticate"
         (click)="drawer.toggle(); openDeleteConfimationDialog()"
         >Logout</a
@@ -171,6 +178,13 @@
           routerLinkActive="active-link"
           *ngIf="isAuthenticate && isAdmin"
           >Purchase</a
+        >
+        <a
+          mat-button
+          routerLink="/salebook"
+          routerLinkActive="active-link"
+          *ngIf="isAuthenticate && isAdmin"
+          >Sale Book</a
         >
         <a
           mat-button

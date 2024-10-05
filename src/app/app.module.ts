@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -72,6 +72,9 @@ import { OrdersComponent } from './orders/orders.component';
 import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { DropdownRendererComponent } from './renderer/dropdown-renderer/dropdown-renderer.component';
+import { SaleBookComponent } from './sale-book/sale-book.component';
+import { StoreRouteService } from './interface/StoreRouteService';
+import { StoreRouteServiceImpl } from './interfaceImplementation/StoreRouteServiceImpl';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -84,6 +87,8 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
+export const MY_SERVICE_TOKEN = new InjectionToken<StoreRouteService>('IStore');
 
 @NgModule({
   declarations: [
@@ -124,6 +129,7 @@ const MY_DATE_FORMAT = {
     ProductDataEntryComponent,
     PurchaseComponent,
     DropdownRendererComponent,
+    SaleBookComponent,
   ],
   imports: [
     BrowserModule,
@@ -159,6 +165,7 @@ const MY_DATE_FORMAT = {
     DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    { provide: MY_SERVICE_TOKEN, useClass: StoreRouteServiceImpl },
   ],
 
   bootstrap: [AppComponent],
