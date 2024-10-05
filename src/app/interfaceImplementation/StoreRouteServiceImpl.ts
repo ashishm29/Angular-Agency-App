@@ -6,6 +6,7 @@ import { StoreService } from '../services/store.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { RouteService } from '../services/route.service';
 import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../services/local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ export class StoreRouteServiceImpl implements StoreRouteService {
 
   constructor(
     private storeService: StoreService,
-    private routeService: RouteService
+    private routeService: RouteService,
+    private localStorageService: LocalStorageService
   ) {}
 
   onFetchStoreDetails(selecetdValue: string) {
@@ -84,10 +86,10 @@ export class StoreRouteServiceImpl implements StoreRouteService {
 
   onRouteSelectionChange(selecetdValue: string) {
     console.log(selecetdValue);
-    // this.localStorageService.setKeyValue(
-    //   AppConstant.ROUTE_LOCAL_STORAGE_KEY,
-    //   selecetdValue
-    // );
+    this.localStorageService.setKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY,
+      selecetdValue
+    );
     if (selecetdValue) {
       this.billFormGroup.get('storeName')?.reset();
       this.billFormGroup.get('billNumber')?.reset();

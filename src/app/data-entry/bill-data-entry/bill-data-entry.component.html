@@ -1,12 +1,14 @@
-<form [formGroup]="billFormGroup" #billFormDirective="ngForm">
+<form [formGroup]="storeRouteService.billFormGroup" #billFormDirective="ngForm">
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Route Name</mat-label>
       <mat-select
         formControlName="route"
-        (selectionChange)="onRouteSelectionChange($event.value)"
+        (selectionChange)="
+          storeRouteService.onRouteSelectionChange($event.value)
+        "
       >
-        <div *ngFor="let route of routeCollection">
+        <div *ngFor="let route of storeRouteService.routeCollection">
           <mat-option value="{{ route.routeName }}">{{
             route.routeName
           }}</mat-option>
@@ -27,11 +29,13 @@
       />
       <mat-autocomplete
         #auto="matAutocomplete"
-        [displayWith]="displayFn"
-        (optionSelected)="onStoreSelected($event.option.value)"
+        [displayWith]="storeRouteService.displayFn"
+        (optionSelected)="
+          storeRouteService.onStoreSelected($event.option.value)
+        "
       >
         <mat-option
-          *ngFor="let option of filteredOptions | async"
+          *ngFor="let option of storeRouteService.filteredOptions | async"
           [value]="option"
         >
           {{ option.storeName }}
@@ -87,7 +91,7 @@
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="!(!billFormGroup.invalid && !isClicked)"
+      [disabled]="!(!storeRouteService.billFormGroup.invalid && !isClicked)"
       (click)="onAddBill()"
     >
       {{ buttonText }}

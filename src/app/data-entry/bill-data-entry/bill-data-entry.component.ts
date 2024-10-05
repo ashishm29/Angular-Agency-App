@@ -1,19 +1,18 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
   NgForm,
   Validators,
 } from '@angular/forms';
-import { Observable, map, startWith } from 'rxjs';
+import { MY_SERVICE_TOKEN } from 'src/app/app.module';
 import { AppConstant } from 'src/app/appConstant';
-import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
+import { StoreRouteService } from 'src/app/interface/StoreRouteService';
+import { BillDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { RouteService } from 'src/app/services/route.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { StoreService } from 'src/app/services/store.service';
 import { ValidationDialogService } from 'src/app/services/validation-dialog.service';
 
 @Component({
@@ -24,36 +23,31 @@ import { ValidationDialogService } from 'src/app/services/validation-dialog.serv
 export class BillDataEntryComponent implements OnInit {
   @ViewChild('billFormDirective') private billFormDirective!: NgForm;
   routeName!: string;
-  routeCollection: Route[] = [];
-  storeCollection: StoreDetails[] = [];
   myControl = new UntypedFormControl();
-  billFormGroup!: UntypedFormGroup;
-  filteredOptions: Observable<StoreDetails[]> | undefined;
   isClicked: boolean = false;
   buttonText: string = AppConstant.ADD_BILL_BTN_TEXT;
   localRouteValue!: string;
 
   constructor(
-    public storeService: StoreService,
     public billService: BillService,
-    private routeService: RouteService,
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
     private validationDialogService: ValidationDialogService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    @Inject(MY_SERVICE_TOKEN) public storeRouteService: StoreRouteService
   ) {}
 
   ngOnInit(): void {
     this.initialize();
-    this.onFetchRoute();
+    this.storeRouteService.onFetchRoute();
 
     if (this.localRouteValue) {
-      this.onRouteSelectionChange(this.localRouteValue);
+      this.storeRouteService.onRouteSelectionChange(this.localRouteValue);
     }
   }
 
   onAddBill() {
-    if (this.billFormGroup.invalid) {
+    if (this.storeRouteService.billFormGroup.invalid) {
       console.log('bill form is invalid');
       return;
     }
@@ -66,8 +60,8 @@ export class BillDataEntryComponent implements OnInit {
     this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
 
     let billDetails = {
-      ...this.billFormGroup.value,
-      pendingAmount: this.billFormGroup.value.billAmount,
+      ...this.storeRouteService.billFormGroup.value,
+      pendingAmount: this.storeRouteService.billFormGroup.value.billAmount,
       createdDate: this.datePipe.transform(
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
@@ -122,7 +116,7 @@ export class BillDataEntryComponent implements OnInit {
       AppConstant.ROUTE_LOCAL_STORAGE_KEY
     ) as string;
 
-    this.billFormGroup = new UntypedFormGroup({
+    this.storeRouteService.billFormGroup = new UntypedFormGroup({
       route: new UntypedFormControl(this.localRouteValue, [
         Validators.required,
       ]),
@@ -138,76 +132,6 @@ export class BillDataEntryComponent implements OnInit {
       this.billFormDirective.resetForm();
     }
 
-    this.storeNameValueChange();
-  }
-
-  onFetchRoute() {
-    this.routeCollection = [];
-    this.routeService.getRoutes().then((result) => {
-      if (result && result.length > 0) {
-        this.routeCollection = result;
-      } else {
-        console.log(AppConstant.ROUTE_NOT_FOUND_MSG);
-      }
-    });
-  }
-
-  onFetchStoreDetails(selecetdValue: string) {
-    this.storeCollection = [];
-    this.storeService.getStores(selecetdValue).then((result) => {
-      if (result && result.length > 0) {
-        this.storeCollection = result;
-        this.storeNameValueChange();
-      } else {
-        console.log(AppConstant.STORE_NOT_FOUND_MSG);
-      }
-    });
-  }
-
-  storeNameValueChange() {
-    let routeControl = this.billFormGroup.controls['storeName'];
-    this.filteredOptions = routeControl?.valueChanges.pipe(
-      startWith(''),
-      map((value) => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name
-          ? this._filter(name as string)
-          : this.storeCollection.slice();
-      })
-    );
-  }
-
-  onRouteSelectionChange(selecetdValue: string) {
-    console.log(selecetdValue);
-    this.localStorageService.setKeyValue(
-      AppConstant.ROUTE_LOCAL_STORAGE_KEY,
-      selecetdValue
-    );
-    if (selecetdValue) {
-      this.billFormGroup.get('storeName')?.reset();
-      this.billFormGroup.get('billNumber')?.reset();
-      this.billFormGroup.get('billDate')?.reset();
-      this.billFormGroup.get('billAmount')?.reset();
-      this.billFormGroup.get('comment')?.reset();
-      this.onFetchStoreDetails(selecetdValue);
-    }
-  }
-
-  onStoreSelected(selectedStore: StoreDetails) {
-    this.billFormGroup.patchValue({
-      address: selectedStore.address,
-    });
-  }
-
-  displayFn(user: StoreDetails): string {
-    return user && user.storeName ? user.storeName : '';
-  }
-
-  private _filter(name: string): StoreDetails[] {
-    const filterValue = name.toLowerCase();
-
-    return this.storeCollection.filter((option) =>
-      option.storeName.toLowerCase().includes(filterValue)
-    );
+    this.storeRouteService.subscribeStoreNameValueChange();
   }
 }
