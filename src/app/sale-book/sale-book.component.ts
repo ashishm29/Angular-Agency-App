@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   NgForm,
   UntypedFormControl,
@@ -16,6 +22,7 @@ import { BillDetails } from '../models/route';
 import { SnackBarService } from '../services/snackbar.service';
 import { DatePipe } from '@angular/common';
 import { ValidationDialogService } from '../services/validation-dialog.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-sale-book',
@@ -29,6 +36,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
   isClicked: boolean = false;
   buttonText: string = AppConstant.ADD_BILL_BTN_TEXT;
   localRouteValue!: string;
+  callbackFunction = new EventEmitter<{ action: string; value: any }>();
 
   constructor(
     public billService: BillService,
@@ -101,15 +109,14 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       autoHeight: true,
       editable: true,
     },
-    // {
-    //   headerName: 'Delete',
-    //   minWidth: 100,
-    //   cellRenderer: 'buttonRenderer',
-    //   cellRendererParams: {
-    //     onClick: this.onDelete.bind(this),
-    //     label: 'Delete',
-    //   },
-    // },
+    {
+      minWidth: 80,
+      width: 80,
+      cellRenderer: 'agGridMenuRenderer',
+      cellRendererParams: {
+        callBack: this.callbackFunction,
+      },
+    },
   ];
 
   ngOnInit(): void {
@@ -122,7 +129,15 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     if (this.localRouteValue) {
       this.storeRouteService.onRouteSelectionChange(this.localRouteValue);
     }
-    this.updateGrid();
+
+    this.callbackFunction
+      .pipe(
+        map((val) => {
+          console.log(val.action);
+          console.log(val.value);
+        })
+      )
+      .subscribe();
   }
 
   initialize() {
@@ -191,8 +206,6 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
   }
 
   addBill(billDetails: BillDetails) {
-    this.updateGrid();
-
     this.billService
       .addBillDetails(billDetails)
       .then(() => {

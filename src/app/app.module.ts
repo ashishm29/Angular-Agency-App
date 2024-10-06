@@ -75,6 +75,7 @@ import { DropdownRendererComponent } from './renderer/dropdown-renderer/dropdown
 import { SaleBookComponent } from './sale-book/sale-book.component';
 import { StoreRouteService } from './interface/StoreRouteService';
 import { StoreRouteServiceImpl } from './interfaceImplementation/StoreRouteServiceImpl';
+import { AgGridMenuRendererComponent } from './renderer/ag-grid-menu-renderer/ag-grid-menu-renderer.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -130,6 +131,7 @@ export const MY_SERVICE_TOKEN = new InjectionToken<StoreRouteService>('IStore');
     PurchaseComponent,
     DropdownRendererComponent,
     SaleBookComponent,
+    AgGridMenuRendererComponent,
   ],
   imports: [
     BrowserModule,

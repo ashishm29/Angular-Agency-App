@@ -2,6 +2,7 @@ import { ColDef } from 'ag-grid-community';
 import { ButtonRendererComponent } from '../renderer/button-renderer/button-renderer.component';
 import { IAgGrid as AgGridService } from '../interface/AgGridService';
 import { Injectable } from '@angular/core';
+import { AgGridMenuRendererComponent } from '../renderer/ag-grid-menu-renderer/ag-grid-menu-renderer.component';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export abstract class AgGridServiceImpl implements AgGridService {
   constructor() {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
+      agGridMenuRenderer: AgGridMenuRendererComponent,
     };
   }
 
