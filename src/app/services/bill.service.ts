@@ -77,6 +77,11 @@ export class BillService {
     return this.getBills(queryConditions);
   }
 
+  async getBillByDate(date: Date) {
+    const queryConditions: QueryConstraint[] = [where('billDate', '==', date)];
+    return this.getBills(queryConditions);
+  }
+
   async getFilteredBillsByBillNumber(billnumber: string) {
     const queryConditions: QueryConstraint[] = [
       where('billNumber', '==', billnumber),

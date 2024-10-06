@@ -68,15 +68,27 @@
     <textarea matInput formControlName="comment"></textarea>
   </mat-form-field>
 
-  <!-- <p align="center">
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!(!storeRouteService.billFormGroup.invalid && !isClicked)"
-      (click)="onAddBill()"
-    >
-      {{ buttonText }}
-    </button>
-  </p> -->
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="!(!storeRouteService.billFormGroup.invalid && !isClicked)"
+    (click)="onAddBill()"
+  >
+    {{ buttonText }}
+  </button>
 </form>
+
+<div class="content">
+  <ag-grid-angular
+    style="width: 100%; height: 600px"
+    [rowData]="collection"
+    [columnDefs]="colDefs"
+    [defaultColDef]="defaultColDef"
+    [components]="frameworkComponents"
+    [gridOptions]="gridOptions"
+    class="ag-theme-quartz"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>

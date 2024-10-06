@@ -1,11 +1,14 @@
 import { ColDef } from 'ag-grid-community';
 import { ButtonRendererComponent } from '../renderer/button-renderer/button-renderer.component';
-import { IAgGrid } from '../interface/iagGrid';
-import { Inject } from '@angular/core';
+import { IAgGrid as AgGridService } from '../interface/AgGridService';
+import { Injectable } from '@angular/core';
 
-@Inject
-export class iAgGridImplementation implements IAgGrid {
+@Injectable({
+  providedIn: 'root',
+})
+export abstract class AgGridServiceImpl implements AgGridService {
   frameworkComponents: any;
+  collection!: any[];
   api!: any;
   colDefs!: ColDef[];
 
@@ -22,6 +25,7 @@ export class iAgGridImplementation implements IAgGrid {
     paginationPageSize: 50,
     suppressHorizontalScroll: false,
     alwaysShowHorizontalScroll: true,
+    suppressContextMenu: false,
   };
 
   public defaultColDef: ColDef = {
@@ -34,7 +38,7 @@ export class iAgGridImplementation implements IAgGrid {
   }
 
   updateGrid() {
-    //this.api.updateGridOptions({ rowData: this.collection });
+    this.api.updateGridOptions({ rowData: this.collection });
   }
 
   setColDefs(colDef: ColDef[]) {
