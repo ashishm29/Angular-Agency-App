@@ -1,6 +1,10 @@
 <form [formGroup]="recoveryFormGroup">
   <p>
-    <mat-form-field appearance="outline">
+    <mat-form-field
+      appearance="outline"
+      floatLabel="always"
+      aria-readonly="isNavigated"
+    >
       <mat-label>Route Name</mat-label>
       <mat-select
         formControlName="route"
@@ -16,9 +20,14 @@
   </p>
 
   <p>
-    <mat-form-field class="example-full-width" appearance="outline">
+    <mat-form-field
+      class="example-full-width"
+      floatLabel="always"
+      appearance="outline"
+    >
       <mat-label>Store Name</mat-label>
       <input
+        [readonly]="isNavigated"
         type="text"
         formControlName="storeName"
         matInput
@@ -41,21 +50,30 @@
   </p>
 
   <p>
-    <mat-form-field appearance="outline" class="example-full-width">
+    <mat-form-field
+      appearance="outline"
+      floatLabel="always"
+      class="example-full-width address"
+    >
       <mat-label>Shop Address</mat-label>
       <textarea readonly="true" matInput formControlName="address"></textarea>
     </mat-form-field>
   </p>
 
   <p>
-    <mat-form-field class="example-full-width" appearance="outline">
+    <mat-form-field
+      class="example-full-width"
+      floatLabel="auto"
+      appearance="outline"
+    >
       <mat-label>Bill Number </mat-label>
       <input
+        [readonly]="isNavigated"
         matInput
         aria-label="State"
         formControlName="billNumber"
         [matAutocomplete]="bill"
-        (keyup)="OnBillNumberChanged()"
+        (keyup)="isNavigated ? undefined : OnBillNumberChanged()"
         oninput="this.value = this.value.toUpperCase()"
       />
       <mat-autocomplete
@@ -75,14 +93,18 @@
   </p>
 
   <p>
-    <mat-form-field appearance="outline" class="example-full-width">
+    <mat-form-field
+      appearance="outline"
+      floatLabel="always"
+      class="example-full-width"
+    >
       <mat-label>Comment</mat-label>
       <textarea matInput readonly="true" formControlName="comment"></textarea>
     </mat-form-field>
   </p>
 
   <p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Bill Amount</mat-label>
       <input
         matInput
@@ -93,7 +115,7 @@
     </mat-form-field>
   </p>
   <p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="auto">
       <mat-label>Amount Received</mat-label>
       <input
         matInput
@@ -108,7 +130,7 @@
       Pending amount can not be less than 0.
     </div>
     <p>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Pending Amount</mat-label>
         <input
           matInput
@@ -121,17 +143,19 @@
   </div>
 
   <p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Receipt Number</mat-label>
       <input matInput formControlName="receiptNumber" toUppercase />
     </mat-form-field>
   </p>
 
   <p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Payment option</mat-label>
-      <mat-select formControlName="modeOfPayment"
-        (selectionChange)="onPaymentModeChange($event.value)">
+      <mat-select
+        formControlName="modeOfPayment"
+        (selectionChange)="onPaymentModeChange($event.value)"
+      >
         <div *ngFor="let paymentMode of modeOfPaymentCollection">
           <mat-option value="{{ paymentMode.mode }}">
             {{ paymentMode.mode }}
@@ -142,7 +166,7 @@
   </p>
 
   <p>
-    <mat-form-field appearance="outline" *ngIf="isCheque">
+    <mat-form-field appearance="outline" *ngIf="isCheque" floatLabel="always">
       <mat-label>Cheque Number</mat-label>
       <input matInput formControlName="chequeNo" toUppercase />
     </mat-form-field>

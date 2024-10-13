@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -23,6 +23,7 @@ import { AuthService } from '../services/auth.service';
 import { SnackBarService } from '../services/snackbar.service';
 import { ValidationDialogService } from '../services/validation-dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recovery',
@@ -43,6 +44,8 @@ export class RecoveryComponent implements OnInit {
   buttonText: string = AppConstant.SUBMIT_BTN_TEXT;
   localRouteValue!: string;
   isCheque!: boolean;
+  isNavigated = false;
+  // parameters = new EventEmitter<{ Params: any }>();
 
   constructor(
     public recoveryService: RecoveryService,
@@ -54,8 +57,62 @@ export class RecoveryComponent implements OnInit {
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
     private validationService: ValidationDialogService,
-    private localStorageService: LocalStorageService
-  ) {}
+    private localStorageService: LocalStorageService,
+    private router: Router
+  ) {
+    this.isNavigated = false;
+    this.recoveryService.parameters
+      .pipe(
+        map((val) => {
+          console.log('Parameters Received:' + JSON.stringify(val));
+          let routingData = val.params as BillDetails;
+
+          if (routingData) {
+            this.selecetdBill = routingData;
+            this.isNavigated = true;
+          }
+          this.prepopulateData(routingData);
+        })
+      )
+      .subscribe();
+  }
+
+  async prepopulateData(routingData: BillDetails) {
+    await this.getBillsForSelectedStore(
+      routingData.storeName.storeName,
+      routingData.route
+    );
+
+    if (
+      this.billCollection &&
+      this.billCollection.some((c) => c.billNumber === routingData.billNumber)
+    ) {
+      this.recoveryFormGroup = new UntypedFormGroup({
+        route: new UntypedFormControl(routingData.route, [Validators.required]),
+        storeName: new UntypedFormControl(routingData.storeName, [
+          Validators.required,
+        ]),
+        address: new UntypedFormControl(routingData.storeName.address),
+        billNumber: new UntypedFormControl(routingData.billNumber, [
+          Validators.required,
+        ]),
+        billAmount: new UntypedFormControl(routingData.billAmount, [
+          Validators.required,
+        ]),
+        amountReceived: new UntypedFormControl(routingData.billAmount, [
+          Validators.required,
+        ]),
+        pendingAmount: new UntypedFormControl(0),
+        receiptNumber: new UntypedFormControl('', [Validators.required]),
+        modeOfPayment: new UntypedFormControl('', [Validators.required]),
+        chequeNo: new UntypedFormControl(''),
+        comment: new UntypedFormControl(),
+      });
+    } else {
+      this.snackBar.open('Bill is Already Paid.');
+      this.router.navigate(['/salebook']);
+    }
+  }
 
   ngOnInit(): void {
     this.initializeFormGroup();
@@ -64,6 +121,10 @@ export class RecoveryComponent implements OnInit {
 
     if (this.localRouteValue) {
       this.onRouteSelectionChange(this.localRouteValue);
+    }
+
+    if (this.selecetdBill) {
+      this.prepopulateData(this.selecetdBill);
     }
   }
 
@@ -142,6 +203,9 @@ export class RecoveryComponent implements OnInit {
         ?.addValidators(Validators.required);
     } else {
       this.isCheque = false;
+      this.recoveryFormGroup.patchValue({
+        chequeNo: '',
+      });
       this.recoveryFormGroup
         .get('chequeNo')
         ?.removeValidators(Validators.required);
@@ -234,9 +298,9 @@ export class RecoveryComponent implements OnInit {
     }
   }
 
-  getBillsForSelectedStore(selecetdValue: string, route: string) {
+  async getBillsForSelectedStore(selecetdValue: string, route: string) {
     this.billCollection = [];
-    this.billService
+    await this.billService
       .getFilteredBillsByStoreName(selecetdValue, route)
       .then((result) => {
         if (result && result.length > 0) {
@@ -311,6 +375,7 @@ export class RecoveryComponent implements OnInit {
         );
         this.updateBillPendingAmount();
         this.initializeFormGroup();
+        this.router.navigate(['/salebook']);
       })
       .catch((err) => {
         console.log(err);
@@ -330,6 +395,7 @@ export class RecoveryComponent implements OnInit {
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
       ),
+      status: 'PAID',
     } as BillDetails;
 
     this.billService
@@ -364,6 +430,7 @@ export class RecoveryComponent implements OnInit {
   }
 
   OnBillNumberChanged() {
+    console.log('OnBillNumberChanged called');
     this.recoveryFormGroup.patchValue({
       billAmount: '',
       pendingAmount: '',

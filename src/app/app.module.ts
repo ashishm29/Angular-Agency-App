@@ -160,6 +160,7 @@ export const MY_SERVICE_TOKEN = new InjectionToken<StoreRouteService>('IStore');
     ReactiveFormsModule,
     FormsModule,
     AgGridModule,
+    MatSidenavModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
   ],

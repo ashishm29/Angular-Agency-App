@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Inject,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -18,11 +19,15 @@ import { StoreRouteService } from '../interface/StoreRouteService';
 import { MY_SERVICE_TOKEN } from '../app.module';
 import { AgGridServiceImpl } from '../interfaceImplementation/AgGridServiceImpl';
 import { ColDef } from 'ag-grid-community';
-import { BillDetails } from '../models/route';
+import { BillDetails, RecoveryDetails } from '../models/route';
 import { SnackBarService } from '../services/snackbar.service';
 import { DatePipe } from '@angular/common';
 import { ValidationDialogService } from '../services/validation-dialog.service';
 import { map } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+import { RecoveryService } from '../services/recovery.service';
+import { CellStyle } from '@ag-grid-community/core';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-sale-book',
@@ -31,12 +36,14 @@ import { map } from 'rxjs';
 })
 export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
   @ViewChild('billFormDirective') private billFormDirective!: NgForm;
+  @ViewChild('drawer') private drawer!: MatDrawer;
   routeName!: string;
   myControl = new UntypedFormControl();
   isClicked: boolean = false;
   buttonText: string = AppConstant.ADD_BILL_BTN_TEXT;
   localRouteValue!: string;
   callbackFunction = new EventEmitter<{ action: string; value: any }>();
+  showFiller = false;
 
   constructor(
     public billService: BillService,
@@ -44,7 +51,9 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     @Inject(MY_SERVICE_TOKEN) public storeRouteService: StoreRouteService,
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
-    private validationDialogService: ValidationDialogService
+    private validationDialogService: ValidationDialogService,
+    public recoveryService: RecoveryService,
+    private authservice: AuthService
   ) {
     super();
   }
@@ -101,8 +110,16 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       wrapText: true,
       autoHeight: true,
     },
+    // {
+    //   field: 'revisedAmount',
+    //   flex: 2,
+    //   minWidth: 200,
+    //   wrapText: true,
+    //   autoHeight: true,
+    //   editable: true,
+    // },
     {
-      field: 'revisedAmount',
+      field: 'status',
       flex: 2,
       minWidth: 200,
       wrapText: true,
@@ -115,6 +132,11 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       cellRenderer: 'agGridMenuRenderer',
       cellRendererParams: {
         callBack: this.callbackFunction,
+      },
+      cellStyle: (params: any) => {
+        return params.data.status
+          ? ({ 'pointer-events': 'none', opacity: '0.2' } as CellStyle)
+          : ('' as unknown as CellStyle);
       },
     },
   ];
@@ -135,6 +157,12 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         map((val) => {
           console.log(val.action);
           console.log(val.value);
+
+          if (val.action === 'Paid') {
+            this.markPaid(val.value);
+          } else if (val.action === 'UnPaid') {
+          } else if (val.action === 'Delete') {
+          }
         })
       )
       .subscribe();
@@ -248,4 +276,119 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         this.reset();
       });
   }
+
+  markPaid(param: any) {
+    this.recoveryService.parameters.emit({ params: param });
+    this.drawer.toggle();
+  }
+
+  markUnPaid(param: any) {
+    //
+    let req = {
+      ...param.data,
+      status: 'UNPAID',
+    } as BillDetails;
+  }
+
+  markDeleted(param: any) {
+    // Mark delete
+    let req = {
+      ...param.data,
+      status: 'DELETED',
+    } as BillDetails;
+  }
+
+  // onAddRecoveryData(params: BillDetails) {
+  //   // if (this.storeRouteService.billFormGroup.invalid) {
+  //   //   console.log('recovery form is invalid');
+  //   //   return;
+  //   // }
+
+  //   // if (
+  //   //   +this.storeRouteService.billFormGroup.value.billAmount -
+  //   //     +this.storeRouteService.billFormGroup.value.amountReceived <
+  //   //   0
+  //   // ) {
+  //   //   this.validationDialogService.openValidationDialog(
+  //   //     AppConstant.ADD_BILL_PENDING_AMT_VALIDATION
+  //   //   );
+  //   //   return;
+  //   // } else if (
+  //   //   +this.storeRouteService.billFormGroup.value.billAmount ===
+  //   //   +this.storeRouteService.billFormGroup.value.pendingAmount
+  //   // ) {
+  //   //   this.validationDialogService.openValidationDialog(
+  //   //     AppConstant.ADD_RECOVERY_BILL_AND_PENDING_AMT_VALIDATION
+  //   //   );
+  //   //   return;
+  //   // }
+
+  //   if (this.isClicked) {
+  //     return;
+  //   }
+  //   this.isClicked = true;
+  //   this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
+
+  //   let recoveryDetail = {
+  //     address: params.storeName.address,
+  //     amountReceived: params.billAmount,
+  //     billAmount: params.billAmount,
+  //     billNumber: params.billNumber,
+  //     // modeOfPayment :
+  //     pendingAmount: '0',
+  //     receiptNumber: '',
+  //     route: params.route,
+  //     storeName: params.storeName,
+  //     recoveryDate: new Date(),
+  //     createdDate: this.datePipe.transform(
+  //       Date.now().toString(),
+  //       AppConstant.DATE_TIME_FORMAT
+  //     ),
+  //     recoveryAgent: this.authservice.getuserDetails().username,
+  //   } as RecoveryDetails;
+
+  //   this.recoveryService
+  //     .addRecoveryDetails(recoveryDetail)
+  //     .then(() => {
+  //       console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
+  //       this.snackbarService.openSnackBar(
+  //         AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
+  //         AppConstant.SAVE_ACTION
+  //       );
+  //       this.updateBillPendingAmount();
+  //       // this.initializeFormGroup();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+  //     })
+  //     .finally(() => {
+  //       this.isClicked = false;
+  //       this.buttonText = AppConstant.SUBMIT_BTN_TEXT;
+  //     });
+  // }
+
+  // updateBillPendingAmount() {
+  //   let bill = {
+  //     // ...this.selecetdBill,
+  //     pendingAmount: this.storeRouteService.billFormGroup.value.pendingAmount,
+  //     updatedDate: this.datePipe.transform(
+  //       Date.now().toString(),
+  //       AppConstant.DATE_TIME_FORMAT
+  //     ),
+  //   } as BillDetails;
+
+  //   this.billService
+  //     .updateBillPendingAmount(bill)
+  //     .then(() => {
+  //       console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);
+  //       this.snackbarService.openSnackBar(
+  //         AppConstant.BILL_UPDATED_SUCCESS_MSG,
+  //         AppConstant.UPDAE_ACTION
+  //       );
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 }

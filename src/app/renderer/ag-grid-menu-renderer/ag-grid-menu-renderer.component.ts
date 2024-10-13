@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-ag-grid-menu-renderer',

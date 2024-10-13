@@ -31,6 +31,7 @@ export class BillDetails {
   comment!: string;
   isRedBill!: boolean;
   isOrangeBill!: boolean;
+  status!: string;
 }
 
 export class RecoveryDetails {

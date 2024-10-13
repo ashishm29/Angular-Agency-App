@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { getDocs } from '@firebase/firestore';
 import { PaymentMode, RecoveryDetails, RecoveryHistory } from '../models/route';
@@ -22,6 +22,8 @@ export class RecoveryService {
     public firestoreService: FirestoreService,
     public logService: LoggingService
   ) {}
+
+  parameters = new EventEmitter<any>();
 
   async getPaymentModes() {
     let resultData: PaymentMode[] = [];
