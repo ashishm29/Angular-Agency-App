@@ -96,6 +96,8 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       field: 'paymentDate',
       flex: 2,
       valueGetter: (param) => {
+        if (!param.data.paymentDate) return;
+
         return this.datePipe.transform(
           param.data.paymentDate.toDate(),
           'dd-MM-yyyy'
