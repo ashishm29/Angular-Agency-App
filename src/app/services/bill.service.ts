@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { getDocs } from '@firebase/firestore';
 import { BillDetails } from '../models/route';
@@ -19,6 +19,9 @@ import { LoggingService } from './logging.service';
   providedIn: 'root',
 })
 export class BillService {
+  parameters = new EventEmitter<any>();
+  billUpdated = new EventEmitter();
+
   constructor(
     public firestoreService: FirestoreService,
     public logService: LoggingService

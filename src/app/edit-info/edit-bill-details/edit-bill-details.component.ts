@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { map } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
 import { BillDetails, RecoveryDetails } from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
@@ -22,6 +23,7 @@ export class EditBillDetailsComponent implements OnInit {
   billFormBillNoControl = new UntypedFormControl();
   selectedBillToUpdate!: BillDetails;
   billCollection: BillDetails[] = [];
+  isNavigated = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -29,11 +31,28 @@ export class EditBillDetailsComponent implements OnInit {
     private billService: BillService,
     private snackbarService: SnackBarService,
     private recoveryService: RecoveryService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.billFormBillNoControl = new UntypedFormControl();
     this.initializeBillUiFields();
+
+    this.isNavigated = false;
+    this.billService.parameters
+      .pipe(
+        map((values) => {
+          this.isNavigated = true;
+          this.billFormBillNoControl = new UntypedFormControl();
+          this.populateData(values.params);
+        })
+      )
+      .subscribe();
+  }
+
+  ngOnInit(): void {}
+
+  populateData(details: BillDetails) {
+    this.initializeBillUiFields();
+    this.billFormBillNoControl.patchValue(details.billNumber);
+    this.searchBill();
   }
 
   initializeBillUiFields() {
@@ -135,6 +154,10 @@ export class EditBillDetailsComponent implements OnInit {
             }
 
             this.initializeBillUiFields();
+
+            if (this.isNavigated) {
+              this.billService.billUpdated.emit();
+            }
           });
       })
       .catch((err) => {

@@ -24,6 +24,8 @@ export class RecoveryService {
   ) {}
 
   parameters = new EventEmitter<any>();
+  recoveryUpdated = new EventEmitter();
+  closeSidePanelEvent = new EventEmitter();
 
   async getPaymentModes() {
     let resultData: PaymentMode[] = [];

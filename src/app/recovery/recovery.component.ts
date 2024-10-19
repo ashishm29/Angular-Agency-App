@@ -96,21 +96,20 @@ export class RecoveryComponent implements OnInit {
         billNumber: new UntypedFormControl(routingData.billNumber, [
           Validators.required,
         ]),
-        billAmount: new UntypedFormControl(routingData.billAmount, [
+        billAmount: new UntypedFormControl(routingData.pendingAmount, [
           Validators.required,
         ]),
-        amountReceived: new UntypedFormControl(routingData.billAmount, [
+        amountReceived: new UntypedFormControl(routingData.pendingAmount, [
           Validators.required,
         ]),
-        pendingAmount: new UntypedFormControl(0),
+        pendingAmount: new UntypedFormControl(routingData.pendingAmount),
         receiptNumber: new UntypedFormControl('', [Validators.required]),
         modeOfPayment: new UntypedFormControl('', [Validators.required]),
         chequeNo: new UntypedFormControl(''),
         comment: new UntypedFormControl(),
       });
     } else {
-      this.snackBar.open('Bill is Already Paid.');
-      this.router.navigate(['/salebook']);
+      this.snackBar.open('Bill is Already Paid.', '', { duration: 2000 });
     }
   }
 
@@ -375,7 +374,9 @@ export class RecoveryComponent implements OnInit {
         );
         this.updateBillPendingAmount();
         this.initializeFormGroup();
-        this.router.navigate(['/salebook']);
+        if (this.isNavigated) {
+          this.recoveryService.recoveryUpdated.emit();
+        }
       })
       .catch((err) => {
         console.log(err);

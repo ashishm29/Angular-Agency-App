@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   NgForm,
@@ -19,15 +20,16 @@ import { StoreRouteService } from '../interface/StoreRouteService';
 import { MY_SERVICE_TOKEN } from '../app.module';
 import { AgGridServiceImpl } from '../interfaceImplementation/AgGridServiceImpl';
 import { ColDef } from 'ag-grid-community';
-import { BillDetails, RecoveryDetails } from '../models/route';
+import { BillDetails } from '../models/route';
 import { SnackBarService } from '../services/snackbar.service';
 import { DatePipe } from '@angular/common';
 import { ValidationDialogService } from '../services/validation-dialog.service';
 import { map } from 'rxjs';
-import { AuthService } from '../services/auth.service';
 import { RecoveryService } from '../services/recovery.service';
 import { CellStyle } from '@ag-grid-community/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { EditBillDetailsComponent } from '../edit-info/edit-bill-details/edit-bill-details.component';
+import { RecoveryComponent } from '../recovery/recovery.component';
 
 @Component({
   selector: 'app-sale-book',
@@ -44,6 +46,10 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
   localRouteValue!: string;
   callbackFunction = new EventEmitter<{ action: string; value: any }>();
   showFiller = false;
+  selectedAction!: string;
+
+  @ViewChild('dynamicComponentContainer', { read: ViewContainerRef })
+  dynamicComponentContainer!: ViewContainerRef;
 
   constructor(
     public billService: BillService,
@@ -52,8 +58,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     private datePipe: DatePipe,
     private snackbarService: SnackBarService,
     private validationDialogService: ValidationDialogService,
-    public recoveryService: RecoveryService,
-    private authservice: AuthService
+    public recoveryService: RecoveryService
   ) {
     super();
   }
@@ -109,22 +114,22 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
+      editable: true,
     },
-    // {
-    //   field: 'revisedAmount',
-    //   flex: 2,
-    //   minWidth: 200,
-    //   wrapText: true,
-    //   autoHeight: true,
-    //   editable: true,
-    // },
     {
-      field: 'status',
+      field: 'comment',
       flex: 2,
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
       editable: true,
+    },
+    {
+      field: 'pendingAmount',
+      flex: 2,
+      minWidth: 200,
+      wrapText: true,
+      autoHeight: true,
     },
     {
       minWidth: 80,
@@ -134,7 +139,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         callBack: this.callbackFunction,
       },
       cellStyle: (params: any) => {
-        return params.data.status
+        return params.data.pendingAmount === 0
           ? ({ 'pointer-events': 'none', opacity: '0.2' } as CellStyle)
           : ('' as unknown as CellStyle);
       },
@@ -148,6 +153,24 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     this.storeRouteService.onFetchRoute();
     this.loadTodaysBills();
 
+    this.recoveryService.recoveryUpdated
+      .pipe(
+        map(() => {
+          this.loadTodaysBills();
+          this.drawer.toggle();
+        })
+      )
+      .subscribe();
+
+    this.billService.billUpdated
+      .pipe(
+        map(() => {
+          this.loadTodaysBills();
+          this.drawer.toggle();
+        })
+      )
+      .subscribe();
+
     if (this.localRouteValue) {
       this.storeRouteService.onRouteSelectionChange(this.localRouteValue);
     }
@@ -157,15 +180,24 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         map((val) => {
           console.log(val.action);
           console.log(val.value);
+          this.selectedAction = val.action;
 
-          if (val.action === 'Paid') {
-            this.markPaid(val.value);
-          } else if (val.action === 'UnPaid') {
-          } else if (val.action === 'Delete') {
+          if (val.action === 'recovery') {
+            this.openAddRecoveryPanel(val.value);
+          } else if (val.action === 'deleteBill') {
+            this.deleteBill(val.value);
+          }
+          if (val.action === 'updateBill') {
+            this.openUpdateBillPanel(val.value);
           }
         })
       )
       .subscribe();
+  }
+
+  loadDependentComponent(component: any) {
+    this.dynamicComponentContainer.clear();
+    this.dynamicComponentContainer.createComponent(component);
   }
 
   initialize() {
@@ -257,6 +289,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     this.isClicked = false;
     this.buttonText = AppConstant.ADD_BILL_BTN_TEXT;
     this.initialize();
+    this.loadTodaysBills();
   }
 
   loadTodaysBills() {
@@ -277,118 +310,33 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       });
   }
 
-  markPaid(param: any) {
+  openAddRecoveryPanel(param: any) {
+    this.loadDependentComponent(RecoveryComponent);
     this.recoveryService.parameters.emit({ params: param });
     this.drawer.toggle();
   }
 
-  markUnPaid(param: any) {
-    //
-    let req = {
-      ...param.data,
-      status: 'UNPAID',
-    } as BillDetails;
+  openUpdateBillPanel(param: any) {
+    this.loadDependentComponent(EditBillDetailsComponent);
+    this.billService.parameters.emit({ params: param });
+    this.drawer.toggle();
   }
 
-  markDeleted(param: any) {
-    // Mark delete
-    let req = {
-      ...param.data,
-      status: 'DELETED',
-    } as BillDetails;
+  deleteBill(param: any) {
+    this.billService
+      .deleteBill(param.id)
+      .then(() => {
+        this.snackbarService.openSnackBar(
+          AppConstant.BILL_DELETED_SUCCESS_MSG,
+          AppConstant.DELETE_ACTION
+        );
+        console.log(AppConstant.BILL_DELETED_SUCCESS_MSG);
+      })
+      .catch((err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+      });
+
+    this.loadTodaysBills();
   }
-
-  // onAddRecoveryData(params: BillDetails) {
-  //   // if (this.storeRouteService.billFormGroup.invalid) {
-  //   //   console.log('recovery form is invalid');
-  //   //   return;
-  //   // }
-
-  //   // if (
-  //   //   +this.storeRouteService.billFormGroup.value.billAmount -
-  //   //     +this.storeRouteService.billFormGroup.value.amountReceived <
-  //   //   0
-  //   // ) {
-  //   //   this.validationDialogService.openValidationDialog(
-  //   //     AppConstant.ADD_BILL_PENDING_AMT_VALIDATION
-  //   //   );
-  //   //   return;
-  //   // } else if (
-  //   //   +this.storeRouteService.billFormGroup.value.billAmount ===
-  //   //   +this.storeRouteService.billFormGroup.value.pendingAmount
-  //   // ) {
-  //   //   this.validationDialogService.openValidationDialog(
-  //   //     AppConstant.ADD_RECOVERY_BILL_AND_PENDING_AMT_VALIDATION
-  //   //   );
-  //   //   return;
-  //   // }
-
-  //   if (this.isClicked) {
-  //     return;
-  //   }
-  //   this.isClicked = true;
-  //   this.buttonText = AppConstant.PLEASE_WAIT_BTN_TEXT;
-
-  //   let recoveryDetail = {
-  //     address: params.storeName.address,
-  //     amountReceived: params.billAmount,
-  //     billAmount: params.billAmount,
-  //     billNumber: params.billNumber,
-  //     // modeOfPayment :
-  //     pendingAmount: '0',
-  //     receiptNumber: '',
-  //     route: params.route,
-  //     storeName: params.storeName,
-  //     recoveryDate: new Date(),
-  //     createdDate: this.datePipe.transform(
-  //       Date.now().toString(),
-  //       AppConstant.DATE_TIME_FORMAT
-  //     ),
-  //     recoveryAgent: this.authservice.getuserDetails().username,
-  //   } as RecoveryDetails;
-
-  //   this.recoveryService
-  //     .addRecoveryDetails(recoveryDetail)
-  //     .then(() => {
-  //       console.log(AppConstant.RECOVERY_ADDED_SUCCESS_MSG);
-  //       this.snackbarService.openSnackBar(
-  //         AppConstant.RECOVERY_ADDED_SUCCESS_MSG,
-  //         AppConstant.SAVE_ACTION
-  //       );
-  //       this.updateBillPendingAmount();
-  //       // this.initializeFormGroup();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
-  //     })
-  //     .finally(() => {
-  //       this.isClicked = false;
-  //       this.buttonText = AppConstant.SUBMIT_BTN_TEXT;
-  //     });
-  // }
-
-  // updateBillPendingAmount() {
-  //   let bill = {
-  //     // ...this.selecetdBill,
-  //     pendingAmount: this.storeRouteService.billFormGroup.value.pendingAmount,
-  //     updatedDate: this.datePipe.transform(
-  //       Date.now().toString(),
-  //       AppConstant.DATE_TIME_FORMAT
-  //     ),
-  //   } as BillDetails;
-
-  //   this.billService
-  //     .updateBillPendingAmount(bill)
-  //     .then(() => {
-  //       console.log(AppConstant.BILL_UPDATED_SUCCESS_MSG);
-  //       this.snackbarService.openSnackBar(
-  //         AppConstant.BILL_UPDATED_SUCCESS_MSG,
-  //         AppConstant.UPDAE_ACTION
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
 }
