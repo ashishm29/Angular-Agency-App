@@ -17,6 +17,13 @@ import { SnackBarService } from '../services/snackbar.service';
 import { DeleteConfirmationDialogComponent } from '../dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DropdownRendererComponent } from '../renderer/dropdown-renderer/dropdown-renderer.component';
+import {
+  PinnedRowModel,
+  RowClassParams,
+  RowStyle,
+} from '@ag-grid-community/core';
+import { style } from '@angular/animations';
+import { CustomPinnedRowRendererComponent } from '../renderer/custom-pinned-row-renderer/custom-pinned-row-renderer.component';
 
 @Component({
   selector: 'app-purchase',
@@ -25,6 +32,8 @@ import { DropdownRendererComponent } from '../renderer/dropdown-renderer/dropdow
 })
 export class PurchaseComponent extends BaseCompany implements OnInit {
   formGroup!: UntypedFormGroup;
+  totalBillAmount!: number;
+  totalRevisedAmount!: number;
 
   collection: Purchase[] = [];
   paymentStatusList: KeyValue<string, string>[] = [
@@ -37,7 +46,7 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
     suppressRowHoverHighlight: false,
     columnHoverHighlight: false,
     pagination: false,
-    paginationPageSize: 50,
+    paginationPageSize: 10,
     suppressHorizontalScroll: false,
     alwaysShowHorizontalScroll: true,
   };
@@ -55,11 +64,26 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
     {
       field: 'companyName',
       flex: 2,
+      cellRendererSelector: (params) => {
+        if (params.node.rowPinned) {
+          return {
+            component: CustomPinnedRowRendererComponent,
+            params: {
+              style: { color: '#000000', fontWeight: 'bolder' },
+            },
+          };
+        } else {
+          // rows that are not pinned don't use any cell renderer
+          return undefined;
+        }
+      },
     },
     {
       field: 'billDate',
       flex: 2,
       valueGetter: (param) => {
+        if (!param.data.billDate) return;
+
         return this.datePipe.transform(
           param.data.billDate.toDate(),
           'dd-MM-yyyy'
@@ -75,7 +99,21 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       flex: 2,
       editable: true,
       filter: 'agNumberColumnFilter',
+      aggFunc: 'sum',
       valueFormatter: (params) => this.currencyFormatter(params),
+      cellRendererSelector: (params) => {
+        if (params.node.rowPinned) {
+          return {
+            component: CustomPinnedRowRendererComponent,
+            params: {
+              value: this.currencyFormatter(params),
+              style: { color: '#000000', fontWeight: 'bolder' },
+            },
+          };
+        } else {
+          return undefined;
+        }
+      },
       // filterParams: {
       //   suppressAndOrCondition: true,
       //   filterOptions: ['greaterThan', 'equals'],
@@ -85,7 +123,21 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       field: 'revisedAmount',
       flex: 2,
       editable: true,
+      aggFunc: 'sum',
       valueFormatter: (params) => this.currencyFormatter(params),
+      cellRendererSelector: (params) => {
+        if (params.node.rowPinned) {
+          return {
+            component: CustomPinnedRowRendererComponent,
+            params: {
+              value: this.currencyFormatter(params),
+              style: { color: '#000000', fontWeight: 'bolder' },
+            },
+          };
+        } else {
+          return undefined;
+        }
+      },
     },
     {
       field: 'comment',
@@ -122,25 +174,44 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
     {
       headerName: 'Update',
       minWidth: 100,
-      cellRenderer: 'buttonRenderer',
+      // cellRenderer: 'buttonRenderer',
       cellRendererParams: {
         onClick: this.openUpdateConfirmationDialog.bind(this),
         label: 'Update',
+      },
+      cellRendererSelector: (params) => {
+        if (!params.node.rowPinned) {
+          return {
+            component: 'buttonRenderer',
+          };
+        } else {
+          return undefined;
+        }
       },
     },
     {
       headerName: 'Delete',
       minWidth: 100,
-      cellRenderer: 'buttonRenderer',
+      // cellRenderer: 'buttonRenderer',
       cellRendererParams: {
         onClick: this.openDeleteConfirmationDialog.bind(this),
         label: 'Delete',
+      },
+      cellRendererSelector: (params) => {
+        if (!params.node.rowPinned) {
+          return {
+            component: 'buttonRenderer',
+          };
+        } else {
+          return undefined;
+        }
       },
     },
   ];
 
   onGridReady(params: any) {
     this.api = params.api;
+    this.api.addEventListener('filterChanged', this.onFilterChanged.bind(this));
   }
 
   constructor(
@@ -170,6 +241,28 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
 
     this.onFetchCompanys();
     this.getPurchaseDetails();
+  }
+
+  onFilterChanged(args: any) {
+    this.api.updateGridOptions({ rowData: this.collection });
+
+    let filteredData = this.api.rowModel.rowsToDisplay;
+
+    let data: Purchase[] = [];
+
+    for (const item of filteredData) {
+      data.push(item.data);
+    }
+    this.getTotalAmount(data);
+
+    console.log('Collection : ' + this.collection.length);
+    this.api.setGridOption('pinnedBottomRowData', [
+      {
+        companyName: 'TOTAL :',
+        billAmount: this.totalBillAmount,
+        revisedAmount: this.totalRevisedAmount,
+      },
+    ]);
   }
 
   onAdd() {
@@ -224,8 +317,33 @@ export class PurchaseComponent extends BaseCompany implements OnInit {
       if (result && result.length > 0) {
         this.collection = this.sortData(result);
         this.api.updateGridOptions({ rowData: this.collection });
+        this.getTotalAmount(this.collection);
+        this.api.setGridOption('pinnedBottomRowData', [
+          {
+            companyName: 'TOTAL :',
+            billAmount: this.totalBillAmount,
+            revisedAmount: this.totalRevisedAmount,
+          },
+        ]);
       }
     });
+  }
+
+  getTotalAmount(data: Purchase[]) {
+    this.totalBillAmount = 0;
+    this.totalRevisedAmount = 0;
+
+    this.totalBillAmount = data
+      .map((t) => {
+        return +t.billAmount;
+      })
+      .reduce((acc, value) => acc + value, 0);
+
+    this.totalRevisedAmount = data
+      .map((t) => {
+        return +t.revisedAmount;
+      })
+      .reduce((acc, value) => acc + value, 0);
   }
 
   sortData(result: Purchase[]) {

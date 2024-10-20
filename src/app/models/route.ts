@@ -141,7 +141,7 @@ export class Purchase {
   partyName!: string;
   billDate!: Timestamp;
   billNumber!: string;
-  amount!: string;
+  billAmount!: string;
   revisedAmount!: string;
   comment!: string;
   paymentDate!: Timestamp;

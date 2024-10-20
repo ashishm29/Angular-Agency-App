@@ -66,19 +66,23 @@
 
   <mat-form-field appearance="outline" class="mat-form-field-custome">
     <mat-label>Comment</mat-label>
-    <input matInput formControlName="comment"  toUppercase />
+    <input matInput formControlName="comment" toUppercase />
   </mat-form-field>
 
-  <button mat-raised-button color="primary"
-  [disabled]="formGroup.invalid"
-  type="submit" (click)="onAdd()">
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="formGroup.invalid"
+    type="submit"
+    (click)="onAdd()"
+  >
     Add
   </button>
 </div>
 
 <div class="content">
   <ag-grid-angular
-    style="width: 100%; height: 600px"
+    style="width: 100%; height: 650px"
     [rowData]="collection"
     [columnDefs]="colDefs"
     [defaultColDef]="defaultColDef"
