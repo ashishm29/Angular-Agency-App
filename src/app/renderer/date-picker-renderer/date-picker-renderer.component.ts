@@ -1,13 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
-import {
-  ICellEditorAngularComp,
-  ICellRendererAngularComp,
-  IDateAngularComp,
-} from 'ag-grid-angular';
-import { IAfterGuiAttachedParams } from 'ag-grid-community';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-date-picker-renderer',
@@ -19,12 +13,17 @@ export class DatePickerRendererComponent implements ICellRendererAngularComp {
   absentDays!: string[];
   selectedDate!: FormControl;
   gridApi: any;
+  dateOfJoining!: Date;
+
   agInit(params: any): void {
     this.params = params;
     this.absentDays = this.params.data.absentDayList || null;
-    // this.selectedDate = new FormControl(Timestamp.now().toDate());
     this.selectedDate = new FormControl(this.params.data.absentDate);
     this.gridApi = this.params.gridApi;
+
+    if (this.params.data.dateOfJoining) {
+      this.dateOfJoining = this.params.data.dateOfJoining?.toDate();
+    }
   }
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {

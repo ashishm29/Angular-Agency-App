@@ -20,6 +20,7 @@ export class User {
   mobileNumber!: number;
   password!: string;
   salary!: number;
+  dateOfJoining!: Date;
 }
 
 export class Role {

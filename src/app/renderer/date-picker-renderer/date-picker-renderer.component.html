@@ -3,6 +3,7 @@
     matInput
     [matDatepicker]="picker"
     [formControl]="selectedDate"
+    [min]="dateOfJoining"
     (dateChange)="onChange($event)"
   />
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>

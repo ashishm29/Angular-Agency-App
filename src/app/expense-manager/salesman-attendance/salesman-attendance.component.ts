@@ -72,15 +72,37 @@ export class SalesmanAttendanceComponent implements OnInit {
     },
     {
       field: 'salary',
-      flex: 1.5,
+      flex: 0.6,
       minWidth: 200,
       wrapText: true,
       editable: false,
       autoHeight: true,
     },
     {
+      field: 'dateOfJoining',
+      flex: 1,
+      minWidth: 200,
+      wrapText: true,
+      editable: false,
+      autoHeight: true,
+      valueGetter: (param: any) => {
+        if (!param.data.dateOfJoining) return;
+        try {
+          return this.datePipe.transform(
+            param.data.dateOfJoining.toDate(),
+            'dd-MM-yyyy'
+          );
+        } catch {
+          return this.datePipe.transform(
+            param.data.dateOfJoining.toString(),
+            'dd-MM-yyyy'
+          );
+        }
+      },
+    },
+    {
       field: 'salaryToPay',
-      flex: 1.5,
+      flex: 1,
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
@@ -110,7 +132,7 @@ export class SalesmanAttendanceComponent implements OnInit {
     {
       headerName: 'Comment',
       field: 'comment',
-      flex: 1,
+      flex: 1.5,
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
@@ -317,6 +339,7 @@ export class SalesmanAttendanceComponent implements OnInit {
             salary: salesman[i].salary,
             salaryToPay: dueSal,
             comment: '',
+            dateOfJoining: salesman[i].dateOfJoining,
           } as any);
         }
 

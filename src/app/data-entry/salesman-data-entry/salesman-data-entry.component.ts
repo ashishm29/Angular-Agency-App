@@ -28,7 +28,8 @@ export class SalesmanDataEntryComponent implements OnInit {
   constructor(
     private userService: UserService,
     private snackbarService: SnackBarService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private datePipe: DatePipe
   ) {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
@@ -96,6 +97,28 @@ export class SalesmanDataEntryComponent implements OnInit {
       autoHeight: true,
     },
     {
+      field: 'dateOfJoining',
+      flex: 1.5,
+      minWidth: 200,
+      wrapText: true,
+      editable: false,
+      autoHeight: true,
+      valueGetter: (param: any) => {
+        if (!param.data.dateOfJoining) return;
+        try {
+          return this.datePipe.transform(
+            param.data.dateOfJoining.toDate(),
+            'dd-MM-yyyy'
+          );
+        } catch {
+          return this.datePipe.transform(
+            param.data.dateOfJoining.toString(),
+            'dd-MM-yyyy'
+          );
+        }
+      },
+    },
+    {
       headerName: '',
       minWidth: 100,
       cellRenderer: 'buttonRenderer',
@@ -127,6 +150,7 @@ export class SalesmanDataEntryComponent implements OnInit {
       role: new UntypedFormControl('', [Validators.required]),
       password: new UntypedFormControl('', [Validators.required]),
       salary: new UntypedFormControl('', [Validators.required]),
+      dateOfJoining: new UntypedFormControl('', [Validators.required]),
       mobileNumber: new UntypedFormControl('', [
         Validators.required,
         Validators.min(1000000000),
