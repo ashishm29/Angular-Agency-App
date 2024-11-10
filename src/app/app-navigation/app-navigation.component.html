@@ -24,6 +24,13 @@
       >
       <a
         mat-list-item
+        routerLink="/bankcheque"
+        *ngIf="isAuthenticate"
+        (click)="drawer.toggle()"
+        >Bank Cheque</a
+      >
+      <a
+        mat-list-item
         routerLink="/dataentry"
         *ngIf="isAuthenticate && isAdmin"
         (click)="drawer.toggle()"
@@ -122,6 +129,13 @@
           routerLinkActive="active-link"
           *ngIf="isAuthenticate"
           >Dashboard</a
+        >
+        <a
+          mat-button
+          routerLink="/bankcheque"
+          routerLinkActive="active-link"
+          *ngIf="isAuthenticate"
+          >Bank Cheque</a
         >
         <a
           mat-button

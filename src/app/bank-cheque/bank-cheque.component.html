@@ -1,0 +1,13 @@
+<div class="content">
+  <ag-grid-angular
+    style="width: 100%; height: 900px"
+    [rowData]="collection"
+    [columnDefs]="colDefs"
+    [defaultColDef]="defaultColDef"
+    [components]="frameworkComponents"
+    [gridOptions]="gridOptions"
+    class="ag-theme-quartz"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>

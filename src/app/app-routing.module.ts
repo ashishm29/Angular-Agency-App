@@ -28,6 +28,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { ProductDataEntryComponent } from './data-entry/product-data-entry/product-data-entry.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { SaleBookComponent } from './sale-book/sale-book.component';
+import { BankChequeComponent } from './bank-cheque/bank-cheque.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -159,6 +160,11 @@ const routes: Routes = [
   {
     path: 'salebook',
     component: SaleBookComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'bankcheque',
+    component: BankChequeComponent,
     canActivate: [AuthGuard],
   },
 ];

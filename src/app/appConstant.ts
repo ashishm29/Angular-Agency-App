@@ -101,6 +101,7 @@ export class AppConstant {
   static readonly PRODUCT_UPDATE: string = 'Product_Update';
   static readonly PRODUCT_DELETE: string = 'Product_DELETE';
   static readonly PURCHASE_DELETE: string = 'PURCHASE_DELETE';
+  static readonly BANK_CHEQUE_UPDATE: string = 'BANK_CHEQUE_UPDATE';
 
   static readonly ADD_STORE_VALIDATION: string =
     'Store with entered mobile number already exist.';

@@ -77,6 +77,7 @@ import { StoreRouteService } from './interface/StoreRouteService';
 import { StoreRouteServiceImpl } from './interfaceImplementation/StoreRouteServiceImpl';
 import { AgGridMenuRendererComponent } from './renderer/ag-grid-menu-renderer/ag-grid-menu-renderer.component';
 import { CustomPinnedRowRendererComponent } from './renderer/custom-pinned-row-renderer/custom-pinned-row-renderer.component';
+import { BankChequeComponent } from './bank-cheque/bank-cheque.component';
 
 const MY_DATE_FORMAT = {
   parse: {
@@ -134,6 +135,7 @@ export const MY_SERVICE_TOKEN = new InjectionToken<StoreRouteService>('IStore');
     SaleBookComponent,
     AgGridMenuRendererComponent,
     CustomPinnedRowRendererComponent,
+    BankChequeComponent,
   ],
   imports: [
     BrowserModule,

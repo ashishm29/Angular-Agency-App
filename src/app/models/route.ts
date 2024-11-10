@@ -48,6 +48,9 @@ export class RecoveryDetails {
   recoveryDate!: Date;
   createdDate!: string;
   recoveryAgent!: string;
+  isDeposite!: string;
+  depositeStatus!: string;
+  chequeNo!: string;
 }
 
 export class StoreDataEntry {
