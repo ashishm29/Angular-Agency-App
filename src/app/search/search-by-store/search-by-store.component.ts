@@ -4,7 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { AppConstant } from 'src/app/appConstant';
-import { BillDetails, Route, StoreDetails } from 'src/app/models/route';
+import {
+  BillDetails,
+  BillStatus,
+  Route,
+  StoreDetails,
+} from 'src/app/models/route';
 import { BillService } from 'src/app/services/bill.service';
 import { RecoveryInfoComponent } from '../recovery-info/recovery-info.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -326,6 +331,10 @@ export class SearchByStoreComponent implements OnInit {
               filterResult = result.filter((c) => +c.pendingAmount == 0);
             }
           }
+
+          filterResult = filterResult.filter((c) =>
+            c.status && c.status == BillStatus.NEW ? false : true
+          );
 
           let oldRedBills = this.getRedBills(filterResult);
           let oldOrangeBills = this.getOrangeBills(filterResult);

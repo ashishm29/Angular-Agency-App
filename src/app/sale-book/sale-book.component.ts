@@ -20,7 +20,7 @@ import { StoreRouteService } from '../interface/StoreRouteService';
 import { MY_SERVICE_TOKEN } from '../app.module';
 import { AgGridServiceImpl } from '../interfaceImplementation/AgGridServiceImpl';
 import { ColDef } from 'ag-grid-community';
-import { BillDetails } from '../models/route';
+import { BillDetails, BillStatus } from '../models/route';
 import { SnackBarService } from '../services/snackbar.service';
 import { DatePipe } from '@angular/common';
 import { ValidationDialogService } from '../services/validation-dialog.service';
@@ -151,12 +151,12 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     this.collection = [];
     this.colDefs = this.columns;
     this.storeRouteService.onFetchRoute();
-    this.loadTodaysBills();
+    this.loadNewStatusBills();
 
     this.recoveryService.recoveryUpdated
       .pipe(
         map(() => {
-          this.loadTodaysBills();
+          this.loadNewStatusBills();
           this.drawer.toggle();
         })
       )
@@ -165,7 +165,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     this.billService.billUpdated
       .pipe(
         map(() => {
-          this.loadTodaysBills();
+          this.loadNewStatusBills();
           this.drawer.toggle();
         })
       )
@@ -186,9 +186,10 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
             this.openAddRecoveryPanel(val.value);
           } else if (val.action === 'deleteBill') {
             this.deleteBill(val.value);
-          }
-          if (val.action === 'updateBill') {
+          } else if (val.action === 'updateBill') {
             this.openUpdateBillPanel(val.value);
+          } else if (val.action === 'markUnpaid') {
+            this.markBillUnpaid(val.value);
           }
         })
       )
@@ -244,6 +245,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         Date.now().toString(),
         AppConstant.DATE_TIME_FORMAT
       ),
+      status: BillStatus.NEW,
     } as BillDetails;
 
     this.billService
@@ -289,16 +291,14 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     this.isClicked = false;
     this.buttonText = AppConstant.ADD_BILL_BTN_TEXT;
     this.initialize();
-    this.loadTodaysBills();
+    this.loadNewStatusBills();
   }
 
-  loadTodaysBills() {
-    let todaysDate = new Date();
-    todaysDate.setHours(0, 0, 0, 0);
-
+  loadNewStatusBills() {
     this.billService
-      .getBillByDate(todaysDate)
+      .getBillByStatus(BillStatus.NEW)
       .then((result) => {
+        this.collection = [];
         if (result != null && result.length > 0) {
           this.collection = result;
         }
@@ -337,6 +337,28 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
       });
 
-    this.loadTodaysBills();
+    this.loadNewStatusBills();
+  }
+
+  markBillUnpaid(param: any) {
+    let updatedBill = {
+      ...param,
+      status: BillStatus.UNPAID,
+    } as BillDetails;
+
+    this.billService
+      .updateBillDetails(updatedBill)
+      .then(() => {
+        this.snackbarService.openSnackBar(
+          AppConstant.BILL_UPDATED_SUCCESS_MSG,
+          AppConstant.UPDAE_ACTION
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+      });
+
+    this.loadNewStatusBills();
   }
 }

@@ -7,6 +7,7 @@ import {
 import { AppConstant } from '../appConstant';
 import {
   BillDetails,
+  BillStatus,
   PaymentMode,
   RecoveryDetails,
   Route,
@@ -80,7 +81,8 @@ export class RecoveryComponent implements OnInit {
   async prepopulateData(routingData: BillDetails) {
     await this.getBillsForSelectedStore(
       routingData.storeName.storeName,
-      routingData.route
+      routingData.route,
+      false
     );
 
     if (
@@ -102,7 +104,7 @@ export class RecoveryComponent implements OnInit {
         amountReceived: new UntypedFormControl(routingData.pendingAmount, [
           Validators.required,
         ]),
-        pendingAmount: new UntypedFormControl(routingData.pendingAmount),
+        pendingAmount: new UntypedFormControl(0),
         receiptNumber: new UntypedFormControl('', [Validators.required]),
         modeOfPayment: new UntypedFormControl('', [Validators.required]),
         chequeNo: new UntypedFormControl(''),
@@ -279,7 +281,11 @@ export class RecoveryComponent implements OnInit {
       mobileNo: selectedStore.mobileNo,
     });
 
-    this.getBillsForSelectedStore(selectedStore.storeName, selectedStore.route);
+    this.getBillsForSelectedStore(
+      selectedStore.storeName,
+      selectedStore.route,
+      true
+    );
   }
 
   onBillSelected(selectedBill: string) {
@@ -297,12 +303,22 @@ export class RecoveryComponent implements OnInit {
     }
   }
 
-  async getBillsForSelectedStore(selecetdValue: string, route: string) {
+  async getBillsForSelectedStore(
+    selecetdValue: string,
+    route: string,
+    ignoreNewStatusBills: boolean
+  ) {
     this.billCollection = [];
     await this.billService
       .getFilteredBillsByStoreName(selecetdValue, route)
       .then((result) => {
         if (result && result.length > 0) {
+          if (ignoreNewStatusBills) {
+            // DO not show Newly addded bill to salesman for recovery.
+            result = result.filter((c) =>
+              c.status && c.status == BillStatus.NEW ? false : true
+            );
+          }
           this.billCollection = this.sortData(result);
         } else {
           console.log(AppConstant.STORE_NOT_FOUND_MSG);

@@ -85,6 +85,11 @@ export class BillService {
     return this.getBills(queryConditions);
   }
 
+  async getBillByStatus(status: string) {
+    const queryConditions: QueryConstraint[] = [where('status', '==', status)];
+    return this.getBills(queryConditions);
+  }
+
   async getFilteredBillsByBillNumber(billnumber: string) {
     const queryConditions: QueryConstraint[] = [
       where('billNumber', '==', billnumber),
@@ -108,7 +113,6 @@ export class BillService {
         id: doc.id,
       } as BillDetails);
     });
-    console.log(JSON.stringify(collectionData));
     return collectionData;
   }
 

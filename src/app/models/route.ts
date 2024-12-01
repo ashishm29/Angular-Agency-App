@@ -140,6 +140,12 @@ export enum PaymentStatus {
   PAID = 1,
 }
 
+export enum BillStatus {
+  NEW = 'NEW',
+  UNPAID = 'UNPAID',
+  PAID = 'PAID',
+}
+
 export class Purchase {
   partyName!: string;
   billDate!: Timestamp;
