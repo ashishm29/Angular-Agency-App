@@ -127,6 +127,22 @@ export class RecoveryComponent implements OnInit {
     if (this.selecetdBill) {
       this.prepopulateData(this.selecetdBill);
     }
+
+    let store = this.localStorageService.getKeyValue(
+      AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY
+    ) as string;
+
+    let storeDetail = JSON.parse(store) as StoreDetails;
+
+    if (storeDetail) {
+      this.recoveryFormGroup.get('storeName')?.patchValue(storeDetail);
+      this.recoveryFormGroup.get('address')?.patchValue(storeDetail?.address);
+      this.getBillsForSelectedStore(
+        storeDetail.storeName,
+        storeDetail.route,
+        true
+      );
+    }
   }
 
   initializeFormGroup() {
@@ -149,6 +165,8 @@ export class RecoveryComponent implements OnInit {
       chequeNo: new UntypedFormControl(''),
       comment: new UntypedFormControl(),
     });
+
+    this.subscribeBill_StoreNameValueChange();
   }
 
   getPaymentModes() {
@@ -179,21 +197,28 @@ export class RecoveryComponent implements OnInit {
       selecetdValue
     );
     if (selecetdValue) {
+      this.resetFields(selecetdValue, true);
+    }
+  }
+
+  resetFields(route: string, onRouteChange: boolean) {
+    if (onRouteChange) {
       this.recoveryFormGroup.get('storeName')?.reset();
       this.recoveryFormGroup.get('address')?.reset();
-      this.recoveryFormGroup.get('billNumber')?.reset();
-      this.recoveryFormGroup.get('billAmount')?.reset();
-      this.recoveryFormGroup.get('amountReceived')?.reset();
-      this.recoveryFormGroup.get('pendingAmount')?.reset();
-      this.recoveryFormGroup.get('modeOfPayment')?.reset();
-      this.recoveryFormGroup.get('comment')?.reset();
-      this.recoveryFormGroup.get('chequeNo')?.reset();
-      this.recoveryFormGroup
-        .get('chequeNo')
-        ?.removeValidators(Validators.required);
-      this.isCheque = false;
-      this.onFetchStoreDetails(selecetdValue);
     }
+    this.recoveryFormGroup.get('billNumber')?.reset();
+    this.recoveryFormGroup.get('billAmount')?.reset();
+    this.recoveryFormGroup.get('amountReceived')?.reset();
+    this.recoveryFormGroup.get('pendingAmount')?.reset();
+    this.recoveryFormGroup.get('modeOfPayment')?.reset();
+    this.recoveryFormGroup.get('comment')?.reset();
+    this.recoveryFormGroup.get('receiptNumber')?.reset();
+    this.recoveryFormGroup.get('chequeNo')?.reset();
+    this.recoveryFormGroup
+      .get('chequeNo')
+      ?.removeValidators(Validators.required);
+    this.isCheque = false;
+    this.onFetchStoreDetails(route);
   }
 
   onPaymentModeChange(val: string) {
@@ -276,6 +301,13 @@ export class RecoveryComponent implements OnInit {
   }
 
   onStoreSelected(selectedStore: StoreDetails) {
+    if (selectedStore) {
+      this.localStorageService.setKeyValue(
+        AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY,
+        JSON.stringify(selectedStore)
+      );
+    }
+
     this.recoveryFormGroup.patchValue({
       address: selectedStore.address,
       mobileNo: selectedStore.mobileNo,
@@ -389,7 +421,7 @@ export class RecoveryComponent implements OnInit {
           AppConstant.SAVE_ACTION
         );
         this.updateBillPendingAmount();
-        this.initializeFormGroup();
+        this.resetFields(recoveryDetail.route, false);
         if (this.isNavigated) {
           this.recoveryService.recoveryUpdated.emit();
         }
