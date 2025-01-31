@@ -373,13 +373,8 @@ export class SalesmanAttendanceComponent implements OnInit {
   onSelectionChange(value: string, controlName: string) {
     if (value && controlName) {
       let date = new Date();
-      if (controlName === 'month') {
-        date.setMonth(this.selectedMonth.value - 1);
-      }
-
-      if (controlName === 'year') {
-        date.setFullYear(this.selectedYear.value);
-      }
+      date.setMonth(this.selectedMonth.value - 1);
+      date.setFullYear(this.selectedYear.value);
 
       let currentMonthAbsentList = this.tempAttendanceCollection.filter(
         (c) =>
