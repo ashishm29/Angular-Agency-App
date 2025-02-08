@@ -181,6 +181,15 @@ export class SalesmanAttendanceComponent implements OnInit {
       wrapText: true,
       autoHeight: true,
     },
+    {
+      headerName: 'Delete Attendance',
+      minWidth: 120,
+      cellRenderer: 'buttonRenderer',
+      cellRendererParams: {
+        onClick: this.openDeleteConfirmationDialog.bind(this),
+        label: 'Delete',
+      },
+    },
   ];
 
   onChange(params: any) {
@@ -397,5 +406,43 @@ export class SalesmanAttendanceComponent implements OnInit {
         AppConstant.SEARCH_ACTION
       );
     }
+  }
+
+  openDeleteConfirmationDialog(element: any): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        key: AppConstant.ATTENDANCE_DELETE,
+        object: element.rowData,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.delete == AppConstant.YES_ACTION) {
+        console.log(AppConstant.YES_ACTION);
+        this.onDeleteAttendanceClick(element);
+      } else {
+        console.log(AppConstant.NO_ACTION);
+      }
+    });
+  }
+
+  onDeleteAttendanceClick(record: any) {
+    let element = record.rowData;
+    this.expenseService
+      .deleteAttendance(element.id)
+      .then(() => {
+        let index = this.collection.indexOf(element);
+        if (index >= 0) {
+          this.collection.splice(index, 1);
+          let array = this.collection.slice();
+          this.collection = array;
+          this.api.updateGridOptions({ rowData: this.collection });
+          this.getRecords();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(err, AppConstant.ERROR_ACTION);
+      });
   }
 }

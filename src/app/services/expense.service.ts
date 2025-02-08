@@ -76,4 +76,13 @@ export class ExpenseService {
     });
     return collectionData;
   }
+
+  deleteAttendance(docId: string) {
+    const docRef = doc(
+      this.firestoreService.firestore,
+      AppConstant.ATTENDANCE_COLLECTION_NAME,
+      docId
+    );
+    return deleteDoc(docRef);
+  }
 }

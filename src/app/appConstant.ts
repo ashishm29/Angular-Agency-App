@@ -90,6 +90,7 @@ export class AppConstant {
   static readonly ROUTE: string = 'Route';
   static readonly STORE: string = 'Store';
   static readonly SALESMAN_RECOVERY_DELETE: string = 'Salesman-recovery-delete';
+  static readonly ATTENDANCE_DELETE: string = 'Attendance-delete';
   static readonly SALESMAN_RECOVERY_UPDATE: string = 'Salesman-recovery-update';
   static readonly USER_DELETE: string = 'User-delete';
   static readonly USER_UPDATE: string = 'User-update';
