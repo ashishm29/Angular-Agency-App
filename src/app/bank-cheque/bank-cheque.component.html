@@ -1,3 +1,53 @@
+<div>
+  <mat-form-field class="example-full-width" appearance="outline">
+    <mat-label>Store Name</mat-label>
+    <input
+      type="text"
+      [formControl]="storeName"
+      matInput
+      [matAutocomplete]="auto"
+      oninput="this.value = this.value.toUpperCase()"
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option"
+      >
+        {{ option.storeName }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="outline">
+    <mat-label>Cheque Number</mat-label>
+    <input
+      type="number"
+      [formControl]="chequeNo"
+      matInput
+      oninput="this.value = this.value.toUpperCase()"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="outline">
+    <mat-label>Cheque Amount</mat-label>
+    <input
+      type="number"
+      [formControl]="chequeAmount"
+      matInput
+      oninput="this.value = this.value.toUpperCase()"
+    />
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    style="margin-left: 1em"
+    (click)="addCheque()"
+  >
+    Add Cheque
+  </button>
+</div>
+
 <div class="content">
   <ag-grid-angular
     style="width: 100%; height: 900px"

@@ -80,6 +80,11 @@ export class FirestoreService {
     AppConstant.PURCHASE_COLLECTION_NAME
   );
 
+  chequeCollectionInstance = collection(
+    this.firestore,
+    AppConstant.CHEQUE_COLLECTION_NAME
+  );
+
   // ashishCollectionInstance24 = collection(
   //   this.firestore,
   //   'AshishCollection_24'

@@ -6,6 +6,7 @@ export class AppConstant {
   static readonly BILL_COLLECTION_NAME: string = 'BillCollection';
   static readonly RECOVERY_COLLECTION_NAME: string = 'RecoveryCollection';
   static readonly PURCHASE_COLLECTION_NAME: string = 'PurchaseCollection';
+  static readonly CHEQUE_COLLECTION_NAME: string = 'ChequeCollection';
   static readonly PAYMENT_MODE_COLLECTION_NAME: string =
     'PaymentModeCollection';
   static readonly LOGGING_COLLECTION_NAME: string = 'LoggingCollection';

@@ -51,7 +51,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 -- git reset --hard HEAD~1
 -- git reset --hard 2b1ab85 (2b1ab85 is Commit SHA number you want to set to. Commits after this SHA will be removed)
 
-
+## Git commit and push command
+git add . && git commit -m "added delete attendance feature" && git push
 
 ## AG-GRID :
 # Curreny formatter :
