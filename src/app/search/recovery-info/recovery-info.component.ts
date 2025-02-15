@@ -27,6 +27,7 @@ export class RecoveryInfoComponent implements OnInit {
     'amountReceived',
     'pendingAmount',
     'modeOfPayment',
+    'chequeNo',
   ];
 
   constructor(

@@ -10,7 +10,7 @@
     </td>
   </ng-container>
 
-   <ng-container matColumnDef="recoveryAgent">
+  <ng-container matColumnDef="recoveryAgent">
     <th mat-header-cell *matHeaderCellDef>Recovery Agent</th>
     <td mat-cell *matCellDef="let element">
       {{ element.recoveryAgent }}
@@ -43,7 +43,7 @@
   <ng-container matColumnDef="receiptNumber">
     <th mat-header-cell *matHeaderCellDef>Receipt Number</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.receiptNumber}}
+      {{ element.receiptNumber }}
     </td>
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
@@ -60,6 +60,14 @@
     <th mat-header-cell *matHeaderCellDef>Payment Mode</th>
     <td mat-cell *matCellDef="let element">
       {{ element.modeOfPayment }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="chequeNo">
+    <th mat-header-cell *matHeaderCellDef>Cheque Number</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.chequeNo }}
     </td>
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>

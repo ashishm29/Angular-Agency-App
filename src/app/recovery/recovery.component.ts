@@ -65,7 +65,6 @@ export class RecoveryComponent implements OnInit {
     this.recoveryService.parameters
       .pipe(
         map((val) => {
-          console.log('Parameters Received:' + JSON.stringify(val));
           let routingData = val.params as BillDetails;
 
           if (routingData) {
@@ -120,19 +119,22 @@ export class RecoveryComponent implements OnInit {
     this.getPaymentModes();
     this.onFetchRoute();
 
-    if (this.localRouteValue) {
-      this.onRouteSelectionChange(this.localRouteValue);
-    }
-
-    if (this.selecetdBill) {
-      this.prepopulateData(this.selecetdBill);
-    }
-
     let store = this.localStorageService.getKeyValue(
       AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY
     ) as string;
 
     let storeDetail = JSON.parse(store) as StoreDetails;
+
+    if (this.localRouteValue) {
+      this.onRouteSelectionChange(this.localRouteValue);
+    } else if (storeDetail) {
+      this.onRouteSelectionChange(storeDetail.route);
+      this.recoveryFormGroup.get('route')?.patchValue(storeDetail.route);
+    }
+
+    if (this.selecetdBill) {
+      this.prepopulateData(this.selecetdBill);
+    }
 
     if (storeDetail) {
       this.recoveryFormGroup.get('storeName')?.patchValue(storeDetail);
@@ -373,7 +375,6 @@ export class RecoveryComponent implements OnInit {
 
   onAddRecoveryData() {
     if (this.recoveryFormGroup.invalid) {
-      console.log('recovery form is invalid');
       return;
     }
 
@@ -479,7 +480,6 @@ export class RecoveryComponent implements OnInit {
   }
 
   OnBillNumberChanged() {
-    console.log('OnBillNumberChanged called');
     this.recoveryFormGroup.patchValue({
       billAmount: '',
       pendingAmount: '',
