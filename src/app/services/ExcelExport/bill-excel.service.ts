@@ -68,6 +68,7 @@ export class BillExcelService {
         billDate: billdate,
         billAmount: d.billAmount,
         receivedAmount: +d.billAmount - +d.pendingAmount,
+        paymentMode: d.paymentMode,
         pendingAmount: d.pendingAmount,
       };
       this.addDetails(values);
@@ -92,6 +93,7 @@ export class BillExcelService {
       billDate: '',
       billAmount: totalBillAmt,
       receivedAmount: totalReceivedAmt,
+      paymentMode: '',
       pendingAmount: totalPendingAmt,
     };
 
@@ -122,6 +124,7 @@ export class BillExcelService {
       'Bill Date',
       'Bill Amount',
       'Received Amount',
+      'Payment Mode',
       'Pending Amount',
     ];
   }

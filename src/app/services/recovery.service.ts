@@ -39,7 +39,6 @@ export class RecoveryService {
         id: doc.id,
       } as PaymentMode);
     });
-    console.log(JSON.stringify(resultData));
     return resultData;
   }
 
@@ -82,7 +81,26 @@ export class RecoveryService {
         id: doc.id,
       } as RecoveryDetails);
     });
-    console.log(JSON.stringify(collectionData));
+    return collectionData;
+  }
+
+  async getRecoveryDetailsUsingIn(billNumber: string[]) {
+    let collectionData: RecoveryDetails[] = [];
+
+    // Create a query against the collection.
+    // IN only suppoty 30 records at a time.
+    const q = query(
+      this.firestoreService.recoveryCollectionInstance,
+      where('billNumber', 'in', billNumber)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      collectionData.push({
+        ...doc.data(),
+        id: doc.id,
+      } as RecoveryDetails);
+    });
     return collectionData;
   }
 

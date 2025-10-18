@@ -22,6 +22,7 @@ import { dateConverter } from 'src/app/shared/dateConverter';
 import { BillExcelService } from 'src/app/services/ExcelExport/bill-excel.service';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { RecoveryService } from 'src/app/services/recovery.service';
 
 @Component({
   selector: 'app-search-by-store',
@@ -67,6 +68,7 @@ export class SearchByStoreComponent implements OnInit {
     private snackbarService: SnackBarService,
     private excelService: BillExcelService,
     private datePipe: DatePipe,
+    private recoveryService: RecoveryService,
     private localstorageService: LocalStorageService
   ) {}
 
@@ -467,11 +469,53 @@ export class SearchByStoreComponent implements OnInit {
   }
 
   exportToExcel() {
-    this.excelService.ExportBillReportExcel(
-      this.billCollection,
-      this.fromBillDate?.value?.toLocaleDateString(),
-      this.toBillDate?.value?.toLocaleDateString()
-    );
+    let bills: string[] = this.billCollection.map((item) => item.billNumber); // Extract all bill numbers
+    const chunkSize = 30;
+    let allRecoveryDetails: any[] = []; // Array to store all recovery details
+    let promises: Promise<any>[] = [];
+
+    // Split the bills into chunks of 30 and fetch recovery details for each chunk
+    for (let i = 0; i < bills.length; i += chunkSize) {
+      const chunk = bills.slice(i, i + chunkSize);
+
+      const promise = this.recoveryService
+        .getRecoveryDetailsUsingIn(chunk)
+        .then((result) => {
+          if (result) {
+            allRecoveryDetails = allRecoveryDetails.concat(result); // Collect all recovery details
+          }
+        });
+
+      promises.push(promise);
+    }
+
+    // Wait for all chunks to be processed
+    Promise.all(promises).then(() => {
+      // Update the paymentMode for each bill using the collected recovery details
+      const updatedBillCollection = this.billCollection.map((bill) => {
+        const recoveryDetails = allRecoveryDetails.filter(
+          (recovery) => recovery.billNumber === bill.billNumber
+        );
+
+        // Fetch payment modes and join them with a comma
+        bill.paymentMode = recoveryDetails
+          .map((recovery) =>
+            recovery.modeOfPayment === 'Cheque'
+              ? `${recovery.modeOfPayment} (${recovery.chequeNo ?? 0})`
+              : recovery.modeOfPayment
+          )
+          .join(', ');
+
+        return bill;
+      });
+
+      // Export the updated bill collection to Excel
+      this.excelService.ExportBillReportExcel(
+        updatedBillCollection,
+        this.fromBillDate?.value?.toLocaleDateString(),
+        this.toBillDate?.value?.toLocaleDateString()
+      );
+    });
   }
 
   getRedBills(bills: BillDetails[]): BillDetails[] {

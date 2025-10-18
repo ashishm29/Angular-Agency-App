@@ -32,6 +32,7 @@ export class BillDetails {
   isRedBill!: boolean;
   isOrangeBill!: boolean;
   status!: string;
+  paymentMode!: string; // Adding reporting
 }
 
 export class RecoveryDetails {
