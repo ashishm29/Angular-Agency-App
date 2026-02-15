@@ -19,11 +19,25 @@ import { StoreDetails } from '../models/route';
 export class StoreService {
   constructor(private firestoreService: FirestoreService) {}
 
-  async getStores(route: string) {
+  async getStores(route: any) {
     const queryConditions: QueryConstraint[] = [];
+    if (route === 'GRAMIN') {
+      route = [
+        'YEDSHI TO DHOKI',
+        'BEMBALI',
+        'UPLA TO TER',
+        '12 WADI SAROLA CHIKALI',
+        'TULJAPUR',
+        'TEST ROUTE',
+      ];
+    }
 
     if (route) {
-      queryConditions.push(where('route', '==', route));
+      if (route.length === 1) {
+        queryConditions.push(where('route', '==', route));
+      } else if (route.length > 1) {
+        queryConditions.push(where('route', 'in', route));
+      }
     }
 
     return this.getStoreFilterdData(queryConditions);
@@ -72,7 +86,6 @@ export class StoreService {
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
       storeCollection.push({
         ...doc.data(),
         id: doc.id,

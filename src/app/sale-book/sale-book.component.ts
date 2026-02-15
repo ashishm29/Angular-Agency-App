@@ -30,6 +30,7 @@ import { CellStyle } from '@ag-grid-community/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { EditBillDetailsComponent } from '../edit-info/edit-bill-details/edit-bill-details.component';
 import { RecoveryComponent } from '../recovery/recovery.component';
+import { CustomPinnedRowRendererComponent } from '../renderer/custom-pinned-row-renderer/custom-pinned-row-renderer.component';
 
 @Component({
   selector: 'app-sale-book',
@@ -47,6 +48,8 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
   callbackFunction = new EventEmitter<{ action: string; value: any }>();
   showFiller = false;
   selectedAction!: string;
+  totalBillAmount: number = 0;
+  totalPendingAmount: number = 0;
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef })
   dynamicComponentContainer!: ViewContainerRef;
@@ -61,6 +64,15 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
     public recoveryService: RecoveryService
   ) {
     super();
+
+    this.defaultColDef = {
+      editable: false,
+      filter: true,
+      minWidth: 200,
+      wrapText: true,
+      autoHeight: true,
+      floatingFilter: true,
+    };
   }
 
   columns: ColDef[] = [
@@ -77,8 +89,10 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
+      filter: true,
+      floatingFilter: true,
       valueGetter: (params: any) => {
-        return params.data.storeName.storeName;
+        return params.data.storeName?.storeName;
       },
     },
     {
@@ -115,6 +129,21 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       wrapText: true,
       autoHeight: true,
       editable: true,
+      filter: 'agNumberColumnFilter',
+      aggFunc: 'sum',
+      cellRendererSelector: (params) => {
+        if (params.node.rowPinned) {
+          return {
+            component: CustomPinnedRowRendererComponent,
+            params: {
+              value: this.currencyFormatter(params),
+              style: { color: '#000000', fontWeight: 'bolder' },
+            },
+          };
+        } else {
+          return undefined;
+        }
+      },
     },
     {
       field: 'comment',
@@ -130,10 +159,24 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       minWidth: 200,
       wrapText: true,
       autoHeight: true,
+      cellRendererSelector: (params) => {
+        if (params.node.rowPinned) {
+          return {
+            component: CustomPinnedRowRendererComponent,
+            params: {
+              value: this.currencyFormatter(params),
+              style: { color: '#000000', fontWeight: 'bolder' },
+            },
+          };
+        } else {
+          return undefined;
+        }
+      },
     },
     {
       minWidth: 80,
       width: 80,
+      floatingFilter: false,
       cellRenderer: 'agGridMenuRenderer',
       cellRendererParams: {
         callBack: this.callbackFunction,
@@ -274,6 +317,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         console.log(AppConstant.BILL_ADDED_SUCCESS_MSG);
         this.collection.push(billDetails);
         this.updateGrid();
+        this.getTotalAmount(this.collection);
         this.snackbarService.openSnackBar(
           AppConstant.BILL_ADDED_SUCCESS_MSG,
           AppConstant.SAVE_ACTION
@@ -301,6 +345,7 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
         this.collection = [];
         if (result != null && result.length > 0) {
           this.collection = result;
+          this.getTotalAmount(this.collection);
         }
       })
       .catch((err) => {
@@ -360,5 +405,55 @@ export class SaleBookComponent extends AgGridServiceImpl implements OnInit {
       });
 
     this.loadNewStatusBills();
+  }
+
+  currencyFormatter(params: any) {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+    }).format(params.value);
+  }
+
+  override onGridReady(params: any): void {
+    super.onGridReady(params);
+    this.updateFooter();
+  }
+
+  updateFooter() {
+    setTimeout(() => {
+      this.api.setGridOption('pinnedBottomRowData', [
+        {
+          storeName: {
+            storeName: '',
+          },
+          billNumber: '',
+          billDate: '',
+          billAmount: this.totalBillAmount,
+          comment: '',
+          pendingAmount: this.totalPendingAmount,
+          createdDate: '',
+          route: 'TOTAL :',
+        },
+      ]);
+    }, 1000);
+  }
+
+  getTotalAmount(data: BillDetails[]) {
+    this.totalBillAmount = 0;
+    this.totalPendingAmount = 0;
+
+    this.totalBillAmount = data
+      .map((t) => {
+        return +t.billAmount;
+      })
+      .reduce((acc, value) => acc + value, 0);
+
+    this.totalPendingAmount = data
+      .map((t) => {
+        return +t.pendingAmount;
+      })
+      .reduce((acc, value) => acc + value, 0);
+
+    this.updateFooter();
   }
 }

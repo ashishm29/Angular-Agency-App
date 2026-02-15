@@ -46,6 +46,7 @@ export class RecoveryComponent implements OnInit {
   localRouteValue!: string;
   isCheque!: boolean;
   isNavigated = false;
+  selectedRoute: string = '';
   // parameters = new EventEmitter<{ Params: any }>();
 
   constructor(
@@ -123,27 +124,28 @@ export class RecoveryComponent implements OnInit {
       AppConstant.STORE_SEARCH_LOCAL_STORAGE_KEY
     ) as string;
 
+    let route = this.localStorageService.getKeyValue(
+      AppConstant.ROUTE_LOCAL_STORAGE_KEY
+    ) as string;
+
     let storeDetail = JSON.parse(store) as StoreDetails;
 
     if (this.localRouteValue) {
       this.onRouteSelectionChange(this.localRouteValue);
-    } else if (storeDetail) {
-      this.onRouteSelectionChange(storeDetail.route);
-      this.recoveryFormGroup.get('route')?.patchValue(storeDetail.route);
+    } else if (route) {
+      this.selectedRoute = route;
+      this.onRouteSelectionChange(route);
+      this.recoveryFormGroup.get('route')?.patchValue(route);
     }
 
     if (this.selecetdBill) {
       this.prepopulateData(this.selecetdBill);
     }
 
-    if (storeDetail) {
+    if (storeDetail && route) {
       this.recoveryFormGroup.get('storeName')?.patchValue(storeDetail);
       this.recoveryFormGroup.get('address')?.patchValue(storeDetail?.address);
-      this.getBillsForSelectedStore(
-        storeDetail.storeName,
-        storeDetail.route,
-        true
-      );
+      this.getBillsForSelectedStore(storeDetail.storeName, route, true);
     }
   }
 
@@ -151,6 +153,8 @@ export class RecoveryComponent implements OnInit {
     this.localRouteValue = this.localStorageService.getKeyValue(
       AppConstant.ROUTE_LOCAL_STORAGE_KEY
     ) as string;
+
+    this.selectedRoute = this.localRouteValue;
 
     this.recoveryFormGroup = new UntypedFormGroup({
       route: new UntypedFormControl(this.localRouteValue, [
@@ -193,7 +197,7 @@ export class RecoveryComponent implements OnInit {
   }
 
   onRouteSelectionChange(selecetdValue: string) {
-    console.log(selecetdValue);
+    this.selectedRoute = selecetdValue;
     this.localStorageService.setKeyValue(
       AppConstant.ROUTE_LOCAL_STORAGE_KEY,
       selecetdValue
@@ -317,7 +321,7 @@ export class RecoveryComponent implements OnInit {
 
     this.getBillsForSelectedStore(
       selectedStore.storeName,
-      selectedStore.route,
+      this.selectedRoute,
       true
     );
   }
