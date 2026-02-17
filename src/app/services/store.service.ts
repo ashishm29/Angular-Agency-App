@@ -33,10 +33,10 @@ export class StoreService {
     }
 
     if (route) {
-      if (route.length === 1) {
-        queryConditions.push(where('route', '==', route));
-      } else if (route.length > 1) {
+      if (Array.isArray(route)) {
         queryConditions.push(where('route', 'in', route));
+      } else {
+        queryConditions.push(where('route', '==', route));
       }
     }
 
